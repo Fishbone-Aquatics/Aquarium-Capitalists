@@ -1,2 +1,2 @@
 ## Screenshots
-<img src="https://raw.githubusercontent.com/SobieskiCodes/SobieskiCodes/main/Assets/SideImageDown.png">
+[<img src="https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/blob/main/screenshots/WorkingGridExample.gif">](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/blob/main/screenshots/WorkingGridExample.gif)
