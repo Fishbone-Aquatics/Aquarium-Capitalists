@@ -15,8 +15,8 @@ function App() {
     ],
     gridItems: Array(16).fill(null), // Assuming a 4x4 grid
   });
-  
-  
+
+
 // Function to update the grid items after a successful drop
 const updateGridItems = (newGridItems) => {
   setInventoryItems(prevState => ({

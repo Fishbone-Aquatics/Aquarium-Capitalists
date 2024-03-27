@@ -6,7 +6,7 @@ const InventoryGrid = ({ gridItems, setGridItems, gridSize }) => {
   const containerRef = useRef(null);
   const [draggedItem, setDraggedItem] = useState(null);
   const [potentialDropIndices, setPotentialDropIndices] = useState([]);
-
+  
   const handleDrop = (item, monitor) => {
     if (!item) return false;
 
@@ -30,31 +30,30 @@ const InventoryGrid = ({ gridItems, setGridItems, gridSize }) => {
     }
 
     for (let y = 0; y < item.height; y++) {
-      let index = startIndex + y * gridSize;
-      if (index >= newGridItems.length || newGridItems[index] !== null) {
-        console.log(`Cannot place item at index=${index}, space is already occupied or out of bounds`);
-        return false;
+      for (let x = 0; x < item.width; x++) {
+        let index = startIndex + y * gridSize + x;
+        if (index >= newGridItems.length || newGridItems[index] !== null) {
+          console.log(`Cannot place item at index=${index}, space is already occupied or out of bounds`);
+          return false;
+        }
       }
     }
 
+    // Place the item in the grid
     for (let y = 0; y < item.height; y++) {
-      let index = startIndex + y * gridSize;
-      console.log(`Placing item at index=${index}`);
-      newGridItems[index] = item;
+      for (let x = 0; x < item.width; x++) {
+        let index = startIndex + y * gridSize + x;
+        newGridItems[index] = item;
+      }
     }
 
     console.log('Grid after drop:', newGridItems);
     setGridItems(newGridItems);
     return true;
-  };
-  
-  
-  
-  
+    };
 
+  
   // handleDrop handleDrop handleDrop handleDrop handleDrop handleDrop handleDrop handleDrop 
-
-
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: 'inventory-item',
     hover: (item, monitor) => {
@@ -99,10 +98,13 @@ const InventoryGrid = ({ gridItems, setGridItems, gridSize }) => {
   drop(containerRef);
 
 
-  const getStyleForItem = (item) => ({
-    gridColumnEnd: `span ${item.width}`,
-    gridRowEnd: `span ${item.height}`,
-  });
+  const getStyleForItem = (item) => {
+    // Only apply the spanning style if the item is not null
+    return item ? {
+      gridColumnEnd: `span ${item.width}`,
+      gridRowEnd: `span ${item.height}`,
+    } : {};
+  };
 
   const shouldHighlight = (index) => {
     return potentialDropIndices.includes(index);
@@ -111,25 +113,33 @@ const InventoryGrid = ({ gridItems, setGridItems, gridSize }) => {
   return (
     <div className='inventory-container' ref={containerRef}>
       {gridItems.map((item, index) => {
+        // Determine if this is the top-left corner of the item
+        // Render the item only if this condition is true
+        const isTopLeftCorner = item && (index % gridSize === 0 || gridItems[index - 1] !== item) && (index < gridSize || gridItems[index - gridSize] !== item);
+
         const isHighlight = draggedItem && shouldHighlight(index);
-        const slotStyle = item ? getStyleForItem(item) : {};
-  
-        if (isHighlight) {
-          slotStyle.backgroundColor = 'rgba(0, 0, 255, 0.2)'; // Highlight color
+        // Apply the spanning style only for the top-left corner of the item
+        const slotStyle = isTopLeftCorner ? getStyleForItem(item) : {};
+
+        // If the slot is part of an item but not the top-left corner, don't render anything
+        if (item && !isTopLeftCorner) {
+          return null;
         }
 
         return (
           <div className={`inventory-slot ${isHighlight ? 'highlight' : ''}`} key={index} style={slotStyle}>
-            {item ? (
+            {isTopLeftCorner && item ? (
               <div className={`inventory-item ${item.shape}`} style={{ width: '100%', height: '100%' }}>
                 {item.name}
               </div>
-            ) : 'Empty Slot'}
+            ) : (
+              !item && 'Empty Slot'
+            )}
           </div>
         );
       })}
     </div>
-  );  
-};
+  );
+  };
 
-export default InventoryGrid;
+  export default InventoryGrid;
