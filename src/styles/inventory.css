@@ -1,0 +1,76 @@
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Adjust the number based on how many columns you want */
+  gap: 35px;
+}
+
+.equipment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Adjust the number based on how many columns you want */
+  gap: 35px;
+}
+
+.item-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers children horizontally */
+  border: 1px solid #ccc; /* Maintain the outer border */
+  padding: 10px;
+  width: 72px; /* Adjust size for your need */
+  height: 72px; /* Adjust size for your need */
+  margin-bottom: 20px; /* Add margin to ensure space below the item box */
+  position: relative; /* Add relative positioning to contain the absolutely positioned quantity */
+}
+
+.inventory-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%; /* Ensures it uses full width of parent */
+  height: 100%; /* Ensures it uses full height of parent */
+}
+
+.item-icon {
+  display: flex;
+  align-items: center; /* Center the image vertically */
+  justify-content: center; /* Center the image horizontally */
+  width: 100%; /* Ensures it uses full width of parent */
+  height: 100%; /* Ensures it uses full height of parent */
+}
+
+.item-icon img {
+  max-width: 100%; /* Ensures the image scales within the parent */
+  max-height: 100%; /* Ensures the image scales within the parent */
+  object-fit: contain; /* Ensures the image keeps its aspect ratio */
+  border: none; /* Remove any border around the image itself */
+}
+
+.item-details {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.equipment-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.stats-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.quantity {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+  color: #fff; /* White text */
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

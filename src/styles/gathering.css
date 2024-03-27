@@ -1,0 +1,276 @@
+.gathering-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 20px;
+  background-color: #1c1c1c; /* Dark background color */
+  color: #fff; /* White text color */
+  border-radius: 10px;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  min-width: 350px; /* Minimum width to prevent collision */
+}
+
+.gathering-column {
+  flex: 1; /* 50% width */
+  max-width: 600px; /* Limit the maximum width of each column */
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  min-width: 300px; /* Minimum width to prevent collision */
+}
+
+.gathering-header,
+.gathering-sidebar {
+  background-color: #2b2b2b;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px; /* Add margin to separate elements */
+  position: relative; /* Add relative positioning to contain the absolutely positioned button */
+  min-width: 280px; /* Minimum width to prevent collision */
+}
+
+.image-border {
+  width: 150px;
+  height: 150px;
+  border: 2px solid #4caf50; /* Green border */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-right: 20px; /* Space between image and drops */
+}
+
+.image-border img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensure the image covers the entire area */
+}
+
+.gathering-drops {
+  flex: 1; /* Take the remaining space */
+  background-color: #1e1e1e; /* Slightly darker background */
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid #444; /* Thin border */
+}
+
+.gathering-drops ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.drop-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #2b2b2b;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  border: 1px solid #444;
+}
+
+.drop-item:hover {
+  background-color: #333; /* Slightly lighter on hover */
+}
+
+.gathering-tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 0; /* Remove bottom margin */
+  border-radius: 10px 10px 0 0; /* Rounded corners only on the top */
+  overflow: hidden; /* Hide overflow to get rounded corners */
+  background-color: #2b2b2b; /* Background color for the tabs */
+}
+
+.tab-button {
+  flex: 1;
+  padding: 10px 0;
+  background-color: #2b2b2b;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.tab-button:last-child {
+  border-right: none; /* Remove border from the last tab */
+}
+
+.tab-button.active {
+  background-color: #4caf50; /* Green background for active tab */
+  color: #000; /* Black text for active tab */
+}
+
+.tab-button:hover {
+  background-color: #3e8e41; /* Darker green on hover */
+}
+
+.gathering-content {
+  background-color: #2b2b2b;
+  border-radius: 0 0 10px 10px; /* Rounded corners only on the bottom */
+  padding: 20px;
+  border-top: none; /* Remove top border to connect with the tabs */
+}
+
+.gathering-content ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.gathering-content li {
+  margin: 5px 0;
+  padding: 10px;
+  background-color: #333; /* Slightly lighter background for items */
+  border-radius: 5px;
+  border: 1px solid #4caf50; /* Border around items */
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gathering-content li:hover {
+  background-color: #3e8e41; /* Darker green on hover */
+}
+
+.gathering-content li .item-name {
+  flex: 1;
+}
+
+.gathering-content li .item-rarity {
+  color: #999; /* Grey color for item rarity */
+}
+
+.gathering-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.toggle-button {
+  flex: 1;
+  padding: 10px 0;
+  background-color: #2b2b2b;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-right: 1px solid #4caf50; /* Border between buttons */
+  border-radius: 10px;
+}
+
+.toggle-button:last-child {
+  border-right: none; /* Remove border from the last button */
+}
+
+.toggle-button.active {
+  background-color: #4caf50; /* Green background for active button */
+  color: #000; /* Black text for active button */
+}
+
+.toggle-button:hover {
+  background-color: #3e8e41; /* Darker green on hover */
+}
+
+.gathering-consumables {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #2b2b2b;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.consumables-label {
+  flex: 1;
+}
+
+.consumables-square-container {
+  display: flex;
+  gap: 10px;
+}
+
+.consumables-square {
+  width: 60px;
+  height: 60px;
+  background-color: #4caf50; /* Green background for the square */
+  border-radius: 5px;
+}
+
+.toggle-btn {
+  margin: 20px 0;
+  padding: 10px 20px;
+  color: white; /* White text */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.toggle-btn.gather {
+  background-color: #4caf50; /* Green background */
+  position: relative;
+  bottom: 120px; /* Move the button down slightly */
+  left: 60%;
+}
+
+.toggle-btn.stop {
+  background-color: #f44336; /* Red background */
+  position: relative;
+  bottom: 120px; /* Move the button down slightly */
+  left: 60%;
+}
+
+.notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  z-index: 1000;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.notification.hide {
+  opacity: 0;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.progress-circle.hidden {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .gathering-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .gathering-column {
+    max-width: 100%;
+    margin: 10px 0;
+  }
+
+  .image-and-button {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .top-right-button {
+    position: static; /* Remove absolute positioning */
+    margin-top: 100px; /* Add margin to separate from other elements */
+  }
+
+  .toggle-btn {
+    width: 100%; /* Make the button full width on smaller screens */
+    margin-top: 10px; /* Add some space above the button */
+  }
+}

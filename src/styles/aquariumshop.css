@@ -1,0 +1,62 @@
+/* src/styles/aquariumshop.css */
+.aquarium-shop {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.shop-items {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.shop-item {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-align: center;
+  padding: 10px;
+}
+
+.item-icon {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 5px;
+}
+
+/* src/styles/grid.css */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-size), 1fr);
+  gap: 0; /* Ensure no gaps between grid cells */
+  position: relative;
+  padding: 0;
+  margin: 0;
+  width: fit-content; /* Ensures the container is only as wide as the grid */
+}
+
+.grid-cell {
+  width: 100px;
+  height: 100px;
+  border: 1px solid #ccc;
+  position: relative;
+  box-sizing: border-box; /* Include border in the element's total width and height */
+}
+
+.grid-cell img {
+  max-width: 100%; /* Ensure image fits within the cell */
+  max-height: 100%; /* Ensure image fits within the cell */
+  display: block;
+}
+
+.drop-indicator {
+  position: absolute;
+  background: rgba(0, 255, 0, 0.3);
+  z-index: 1;
+  box-sizing: border-box; /* Ensure the indicator includes border in its total width and height */
+}
+
+
