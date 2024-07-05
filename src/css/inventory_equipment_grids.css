@@ -1,0 +1,42 @@
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Adjust the number based on how many columns you want */
+  gap: 35px;
+}
+
+.equipment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Adjust the number based on how many columns you want */
+  gap: 35px;
+}
+
+.item-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers children horizontally */
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #f9f9f9;
+  width: 72px; /* Adjust size for your need */
+  height: 72px; /* Adjust size for your need */
+  margin-bottom: 20px; /* Add margin to ensure space below the item box */
+}
+
+.item-icon {
+  flex: 1; /* Gives the image container flexibility to use available space */
+  display: flex;
+  align-items: center; /* Center the image vertically */
+  width: 100%; /* Ensures it uses full width of parent */
+  height: 100%; /* Ensures it uses full height of parent */
+}
+
+.item-icon img {
+  width: 100%; /* Ensures the image scales within the parent */
+  height: 100%; /* Ensures the image scales within the parent */
+  object-fit: contain; /* Ensures the image keeps its aspect ratio */
+}
+
+.item-details {
+  text-align: center;
+  margin-top: 15px;
+}
