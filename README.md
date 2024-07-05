@@ -4,6 +4,7 @@
 
 
 ## file layout
+```
 /src
 |-- /components
 |   |-- /common
@@ -29,3 +30,4 @@
 |   `-- Breeding.jsx
 |-- App.jsx
 `-- index.jsx
+```
