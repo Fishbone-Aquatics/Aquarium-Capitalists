@@ -8,16 +8,16 @@ import Home from './pages/Home';
 import Inventory from './pages/Inventory';
 import Battle from './pages/Battle';
 import Breeding from './pages/Breeding';
-import Equipment from './components/equipment/Equipment'; // Make sure the path is correct
-import Stats from './components/equipment/Stats';       // Make sure the path is correct
+import Equipment from './components/equipment/Equipment';
+import Stats from './components/equipment/Stats';
 import './css/inventory_equipment_grids.css';
 import './App.css';
 
 function App() {
   return (
     <Provider store={store}>
-      <Router>
-        <DndProvider backend={HTML5Backend}>
+      <DndProvider backend={HTML5Backend}>
+        <Router>
           <div className="app-grid">
             <div className="sidebar">
               <Link to="/">Home</Link>
@@ -38,8 +38,8 @@ function App() {
               <Equipment />
             </aside>
           </div>
-        </DndProvider>
-      </Router>
+        </Router>
+      </DndProvider>
     </Provider>
   );
 }
