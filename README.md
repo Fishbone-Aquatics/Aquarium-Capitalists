@@ -4,6 +4,7 @@
 
 
 ## file layout
+```
 /src
 |-- /components
 |   |-- /common
@@ -29,3 +30,8 @@
 |   `-- Breeding.jsx
 |-- App.jsx
 `-- index.jsx
+```
+
+## Commit docs
+https://github.com/SobieskiCodes/Codefolio/blob/websocket/.github/workflows/CONVENTIONAL_COMMITS.md
+https://github.com/SobieskiCodes/Codefolio/blob/websocket/.github/workflows/PROPERLY_SCOPED_BRANCH.MD

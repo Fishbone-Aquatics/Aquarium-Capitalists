@@ -1,28 +1,43 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import '../css/inventory.css'; // Ensure this CSS file contains the necessary styles
+import DraggableItem from '../components/inventory/draggableItems';
 
-function Home() {
+function Inventory() {
   const player = useSelector(state => state.player);
+  const dispatch = useDispatch();
+
+  const handleClick = (item) => {
+    console.log('clicky?')
+    if (item) {
+      console.log('Clicked item:', item)
+      dispatch(equipItem({ item, slot: determineSlot(item.type) }));
+    }
+  };
 
   return (
-    <div>
-      <h1>{player.name}'s Inventory</h1>
-      <h2>Inventory:</h2>
-      <div className="inventory-grid">
-        {player.inventory.map((item, index) => (
-          <div key={index} className="item-box">
-            <div className="item-icon">
-              {item ? <img src={item.image} alt={item.name} /> : <img src="icons/backpack.svg" alt="empty" />}
-            </div>
-            <div className="item-details">
-              {item ? `${item.name} (${item.type}) - Quantity: ${item.quantity}` : 'Empty Slot'}
-            </div>
-          </div>
-        ))}
+      <div>
+        <h1>{player.name}'s Inventory</h1>
+        <h2>Inventory:</h2>
+        <div className="inventory-grid">
+          {player.inventory.map((item, index) => (
+            item ? (
+              <DraggableItem
+                key={item.id}
+                className="item-box"
+                item={item}
+                alt={item.name}
+                onClick={() => handleClick(item)}
+              />
+            ) : (
+              <div key={index} className="item-box empty-slot">
+                Empty Slot
+              </div>
+            )
+          ))}
+        </div>
       </div>
-    </div>
   );
 }
 
-export default Home;
+export default Inventory;

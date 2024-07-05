@@ -6,6 +6,12 @@ const items = {
       type: "Weapon",
       image: "/icons/bone-knife.svg",
     },
+    katana: {
+      id: 'katana',
+      name: "Katana",
+      type: "Weapon",
+      image: "/icons/katana.svg",
+    },
     woodenShield: {
       id: 'basic-armor',
       name: "Basic Armor",
