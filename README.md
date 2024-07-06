@@ -1,6 +1,12 @@
 ## Screenshots
 [<img src="https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/blob/main/screenshots/WorkingGridExample.gif">](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/blob/main/screenshots/WorkingGridExample.gif)
 
+[<img src="https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/blob/main/screenshots/WorkingInventory.gif">](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/blob/main/screenshots/WorkingInventory.gif)
+
+## TODO:
+Add tooltips/hover for item stats/descriptions etc.
+Turn right side into a tabbed "settings" thing
+one for equipment, settings and something else - stats should be a pop out button / details thing.'
 
 
 ## file layout

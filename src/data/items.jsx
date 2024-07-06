@@ -5,18 +5,25 @@ const items = {
       name: "Bone Knife",
       type: "Weapon",
       image: "/icons/bone-knife.svg",
+      statChanges: {
+        strength: 0,
+      },
     },
     katana: {
       id: 'katana',
       name: "Katana",
       type: "Weapon",
       image: "/icons/katana.svg",
+      statChanges: {
+        strength: 2,
+      },
     },
     woodenShield: {
       id: 'basic-armor',
       name: "Basic Armor",
       type: "Armor",
       image: "/icons/armor.svg",
+      statChanges: {}
     },
     bread: {
       id: 'bread',
@@ -25,6 +32,7 @@ const items = {
       heal: 5,
       stack_size: 10,
       image: "/icons/bread.svg",
+      statChanges: {}
     },
     apple: {
       id: 'apple',
@@ -33,6 +41,7 @@ const items = {
       heal: 2,
       stack_size: 10,
       image: "/icons/apple.svg",
+      statChanges: {}
     }
   };
   

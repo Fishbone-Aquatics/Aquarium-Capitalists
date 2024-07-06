@@ -1,0 +1,92 @@
+/* Expeditions.css */
+.zones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .zone {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    margin: 20px 0;
+    color: #333; /* Darker text color */
+    transition: background 0.3s, color 0.3s; /* Smooth transition for color changes */
+  }
+  
+  .zone h2 {
+    margin-top: 0;
+    color: #000; /* Darker heading color */
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7); /* Slight shadow for readability */
+  }
+  
+  .zone p {
+    margin-bottom: 0;
+    color: #555; /* Darker paragraph color */
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7); /* Slight shadow for readability */
+  }
+  
+  .zone button {
+    margin-top: 10px;
+  }
+  
+  .zone.active {
+    animation: bubbles 3s infinite;
+  }
+  
+  @keyframes bubbles {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 100% 100%;
+    }
+  }
+  
+  @keyframes idleBackground {
+    0% {
+      background-color: #f0f8ff;
+    }
+    50% {
+      background-color: #e0f7ff;
+    }
+    100% {
+      background-color: #f0f8ff;
+    }
+  }
+  
+  .zone::before,
+  .zone::after {
+    content: '';
+    position: absolute;
+    top: -50px;
+    width: 100%;
+    height: 200%;
+    
+    animation: none; /* Ensure no animation by default */
+    pointer-events: none;
+  }
+  
+  .zone.active::before,
+  .zone.active::after {
+    animation: moveBubbles 20s linear infinite; /* Apply animation only to active zones */
+  }
+  
+  .zone::after {
+    background: radial-gradient(circle, rgba(0, 0, 255, 0.6), rgba(0, 0, 255, 0) 70%);
+    animation-duration: 30s;
+  }
+  
+  @keyframes moveBubbles {
+    0% {
+      transform: translateY(0) translateX(0);
+    }
+    100% {
+      transform: translateY(-200%) translateX(200%);
+    }
+  }
+  
