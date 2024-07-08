@@ -21,14 +21,13 @@ const EquipmentSlot = ({ slot, item }) => {
       canDrop: !!monitor.canDrop()
     }),
   });
-  const imgSrc = item ? item.image : `icons/equipment/${slot}.svg`
   return (
     <div ref={dropRef} className="item-box" style={{ backgroundColor: isOver ? 'lightgreen' : canDrop ? 'lightblue' : 'transparent' }}>
       <div className="item-icon">
-        {item ? <img src={item.image} alt={item.name} /> : <img src={imgSrc} alt="Empty Slot" />}
+        {item ? <img src={item.image} alt={item.name} /> : <span>Empty `{slot}` slot.</span>}
       </div>
       <div className="item-details">
-      {item ? <span>{item.type} - {item.name} </span> : <span>Empty Slot</span>}
+      {item ? <span>{item.type} - {item.name} </span> : <span></span>}
       </div>
     </div>
   );
