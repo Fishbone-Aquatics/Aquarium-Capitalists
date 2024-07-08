@@ -1,38 +1,23 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActiveZone, clearActiveZone } from '../features/player/playerSlice'; // Adjust path as necessary
-import { Zone, BubblesContainer } from '../components/BubblesContainer'; // Adjust path as necessary
+import { setActiveZone, clearActiveZone } from '../features/expeditionSlice'; // Import actions from expeditionSlice
+import { Zone, BubblesContainer } from '../components/BubblesContainer';
 import './expeditions.css'; // Ensure this is the correct path
 
 const Expeditions = () => {
   const dispatch = useDispatch();
-  const activeZone = useSelector((state) => state.player.activeZone);
+  const activeZone = useSelector((state) => state.expedition.activeZone); // Access activeZone from expeditionSlice
 
-  const zones = [
-    {
-      name: 'Coral Reefs',
-      description: 'Rich in colorful fish and rare coral species.'
-    },
-    {
-      name: 'Shipwrecks',
-      description: 'Chance to find hidden treasures and ancient artifacts.'
-    },
-    {
-      name: 'Deep Sea Trenches',
-      description: 'Home to exotic and rare deep-sea creatures.'
-    },
-    {
-      name: 'Underwater Caves',
-      description: 'Potential for discovering unique plant species and minerals.'
-    }
-  ];
+  const zones = useSelector((state) => state.expedition.zones); // Access zones from expeditionSlice
 
   const handleStart = (zoneName) => {
     dispatch(setActiveZone(zoneName));
+    // Optionally, dispatch actions or perform tasks related to starting an expedition
   };
 
   const handleStop = () => {
     dispatch(clearActiveZone());
+    // Optionally, dispatch actions or perform tasks related to stopping an expedition
   };
 
   return (

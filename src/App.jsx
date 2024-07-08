@@ -10,6 +10,7 @@ import Expeditions from './pages/Expeditions';
 import Breeding from './pages/Breeding';
 import Equipment from './components/equipment/Equipment';
 import Stats from './components/equipment/Stats';
+import Action from './components/Action'; // Import Action component
 import './css/inventory_equipment_grids.css';
 import './App.css';
 
@@ -34,6 +35,7 @@ function App() {
               </Routes>
             </main>
             <aside className="right-side">
+              <Action />
               <Stats />
               <Equipment />
             </aside>

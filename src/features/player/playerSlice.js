@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { setActiveZone, clearActiveZone } from '../expeditionSlice'; // Import actions from expeditionSlice
 import items from '../../data/items';
 
 const loadInitialState = () => {
@@ -30,7 +31,7 @@ const loadInitialState = () => {
         {...items.katana, quantity: 1},
         ...Array(13).fill(null)
       ],
-      activeZone: null // Add activeZone to initial state
+      status: 'idle'
     };
   }
 };
@@ -127,23 +128,25 @@ export const playerSlice = createSlice({
         state.equipment[from] = null;
       }
     },
-    setActiveZone: (state, action) => {
-      state.activeZone = action.payload;
-    },
-    clearActiveZone: (state) => {
-      state.activeZone = null;
-    }
   },
   extraReducers: (builder) => {
+    builder.addCase(setActiveZone, (state, action) => {
+      state.status = `Exploring ${action.payload}`;
+      console.log('status should be exploring:', state.status)
+    });
+    builder.addCase(clearActiveZone, (state) => {
+      console.log('Expedition complete. - player slice');
+      state.status = 'idle';
+    });
     builder.addMatcher(
       action => action.type.startsWith('player/'),
-      (state, action) => {
+      (state) => {
         localStorage.setItem('playerState', JSON.stringify(state));
       }
     );
   }
 });
 
-export const { updateStats, addItemToInventory, updateInventorySize, equipItem, removeItemFromInventory, unequipItem, swapItems, setActiveZone, clearActiveZone } = playerSlice.actions;
+export const { updateStats, addItemToInventory, updateInventorySize, equipItem, removeItemFromInventory, unequipItem, swapItems } = playerSlice.actions;
 
 export default playerSlice.reducer;
