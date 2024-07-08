@@ -12,7 +12,7 @@ const loadInitialState = () => {
       stats: {
         strength: 10,
         agility: 5,
-        intelligence: 7,
+        xp: 0,
         maxInventorySlots: 16,
         health: 100 // Starting health
       },
@@ -26,9 +26,9 @@ const loadInitialState = () => {
         accessory: null
       },
       inventory: [
-        {...items.bread, quantity: 3},
-        {...items.apple, quantity: 3},
-        {...items.katana, quantity: 1},
+        { ...items.bread, quantity: 3 },
+        { ...items.apple, quantity: 3 },
+        { ...items.katana, quantity: 1 },
         ...Array(13).fill(null)
       ],
       status: 'idle'
@@ -43,6 +43,9 @@ export const playerSlice = createSlice({
     updateStats: (state, action) => {
       state.stats = { ...state.stats, ...action.payload };
     },
+    addXp: (state, action) => {
+      state.stats.xp += action.payload;
+    },
     addItemToInventory: (state, action) => {
       const { item } = action.payload;
       const emptyIndex = state.inventory.findIndex(it => it === null);
@@ -50,7 +53,6 @@ export const playerSlice = createSlice({
         state.inventory[emptyIndex] = item;
       } else {
         console.log('Inventory full. Cannot add item:', item.name);
-        // Optionally handle full inventory scenario
       }
     },
     removeItemFromInventory: (state, action) => {
@@ -71,7 +73,7 @@ export const playerSlice = createSlice({
     equipItem: (state, action) => {
       const { item, slot } = action.payload;
       if (item && item.id) {
-        const equipmentType = slot.toLowerCase(); 
+        const equipmentType = slot.toLowerCase();
         if (item.type.toLowerCase() === equipmentType) {
           const currentItem = state.equipment[slot];
           if (currentItem && currentItem.statChanges) {
@@ -99,7 +101,7 @@ export const playerSlice = createSlice({
           console.log(`Cannot equip ${item.name} in ${slot}. Item type does not match slot type.`);
         }
       }
-    },    
+    },
     unequipItem: (state, action) => {
       const { slot } = action.payload;
       if (state.equipment[slot]) {
@@ -131,8 +133,8 @@ export const playerSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(setActiveZone, (state, action) => {
-      state.status = `Exploring ${action.payload}`;
-      console.log('status should be exploring:', state.status)
+      state.status = `Exploring ${action.payload.zoneName}`;
+      console.log('status should be exploring:', state.status);
     });
     builder.addCase(clearActiveZone, (state) => {
       console.log('Expedition complete. - player slice');
@@ -147,6 +149,6 @@ export const playerSlice = createSlice({
   }
 });
 
-export const { updateStats, addItemToInventory, updateInventorySize, equipItem, removeItemFromInventory, unequipItem, swapItems } = playerSlice.actions;
+export const { updateStats, addXp, addItemToInventory, updateInventorySize, equipItem, removeItemFromInventory, unequipItem, swapItems } = playerSlice.actions;
 
 export default playerSlice.reducer;
