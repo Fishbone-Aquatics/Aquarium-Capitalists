@@ -14,7 +14,8 @@ const loadInitialState = () => {
         agility: 5,
         xp: 0,
         maxInventorySlots: 16,
-        health: 100 // Starting health
+        health: 100, // Starting health
+        currency: 0, // Starting currency
       },
       equipment: {
         head: null,
@@ -54,6 +55,9 @@ export const playerSlice = createSlice({
       } else {
         console.log('Inventory full. Cannot add item:', item.name);
       }
+    },
+    addCurrency: (state, action) => {
+      state.stats.currency += action.payload;
     },
     removeItemFromInventory: (state, action) => {
       const { itemId } = action.payload;
@@ -149,6 +153,6 @@ export const playerSlice = createSlice({
   }
 });
 
-export const { updateStats, addXp, addItemToInventory, updateInventorySize, equipItem, removeItemFromInventory, unequipItem, swapItems } = playerSlice.actions;
+export const { updateStats, addXp, addItemToInventory, addCurrency, updateInventorySize, equipItem, removeItemFromInventory, unequipItem, swapItems } = playerSlice.actions;
 
 export default playerSlice.reducer;

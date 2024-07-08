@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActiveZone, clearActiveZone } from '../features/expeditionSlice'; // Import actions from expeditionSlice
-import { addXp } from '../features/player/playerSlice'; // Import the action to add XP
-import './expeditions.css'; // Ensure this is the correct path
+import { setActiveZone, clearActiveZone } from '../features/expeditionSlice';
+import { addXp, addItemToInventory, addCurrency } from '../features/player/playerSlice';
+import './expeditions.css';
 
 const Expeditions = () => {
   const dispatch = useDispatch();
-  const activeZone = useSelector((state) => state.expedition.activeZone); // Access activeZone from expeditionSlice
-  const zones = useSelector((state) => state.expedition.zones); // Access zones from expeditionSlice
-  const [progress, setProgress] = useState(0); // Local state for progress
-  const [intervalId, setIntervalId] = useState(null); // Local state for interval ID
+  const activeZone = useSelector((state) => state.expedition.activeZone);
+  const zones = useSelector((state) => state.expedition.zones);
+  const [progress, setProgress] = useState(0);
+  const [intervalId, setIntervalId] = useState(null);
 
   useEffect(() => {
     if (activeZone && !intervalId) {
-      const zone = zones.find(zone => zone.name === activeZone);
       const id = setInterval(() => {
         setProgress(prevProgress => prevProgress + 1);
       }, 1000);
@@ -26,21 +25,38 @@ const Expeditions = () => {
         setIntervalId(null);
       }
     };
-  }, [activeZone, zones, intervalId]);
+  }, [activeZone, intervalId]);
 
   useEffect(() => {
     if (activeZone) {
       const zone = zones.find(zone => zone.name === activeZone);
       if (progress >= zone.duration) {
-        dispatch(addXp(Math.floor(Math.random() * 5) + 1)); // Random XP between 1 and 5
-        setProgress(0); // Reset progress to 0 after completing duration
+        // Calculate XP
+        const xp = Math.floor(Math.random() * (zone.xpRange[1] - zone.xpRange[0] + 1)) + zone.xpRange[0];
+        dispatch(addXp(xp));
+
+        // Calculate item drops
+        zone.itemDrops.forEach(drop => {
+          if (Math.random() < drop.chance) {
+            dispatch(addItemToInventory({ item: drop.item }));
+          }
+        });
+
+        // Calculate currency drops
+        zone.currencyDrops.forEach(drop => {
+          if (Math.random() < drop.chance) {
+            dispatch(addCurrency(drop.amount));
+          }
+        });
+
+        setProgress(0);
       }
     }
   }, [progress, activeZone, zones, dispatch]);
 
   const handleStart = (zoneName) => {
     dispatch(setActiveZone({ zoneName }));
-    setProgress(0); // Reset progress when starting a new zone
+    setProgress(0);
   };
 
   const handleStop = () => {
@@ -49,7 +65,7 @@ const Expeditions = () => {
       setIntervalId(null);
     }
     dispatch(clearActiveZone());
-    setProgress(0); // Reset progress when stopping
+    setProgress(0);
   };
 
   return (
