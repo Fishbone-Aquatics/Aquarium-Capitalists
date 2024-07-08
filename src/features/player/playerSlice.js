@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { setActiveZone, clearActiveZone } from '../expeditionSlice'; // Import actions from expeditionSlice
 import items from '../../data/items';
 
 const loadInitialState = () => {
@@ -11,9 +12,10 @@ const loadInitialState = () => {
       stats: {
         strength: 10,
         agility: 5,
-        intelligence: 7,
+        xp: 0,
         maxInventorySlots: 16,
-        health: 100 // Starting health
+        health: 100, // Starting health
+        currency: 0, // Starting currency
       },
       equipment: {
         head: null,
@@ -25,12 +27,12 @@ const loadInitialState = () => {
         accessory: null
       },
       inventory: [
-        {...items.bread, quantity: 3},
-        {...items.apple, quantity: 3},
-        {...items.katana, quantity: 1},
+        { ...items.bread, quantity: 3 },
+        { ...items.apple, quantity: 3 },
+        { ...items.katana, quantity: 1 },
         ...Array(13).fill(null)
       ],
-      activeZone: null // Add activeZone to initial state
+      status: 'idle'
     };
   }
 };
@@ -42,6 +44,9 @@ export const playerSlice = createSlice({
     updateStats: (state, action) => {
       state.stats = { ...state.stats, ...action.payload };
     },
+    addXp: (state, action) => {
+      state.stats.xp += action.payload;
+    },
     addItemToInventory: (state, action) => {
       const { item } = action.payload;
       const emptyIndex = state.inventory.findIndex(it => it === null);
@@ -49,8 +54,10 @@ export const playerSlice = createSlice({
         state.inventory[emptyIndex] = item;
       } else {
         console.log('Inventory full. Cannot add item:', item.name);
-        // Optionally handle full inventory scenario
       }
+    },
+    addCurrency: (state, action) => {
+      state.stats.currency += action.payload;
     },
     removeItemFromInventory: (state, action) => {
       const { itemId } = action.payload;
@@ -70,7 +77,7 @@ export const playerSlice = createSlice({
     equipItem: (state, action) => {
       const { item, slot } = action.payload;
       if (item && item.id) {
-        const equipmentType = slot.toLowerCase(); 
+        const equipmentType = slot.toLowerCase();
         if (item.type.toLowerCase() === equipmentType) {
           const currentItem = state.equipment[slot];
           if (currentItem && currentItem.statChanges) {
@@ -98,7 +105,7 @@ export const playerSlice = createSlice({
           console.log(`Cannot equip ${item.name} in ${slot}. Item type does not match slot type.`);
         }
       }
-    },    
+    },
     unequipItem: (state, action) => {
       const { slot } = action.payload;
       if (state.equipment[slot]) {
@@ -127,23 +134,25 @@ export const playerSlice = createSlice({
         state.equipment[from] = null;
       }
     },
-    setActiveZone: (state, action) => {
-      state.activeZone = action.payload;
-    },
-    clearActiveZone: (state) => {
-      state.activeZone = null;
-    }
   },
   extraReducers: (builder) => {
+    builder.addCase(setActiveZone, (state, action) => {
+      state.status = `Exploring ${action.payload.zoneName}`;
+      console.log('status should be exploring:', state.status);
+    });
+    builder.addCase(clearActiveZone, (state) => {
+      console.log('Expedition complete. - player slice');
+      state.status = 'idle';
+    });
     builder.addMatcher(
       action => action.type.startsWith('player/'),
-      (state, action) => {
+      (state) => {
         localStorage.setItem('playerState', JSON.stringify(state));
       }
     );
   }
 });
 
-export const { updateStats, addItemToInventory, updateInventorySize, equipItem, removeItemFromInventory, unequipItem, swapItems, setActiveZone, clearActiveZone } = playerSlice.actions;
+export const { updateStats, addXp, addItemToInventory, addCurrency, updateInventorySize, equipItem, removeItemFromInventory, unequipItem, swapItems } = playerSlice.actions;
 
 export default playerSlice.reducer;
