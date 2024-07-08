@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 
-
-// Example of animated css to use bubbles 
-// Perhaps we can use this for battle in progress?
-// click to start it
-
 // Keyframes for bubble animation
 const rise = keyframes`
   0% {
@@ -22,14 +17,15 @@ const rise = keyframes`
 `;
 
 // Styled components
-const Aquarium = styled.div`
+const Zone = styled.div`
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative;
-  width: 600px;
-  height: 900px;
-  background-color: rgba(255, 255, 255, 0.1);
   overflow: hidden;
-  border-radius: 10px;
-  border: 2px solid #fff;
+  margin: 20px 0;
 `;
 
 const Bubble = styled.div`
@@ -48,13 +44,12 @@ const Bubble = styled.div`
   height: ${props => props.size || '20px'};
 `;
 
-function Battle() {
+const BubblesContainer = ({ isActive }) => {
   const [bubbles, setBubbles] = useState([]);
-  const [isPressed, setIsPressed] = useState(false);
 
   useEffect(() => {
     let interval;
-    if (isPressed) {
+    if (isActive) {
       interval = setInterval(() => {
         const newBubble = {
           id: Date.now(),
@@ -67,17 +62,14 @@ function Battle() {
       }, 500);
     } else {
       clearInterval(interval);
+      setBubbles([]);
     }
 
     return () => clearInterval(interval);
-  }, [isPressed]);
+  }, [isActive]);
 
   return (
-    <Aquarium
-      onMouseDown={() => setIsPressed(true)}
-      onMouseUp={() => setIsPressed(false)}
-      onMouseLeave={() => setIsPressed(false)}
-    >
+    <>
       {bubbles.map(bubble => (
         <Bubble
           key={bubble.id}
@@ -87,8 +79,8 @@ function Battle() {
           size={bubble.size}
         />
       ))}
-    </Aquarium>
+    </>
   );
-}
+};
 
-export default Battle;
+export { Zone, BubblesContainer };

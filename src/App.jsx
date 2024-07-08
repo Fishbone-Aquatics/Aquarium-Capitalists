@@ -6,10 +6,11 @@ import { Provider } from 'react-redux';
 import { store } from './app/store';
 import Home from './pages/Home';
 import Inventory from './pages/Inventory';
-import Battle from './pages/Battle';
+import Expeditions from './pages/Expeditions';
 import Breeding from './pages/Breeding';
 import Equipment from './components/equipment/Equipment';
 import Stats from './components/equipment/Stats';
+import Action from './components/Action'; // Import Action component
 import './css/inventory_equipment_grids.css';
 import './App.css';
 
@@ -22,18 +23,19 @@ function App() {
             <div className="sidebar">
               <Link to="/">Home</Link>
               <Link to="/inventory">Inventory</Link>
-              <Link to="/battle">Battle</Link>
+              <Link to="/expeditions">Expeditions</Link>
               <Link to="/breeding">Breeding</Link>
             </div>
             <main className="main-display">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/inventory" element={<Inventory />} />
-                <Route path="/battle" element={<Battle />} />
+                <Route path="/expeditions" element={<Expeditions />} />
                 <Route path="/breeding" element={<Breeding />} />
               </Routes>
             </main>
             <aside className="right-side">
+              <Action />
               <Stats />
               <Equipment />
             </aside>

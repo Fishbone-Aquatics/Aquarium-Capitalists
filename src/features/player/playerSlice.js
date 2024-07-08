@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import items from '../../app/items.jsx'; // Assuming the items file is in the same directory
+import { setActiveZone, clearActiveZone } from '../expeditionSlice'; // Import actions from expeditionSlice
+import items from '../../data/items/items';
 
-// Define a function to load the initial state from localStorage or fall back to a default state
 const loadInitialState = () => {
   const savedState = localStorage.getItem('playerState');
   if (savedState) {
@@ -10,27 +10,21 @@ const loadInitialState = () => {
     return {
       name: "Player",
       stats: {
-        strength: 10,
-        agility: 5,
-        intelligence: 7,
-        maxInventorySlots: 16,
-        health: 100 // Starting health
+        level: 1,
+        xp: 0,
+        currency: 0,
       },
       equipment: {
-        head: null,
-        chest: null,
-        pants: null,
-        boots: null,
-        weapon: items.boneKnife,
-        shield: items.woodenShield,
-        accessory: null
+        heater: items.equipment.heater,
+        filter: items.equipment.spongeFilter,
+        lights: null
       },
       inventory: [
-        {...items.bread, quantity: 3},
-        {...items.apple, quantity: 3},
-        {...items.katana, quantity: 1},
+        { ...items.equipment.filter, quantity: 1 }, 
         ...Array(13).fill(null)
-      ]
+      ],
+      status: 'idle',
+      maxInventorySlots: 16,
     };
   }
 };
@@ -42,6 +36,9 @@ export const playerSlice = createSlice({
     updateStats: (state, action) => {
       state.stats = { ...state.stats, ...action.payload };
     },
+    addXp: (state, action) => {
+      state.stats.xp += action.payload;
+    },
     addItemToInventory: (state, action) => {
       const { item } = action.payload;
       const emptyIndex = state.inventory.findIndex(it => it === null);
@@ -49,8 +46,10 @@ export const playerSlice = createSlice({
         state.inventory[emptyIndex] = item;
       } else {
         console.log('Inventory full. Cannot add item:', item.name);
-        // Optionally handle full inventory scenario
       }
+    },
+    addCurrency: (state, action) => {
+      state.stats.currency += action.payload;
     },
     removeItemFromInventory: (state, action) => {
       const { itemId } = action.payload;
@@ -69,49 +68,52 @@ export const playerSlice = createSlice({
     },
     equipItem: (state, action) => {
       const { item, slot } = action.payload;
-    
-      // Check if item is valid and has an id property
       if (item && item.id) {
-        const equipmentType = slot.toLowerCase(); // Adjust slot name to match item type (e.g., 'weapon' for 'Weapon')
-    
-        // Check if the item type matches the equipment slot
+        const equipmentType = slot.toLowerCase();
         if (item.type.toLowerCase() === equipmentType) {
-          // Check if the slot is currently empty
-          if (!state.equipment[slot]) {
-            // Equip the item directly if the slot is empty
-            state.equipment[slot] = item;
-            console.log('Equipped:', item.name, 'in slot:', slot, 'with item id:', item.id);
-    
-            // Remove from inventory
-            state.inventory = state.inventory.map(it => it && it.id === item.id ? null : it);
-          } else {
-            // Swap items
-            const currentItem = state.equipment[slot];
-            state.equipment[slot] = item;
-            console.log('Equipped:', item.name, 'in slot:', slot, 'with item id:', item.id);
-    
-            // Find the first available slot in the inventory
+          const currentItem = state.equipment[slot];
+          if (currentItem && currentItem.statChanges) {
+            for (const [stat, value] of Object.entries(currentItem.statChanges)) {
+              state.stats[stat] -= value;
+            }
+          }
+          state.equipment[slot] = item;
+          if (item.statChanges) {
+            for (const [stat, value] of Object.entries(item.statChanges)) {
+              state.stats[stat] += value;
+            }
+          }
+          state.inventory = state.inventory.map(it => it && it.id === item.id ? null : it);
+          if (currentItem) {
             const emptyIndex = state.inventory.findIndex(it => it === null);
             if (emptyIndex !== -1) {
-              state.inventory[emptyIndex - 1] = currentItem;
+              state.inventory[emptyIndex] = currentItem;
             } else {
               console.log('Inventory full. Cannot add item:', currentItem.name);
-              // Optionally handle full inventory scenario
             }
-    
-            // Remove the newly equipped item from inventory
-            state.inventory = state.inventory.map(it => it && it.id === item.id ? null : it);
           }
+          console.log('Equipped:', item.name, 'in slot:', slot, 'with item id:', item.id);
         } else {
           console.log(`Cannot equip ${item.name} in ${slot}. Item type does not match slot type.`);
         }
       }
-    },    
+    },
     unequipItem: (state, action) => {
       const { slot } = action.payload;
       if (state.equipment[slot]) {
-        state.inventory.push(state.equipment[slot]);
+        const item = state.equipment[slot];
         state.equipment[slot] = null;
+        if (item.statChanges) {
+          for (const [stat, value] of Object.entries(item.statChanges)) {
+            state.stats[stat] -= value;
+          }
+        }
+        const emptyIndex = state.inventory.findIndex(it => it === null);
+        if (emptyIndex !== -1) {
+          state.inventory[emptyIndex] = item;
+        } else {
+          console.log('Inventory full. Cannot add item:', item.name);
+        }
       }
     },
     swapItems: (state, action) => {
@@ -119,24 +121,30 @@ export const playerSlice = createSlice({
       const temp = state.equipment[from];
       state.equipment[from] = state.equipment[to];
       state.equipment[to] = temp;
-
-      // Move the previously equipped item from 'from' slot back to inventory
       if (state.equipment[from]) {
         state.inventory.push(state.equipment[from]);
-        state.equipment[from] = null; // Clear the 'from' slot after moving the item
+        state.equipment[from] = null;
       }
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(setActiveZone, (state, action) => {
+      state.status = `Exploring ${action.payload.zoneName}`;
+      console.log('status should be exploring:', state.status);
+    });
+    builder.addCase(clearActiveZone, (state) => {
+      console.log('Expedition complete. - player slice');
+      state.status = 'idle';
+    });
     builder.addMatcher(
       action => action.type.startsWith('player/'),
-      (state, action) => {
+      (state) => {
         localStorage.setItem('playerState', JSON.stringify(state));
       }
     );
   }
 });
 
-export const { updateStats, addItemToInventory, updateInventorySize, equipItem, removeItemFromInventory, unequipItem, swapItems } = playerSlice.actions;
+export const { updateStats, addXp, addItemToInventory, addCurrency, updateInventorySize, equipItem, removeItemFromInventory, unequipItem, swapItems } = playerSlice.actions;
 
 export default playerSlice.reducer;
