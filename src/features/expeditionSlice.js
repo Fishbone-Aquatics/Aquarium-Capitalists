@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import items from '../data/items';
+import items from '../data/items/items';
 
 const loadInitialState = () => {
   const savedState = localStorage.getItem('expeditionState');

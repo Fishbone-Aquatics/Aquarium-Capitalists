@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { setActiveZone, clearActiveZone } from '../expeditionSlice'; // Import actions from expeditionSlice
-import items from '../../data/items';
+import items from '../../data/items/items';
 
 const loadInitialState = () => {
   const savedState = localStorage.getItem('playerState');
@@ -10,29 +10,21 @@ const loadInitialState = () => {
     return {
       name: "Player",
       stats: {
-        strength: 10,
-        agility: 5,
+        level: 1,
         xp: 0,
-        maxInventorySlots: 16,
-        health: 100, // Starting health
-        currency: 0, // Starting currency
+        currency: 0,
       },
       equipment: {
-        head: null,
-        chest: null,
-        pants: null,
-        boots: null,
-        weapon: items.boneKnife,
-        shield: items.woodenShield,
-        accessory: null
+        heater: items.equipment.heater,
+        filter: items.equipment.spongeFilter,
+        lights: null
       },
       inventory: [
-        { ...items.bread, quantity: 3 },
-        { ...items.apple, quantity: 3 },
-        { ...items.katana, quantity: 1 },
+        { ...items.equipment.filter, quantity: 1 }, 
         ...Array(13).fill(null)
       ],
-      status: 'idle'
+      status: 'idle',
+      maxInventorySlots: 16,
     };
   }
 };

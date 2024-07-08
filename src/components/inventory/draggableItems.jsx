@@ -17,19 +17,6 @@ const DraggableItem = ({ item, onClick }) => {
         }
       }
     }));
-  
-    // Ensure the onClick is attached to an element that correctly registers clicks.
-  //   return (
-  //     <div ref={dragRef} alt={item.name} className="item-box" onClick={() => onClick(item)} style={{ opacity: isDragging ? 0.5 : 1 }}>
-  //       <div className="item-icon">
-  //         <img src={item.image} alt={item.name} />
-  //       </div>
-  //       <div className="item-details">
-  //         {item.name} ({item.type}) - Quantity: {item.quantity}
-  //       </div>
-  //     </div>
-  //   );
-  // };
   return (
     <div ref={dragRef} alt={item.name} className="item-box" onClick={() => onClick(item)} style={{ opacity: isDragging ? 0.5 : 1 }}>
       <div className="item-icon">

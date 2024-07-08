@@ -8,7 +8,6 @@ const Inventory = () => {
   const dispatch = useDispatch();
 
   const handleClick = (item) => {
-    console.log('clicky?')
     if (item) {
       console.log('Clicked item:', item)
       dispatch(equipItem({ item, slot: determineSlot(item.type) }));

@@ -43,3 +43,6 @@ one for equipment, settings and something else - stats should be a pop out butto
 ## Commit docs
 https://github.com/SobieskiCodes/Codefolio/blob/websocket/.github/workflows/CONVENTIONAL_COMMITS.md
 https://github.com/SobieskiCodes/Codefolio/blob/websocket/.github/workflows/PROPERLY_SCOPED_BRANCH.MD
+
+
+
