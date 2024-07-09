@@ -85,7 +85,7 @@ const equipment = {
       image: "/icons/equipment/light.png",
       description: "A light for your aquarium.",
       statChanges: {
-        aquariumMaxLightStrength: 5,
+        //aquariumMaxLightStrength: 5,
       }
     },
   };

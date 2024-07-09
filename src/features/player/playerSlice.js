@@ -102,21 +102,14 @@ export const playerSlice = createSlice({
     },
     unequipItem: (state, action) => {
       const { slot } = action.payload;
-      if (state.equipment[slot]) {
-        const item = state.equipment[slot];
-        state.equipment[slot] = null;
-        if (item.statChanges) {
-          for (const [stat, value] of Object.entries(item.statChanges)) {
-            state.stats[stat] -= value;
-          }
-        }
-        if (item.id !== items.equipment.emptySlot.id) {
-          const emptyIndex = state.inventory.findIndex(it => it === null);
-          if (emptyIndex !== -1) {
-            state.inventory[emptyIndex] = item;
-          } else {
-            console.log('Inventory full. Cannot add item:', item.name);
-          }
+      const currentItem = state.equipment[slot];
+      if (currentItem && currentItem.id !== items.equipment.emptySlot.id) {
+        state.equipment[slot] = { ...items.equipment.emptySlot, type: slot.charAt(0).toUpperCase() + slot.slice(1) };
+        const emptyIndex = state.inventory.findIndex(it => it === null);
+        if (emptyIndex !== -1) {
+          state.inventory[emptyIndex] = currentItem;
+        } else {
+          console.log('Inventory full. Cannot add item:', currentItem.name);
         }
       }
     },

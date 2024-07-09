@@ -9,7 +9,7 @@ const Inventory = () => {
 
   const handleClick = (item) => {
     if (item) {
-      console.log('Clicked item:', item)
+      console.log('Clicked item:', item);
       dispatch(equipItem({ item, slot: determineSlot(item.type) }));
     }
   };

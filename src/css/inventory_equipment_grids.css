@@ -27,7 +27,6 @@
   display: flex;
   align-items: center; /* Center the image vertically */
   width: 100%; /* Ensures it uses full width of parent */
-  height: 100%; /* Ensures it uses full height of parent */
 }
 
 .item-icon img {
