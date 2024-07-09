@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import items from '../../data/items/items';
+import { setActiveZone, clearActiveZone } from '../expeditionSlice';
 
 const loadInitialState = () => {
   const savedState = localStorage.getItem('playerState');
@@ -152,6 +153,22 @@ export const playerSlice = createSlice({
       saveState(state);
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(setActiveZone, (state, action) => {
+      state.status = `Exploring ${action.payload.zoneName}`;
+      console.log('status should be exploring:', state.status);
+    });
+    builder.addCase(clearActiveZone, (state) => {
+      console.log('Expedition complete. - player slice');
+      state.status = 'idle';
+    });
+    builder.addMatcher(
+      action => action.type.startsWith('player/'),
+      (state) => {
+        localStorage.setItem('playerState', JSON.stringify(state));
+      }
+    );
+  }
 });
 
 export const { updateStats, addXp, addCurrency, addItemToInventory, removeItemFromInventory, updateInventorySize, equipItem, unequipItem, swapItems, swapEquipmentAndInventory } = playerSlice.actions;
