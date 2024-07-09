@@ -1,24 +1,50 @@
-/* src/pages/Home.css */
-.stats {
-    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
-    color: white;
-    padding: 10px;
-    border-radius: 8px;
-    position: absolute; /* Positions the stats div absolutely to its relative parent */
-    top: 50px; /* Distance from the top of the parent */
-    left: 20%; /* Distance from the left of the parent */
-    width: 60%; /* Width of the stats div */
-    z-index: 1000; /* Ensures it sits on top of other content */
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Soft shadow for better visibility */
-  }
-  
-  /* Optional: Add a transition for smooth appearance */
-  .stats {
-    transition: opacity 0.3s ease-in-out;
-    opacity: 0; /* Default state is invisible */
-  }
-  
-  .stats.active {
-    opacity: 1; /* Visible state */
-  }
-  
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Adjust the number based on how many columns you want */
+  gap: 35px;
+}
+
+.equipment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Adjust the number based on how many columns you want */
+  gap: 35px;
+}
+
+.item-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers children horizontally */
+  border: 1px solid #ccc; /* Maintain the outer border */
+  padding: 10px;
+  width: 72px; /* Adjust size for your need */
+  height: 72px; /* Adjust size for your need */
+  margin-bottom: 20px; /* Add margin to ensure space below the item box */
+}
+
+.inventory-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%; /* Ensures it uses full width of parent */
+  height: 100%; /* Ensures it uses full height of parent */
+}
+
+.item-icon {
+  display: flex;
+  align-items: center; /* Center the image vertically */
+  justify-content: center; /* Center the image horizontally */
+  width: 100%; /* Ensures it uses full width of parent */
+  height: 100%; /* Ensures it uses full height of parent */
+}
+
+.item-icon img {
+  max-width: 100%; /* Ensures the image scales within the parent */
+  max-height: 100%; /* Ensures the image scales within the parent */
+  object-fit: contain; /* Ensures the image keeps its aspect ratio */
+  border: none; /* Remove any border around the image itself */
+}
+
+.item-details {
+  text-align: center;
+  margin-top: 15px;
+}

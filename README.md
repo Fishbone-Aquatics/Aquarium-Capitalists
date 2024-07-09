@@ -5,6 +5,8 @@
 
 [<img src="https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/blob/main/screenshots/ExpeditionsWorkWithDrops.gif">](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/blob/main/screenshots/ExpeditionsWorkWithDrops.gif)
 
+[<img src="https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/blob/main/screenshots/CoolProfiler.gif">](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/blob/main/screenshots/CoolProfiler.gif)
+
 ## TODO:
 Add tooltips/hover for item stats/descriptions etc.
 Turn right side into a tabbed "settings" thing

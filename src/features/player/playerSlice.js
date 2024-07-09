@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { setActiveZone, clearActiveZone } from '../expeditionSlice'; // Import actions from expeditionSlice
 import items from '../../data/items/items';
+import { setActiveZone, clearActiveZone } from '../expeditionSlice';
 
 const loadInitialState = () => {
   const savedState = localStorage.getItem('playerState');
@@ -15,18 +15,30 @@ const loadInitialState = () => {
         currency: 0,
       },
       equipment: {
-        heater: items.equipment.heater,
-        filter: items.equipment.spongeFilter,
-        lights: null
+        // heater: { ...items.equipment.filter, type: 'Heater' }, // testing
+        // filter: { ...items.equipment.spongeFilter, type: 'Filter' },
+        // light: { ...items.equipment.light, type: 'Light' },
+        heater: { ...items.equipment.emptySlot, type: 'Heater' },
+        filter: { ...items.equipment.emptySlot, type: 'Filter' },
+        light: { ...items.equipment.emptySlot, type: 'Light' },
       },
+      // inventory: [ // testing
+      //   { ...items.equipment.filter, quantity: 1 },
+      //   { ...items.equipment.spongeFilter, quantity: 1 },
+      //   { ...items.equipment.light, quantity: 1 },
+      //   ...Array(13).fill({ ...items.equipment.emptySlot }),
+      // ],
       inventory: [
-        { ...items.equipment.filter, quantity: 1 }, 
-        ...Array(13).fill(null)
+        ...Array(16).fill({ ...items.equipment.emptySlot }),
       ],
       status: 'idle',
       maxInventorySlots: 16,
     };
   }
+};
+
+const saveState = (state) => {
+  localStorage.setItem('playerState', JSON.stringify(state));
 };
 
 export const playerSlice = createSlice({
@@ -35,29 +47,39 @@ export const playerSlice = createSlice({
   reducers: {
     updateStats: (state, action) => {
       state.stats = { ...state.stats, ...action.payload };
+      saveState(state);
     },
     addXp: (state, action) => {
       state.stats.xp += action.payload;
-    },
-    addItemToInventory: (state, action) => {
-      const { item } = action.payload;
-      const emptyIndex = state.inventory.findIndex(it => it === null);
-      if (emptyIndex !== -1) {
-        state.inventory[emptyIndex] = item;
-      } else {
-        console.log('Inventory full. Cannot add item:', item.name);
-      }
+      console.log(`Added XP: ${action.payload}, new XP: ${state.stats.xp}`);
+      saveState(state);
     },
     addCurrency: (state, action) => {
       state.stats.currency += action.payload;
+      console.log(`Added currency: ${action.payload}, new currency: ${state.stats.currency}`);
+      saveState(state);
+    },
+    addItemToInventory: (state, action) => {
+      console.log('adding item to inventory',)
+      const { item } = action.payload;
+      const emptyIndex = state.inventory.findIndex(it => it.id === items.equipment.emptySlot.id);
+      if (emptyIndex !== -1) {
+        state.inventory[emptyIndex] = { ...item };
+        console.log(`Added item: ${item.name} to inventory at index: ${emptyIndex}`);
+      } else {
+        console.log('Inventory full. Cannot add item:', item.name);
+      }
+      saveState(state);
     },
     removeItemFromInventory: (state, action) => {
       const { itemId } = action.payload;
-      state.inventory = state.inventory.map(item => item && item.id === itemId ? null : item);
+      state.inventory = state.inventory.map(item => item && item.id === itemId ? { ...items.equipment.emptySlot } : item);
+      console.log(`Removed item with id: ${itemId} from inventory`);
+      saveState(state);
     },
     updateInventorySize: (state, action) => {
       const newSize = action.payload;
-      const resizedInventory = new Array(newSize).fill(null);
+      const resizedInventory = new Array(newSize).fill({ ...items.equipment.emptySlot });
       state.inventory.forEach((item, index) => {
         if (index < newSize) {
           resizedInventory[index] = item;
@@ -65,66 +87,76 @@ export const playerSlice = createSlice({
       });
       state.inventory = resizedInventory;
       state.stats.maxInventorySlots = newSize;
+      console.log(`Updated inventory size to: ${newSize}`);
+      saveState(state);
     },
     equipItem: (state, action) => {
       const { item, slot } = action.payload;
       if (item && item.id) {
         const equipmentType = slot.toLowerCase();
         if (item.type.toLowerCase() === equipmentType) {
-          const currentItem = state.equipment[slot];
-          if (currentItem && currentItem.statChanges) {
-            for (const [stat, value] of Object.entries(currentItem.statChanges)) {
-              state.stats[stat] -= value;
-            }
-          }
-          state.equipment[slot] = item;
-          if (item.statChanges) {
-            for (const [stat, value] of Object.entries(item.statChanges)) {
-              state.stats[stat] += value;
-            }
-          }
-          state.inventory = state.inventory.map(it => it && it.id === item.id ? null : it);
-          if (currentItem) {
-            const emptyIndex = state.inventory.findIndex(it => it === null);
+          const currentItem = { ...state.equipment[slot] };
+          state.equipment[slot] = { ...item };
+          state.inventory = state.inventory.map(it => it && it.id === item.id ? { ...items.equipment.emptySlot } : it);
+
+          if (currentItem && currentItem.id !== items.equipment.emptySlot.id) {
+            const emptyIndex = state.inventory.findIndex(it => it.id === items.equipment.emptySlot.id);
             if (emptyIndex !== -1) {
-              state.inventory[emptyIndex] = currentItem;
+              state.inventory[emptyIndex] = { ...currentItem };
             } else {
-              console.log('Inventory full. Cannot add item:', currentItem.name);
+              state.inventory.push({ ...currentItem });
             }
           }
-          console.log('Equipped:', item.name, 'in slot:', slot, 'with item id:', item.id);
         } else {
-          console.log(`Cannot equip ${item.name} in ${slot}. Item type does not match slot type.`);
+          console.log(`Cannot equip ${item.name} in ${slot}. Item type does not match slot type. ${item.type}`);
         }
       }
+      saveState(state);
     },
     unequipItem: (state, action) => {
-      const { slot } = action.payload;
-      if (state.equipment[slot]) {
-        const item = state.equipment[slot];
-        state.equipment[slot] = null;
-        if (item.statChanges) {
-          for (const [stat, value] of Object.entries(item.statChanges)) {
-            state.stats[stat] -= value;
-          }
-        }
-        const emptyIndex = state.inventory.findIndex(it => it === null);
-        if (emptyIndex !== -1) {
-          state.inventory[emptyIndex] = item;
-        } else {
-          console.log('Inventory full. Cannot add item:', item.name);
-        }
+      const { slot, targetIndex } = action.payload;
+      const currentItem = { ...state.equipment[slot] };
+      if (currentItem && currentItem.id !== items.equipment.emptySlot.id) {
+        state.equipment[slot] = { ...items.equipment.emptySlot, type: slot.charAt(0).toUpperCase() + slot.slice(1) };
+        state.inventory[targetIndex] = currentItem;
       }
+      saveState(state);
     },
     swapItems: (state, action) => {
       const { from, to } = action.payload;
-      const temp = state.equipment[from];
-      state.equipment[from] = state.equipment[to];
-      state.equipment[to] = temp;
-      if (state.equipment[from]) {
-        state.inventory.push(state.equipment[from]);
-        state.equipment[from] = null;
+      if (typeof from === 'number' && typeof to === 'number' && from < state.inventory.length && to < state.inventory.length) {
+        const fromItem = state.inventory[from];
+        const toItem = state.inventory[to];
+
+        console.log("Attempting to swap items:", fromItem, toItem);
+
+        if (fromItem && toItem) {
+          state.inventory[from] = toItem;
+          state.inventory[to] = fromItem;
+          console.log(`Swapped items in inventory from index ${from} to index ${to}`);
+        } else {
+          console.error("Invalid swap operation:", { fromItem, toItem });
+        }
+      } else {
+        console.error("Invalid swap indices:", { from, to });
       }
+      saveState(state);
+    },
+    swapEquipmentAndInventory: (state, action) => {
+      const { fromInventoryIndex, toEquipmentSlot } = action.payload;
+      const fromItem = state.inventory[fromInventoryIndex];
+      const toItem = state.equipment[toEquipmentSlot];
+
+      console.log("Attempting to swap inventory item with equipment:", fromItem, toItem);
+
+      if (fromItem && toItem) {
+        state.inventory[fromInventoryIndex] = toItem;
+        state.equipment[toEquipmentSlot] = fromItem;
+        console.log(`Swapped inventory item at index ${fromInventoryIndex} with equipment slot ${toEquipmentSlot}`);
+      } else {
+        console.error("Invalid swap operation:", { fromItem, toItem });
+      }
+      saveState(state);
     },
   },
   extraReducers: (builder) => {
@@ -145,6 +177,6 @@ export const playerSlice = createSlice({
   }
 });
 
-export const { updateStats, addXp, addItemToInventory, addCurrency, updateInventorySize, equipItem, removeItemFromInventory, unequipItem, swapItems } = playerSlice.actions;
+export const { updateStats, addXp, addCurrency, addItemToInventory, removeItemFromInventory, updateInventorySize, equipItem, unequipItem, swapItems, swapEquipmentAndInventory } = playerSlice.actions;
 
 export default playerSlice.reducer;

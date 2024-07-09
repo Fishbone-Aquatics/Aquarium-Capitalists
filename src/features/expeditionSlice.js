@@ -12,11 +12,12 @@ const loadInitialState = () => {
         {
           name: 'Coral Reefs',
           description: 'Rich in colorful fish and rare coral species.',
-          duration: 10, // seconds
+          duration: 3, // seconds
           xpRange: [1, 3],
           itemDrops: [
-            { item: items.boneKnife, chance: 0.1 },
-            { item: items.katana, chance: 0.05 }
+            { item: items.equipment.heater, chance: 0.75 },
+            { item: items.equipment.filter, chance: 0.05 },
+            { item: items.equipment.light, chance: 0.05 }
           ],
           currencyDrops: [
             { amount: 5, chance: 0.2 },
@@ -29,8 +30,8 @@ const loadInitialState = () => {
           duration: 30, // seconds
           xpRange: [3, 5],
           itemDrops: [
-            { item: items.woodenShield, chance: 0.1 },
-            { item: items.katana, chance: 0.05 }
+            { item: items.equipment.canisterFilter, chance: 0.005 },
+            { item: items.equipment.largeFilter, chance: 0.002 }
           ],
           currencyDrops: [
             { amount: 10, chance: 0.2 },
@@ -43,8 +44,8 @@ const loadInitialState = () => {
           duration: 45, // seconds
           xpRange: [4, 7],
           itemDrops: [
-            { item: items.boneKnife, chance: 0.1 },
-            { item: items.katana, chance: 0.05 }
+            { item: items.equipment.largeHeater, chance: 0.005 },
+            { item: items.equipment.mediumHeater, chance: 0.05 }
           ],
           currencyDrops: [
             { amount: 15, chance: 0.2 },

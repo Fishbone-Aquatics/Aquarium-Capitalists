@@ -1,24 +1,24 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
 
-
-const DraggableItem = ({ item, onClick }) => {
-    const [{ isDragging }, dragRef] = useDrag(() => ({
-      type: 'item',
-      item: item,
-      collect: monitor => ({
-        isDragging: !!monitor.isDragging(),
-      }),
-      end: (droppedItem, monitor) => {
-        if (monitor.didDrop()) {
-          console.log('Item dropped');
-        } else {
-          console.log('Drop canceled', item.name);
-        }
+const DraggableItem = ({ item, index }) => {
+  const [{ isDragging }, dragRef] = useDrag(() => ({
+    type: 'item',
+    item: { ...item, index },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+    end: (droppedItem, monitor) => {
+      if (monitor.didDrop()) {
+        console.log('Item dropped:', droppedItem.name);
+      } else {
+        console.log('Drop canceled:', droppedItem.name);
       }
-    }));
+    }
+  }));
+
   return (
-    <div ref={dragRef} alt={item.name} className="item-box" onClick={() => onClick(item)} style={{ opacity: isDragging ? 0.5 : 1 }}>
+    <div ref={dragRef} className="inventory-slot" style={{ opacity: isDragging ? 0.5 : 1 }}>
       <div className="item-icon">
         <img src={item.image} alt={item.name} />
       </div>
@@ -28,5 +28,5 @@ const DraggableItem = ({ item, onClick }) => {
     </div>
   );
 };
-  
-  export default DraggableItem;
+
+export default DraggableItem;

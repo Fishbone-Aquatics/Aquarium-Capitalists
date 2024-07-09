@@ -8,4 +8,5 @@ export const store = configureStore({
     player: playerReducer,
     expedition: expeditionReducer,
   },
+  devTools: process.env.NODE_ENV !== 'production',
 });
