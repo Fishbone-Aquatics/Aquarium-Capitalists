@@ -22,10 +22,18 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Release Please for main and develop branches
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+      - name: Release Please for main branch
+        if: github.ref == 'refs/heads/main'
         uses: google-github-actions/release-please-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: 'simple'
-          target-branch: ${{ github.ref_name }}
+          target-branch: 'main'
+
+      - name: Release Please for develop branch
+        if: github.ref == 'refs/heads/develop'
+        uses: google-github-actions/release-please-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: 'simple'
+          target-branch: 'develop'
