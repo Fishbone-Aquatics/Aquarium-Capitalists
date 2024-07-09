@@ -4,6 +4,8 @@
   grid-template-columns: 15% 1fr 300px; /* Sidebar, Main Area, Right-Side Grid */
   grid-template-rows: 1fr;
   background-color: #121212; /* Dark background for grungy look */
+  position: relative; /* Ensure the app-grid creates a stacking context */
+  overflow: visible; /* Prevent clipping */
 }
 
 .sidebar {
@@ -13,6 +15,7 @@
   display: flex;
   flex-direction: column; /* Aligns links vertically */
   align-items: start; /* Aligns items to the start of the sidebar */
+  position: relative; /* Ensure the sidebar creates a stacking context */
 }
 
 .sidebar a {
@@ -33,7 +36,8 @@
   background-color: #282828;
   color: white;
   padding: 20px;
-  overflow-y: auto; /* Allows scrolling within the main display area */
+  overflow: visible; /* Prevent clipping */
+  position: relative; /* Ensure the main display creates a stacking context */
 }
 
 .right-side {

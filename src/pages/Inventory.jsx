@@ -1,19 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrop } from 'react-dnd';
 import '../css/inventory.css';
 import DraggableItem from '../components/inventory/draggableItems';
 import { swapItems, unequipItem } from '../features/player/playerSlice';
+import Tooltip from '../components/Tooltip';
+
+const extractTooltipData = (item) => {
+  const tooltip = item.tooltip || {};
+
+  return {
+    name: tooltip.name || item.name,
+    type: tooltip.type || item.type,
+    description: tooltip.description || item.description,
+    id: tooltip.id || item.id,
+    statChanges: tooltip.statChanges || item.statChanges,
+  };
+};
 
 const InventorySlot = ({ item, index, onSwap, onUnequip }) => {
+  const isEmptySlot = !item || item.id === 'empty-slot';
+  const [showTooltip, setShowTooltip] = useState(false);
+  const tooltipData = extractTooltipData(item);
+
   const [{ isOver }, dropRef] = useDrop(() => ({
     accept: 'item',
     drop: (draggedItem) => {
       if (draggedItem.equipmentSlot) {
-        console.log(`Unequipping item: ${draggedItem.name} from slot: ${draggedItem.equipmentSlot}`);
         onUnequip(draggedItem.equipmentSlot, index);
       } else {
-        console.log(`Swapping items: ${draggedItem.name} at index: ${draggedItem.index} with item at index: ${index}`);
         onSwap(draggedItem.index, index);
       }
     },
@@ -22,13 +37,23 @@ const InventorySlot = ({ item, index, onSwap, onUnequip }) => {
     }),
   }));
 
-  const isEmptySlot = !item || item.id === 'empty-slot';
+  console.log(`Rendering slot at index ${index}, item:`, item, 'Tooltip Data:', tooltipData);
 
   return (
     <div ref={dropRef} className={`item-box ${isOver ? 'highlight' : ''}`}>
       {!isEmptySlot ? (
-        <div className="item-icon">
+        <div className="item-icon"
+          onMouseEnter={() => {
+            console.log('Mouse entered item slot:', item);
+            setShowTooltip(true);
+          }}
+          onMouseLeave={() => {
+            console.log('Mouse left item slot:', item);
+            setShowTooltip(false);
+          }}
+        >
           <DraggableItem item={item} index={index} />
+          {showTooltip && <Tooltip data={tooltipData} />}
         </div>
       ) : (
         <div className="item-details">
@@ -39,7 +64,7 @@ const InventorySlot = ({ item, index, onSwap, onUnequip }) => {
   );
 };
 
-function Inventory() {
+const Inventory = () => {
   const player = useSelector(state => state.player);
   const dispatch = useDispatch();
 
@@ -70,6 +95,6 @@ function Inventory() {
       </div>
     </div>
   );
-}
+};
 
 export default Inventory;

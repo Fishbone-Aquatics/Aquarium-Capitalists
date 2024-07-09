@@ -12,6 +12,7 @@ import Equipment from './components/equipment/Equipment';
 import Stats from './components/equipment/Stats';
 import Action from './components/Action'; // Import Action component
 import './App.css';
+import './css/tooltip.css'; // Import the tooltip CSS
 
 function App() {
   return (
