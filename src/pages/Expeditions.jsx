@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActiveZone, clearActiveZone } from '../features/expeditionSlice';
+import { setActiveZone, clearActiveZone } from '../features/expeditions/expeditionSlice';
 import { addXp, addItemToInventory, addCurrency } from '../features/player/playerSlice';
 import '../styles/expeditions.css';
 

@@ -37,7 +37,7 @@ const InventorySlot = ({ item, index, onSwap, onUnequip }) => {
     }),
   }));
 
-  console.log(`Rendering slot at index ${index}, item:`, item, 'Tooltip Data:', tooltipData);
+  //console.log(`Rendering slot at index ${index}, item:`, item, 'Tooltip Data:', tooltipData);
 
   return (
     <div ref={dropRef} className={`item-box ${isOver ? 'highlight' : ''}`}>
