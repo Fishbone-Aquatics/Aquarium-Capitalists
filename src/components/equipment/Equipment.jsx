@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrop } from 'react-dnd';
 import { equipItem } from '../../features/player/playerSlice';
-import items from '../../data/items/items'; // Make sure this path is correct
+import DraggableItem from '../../components/inventory/draggableItems';
 
 const EquipmentSlot = ({ slot, item }) => {
   const dispatch = useDispatch();
@@ -20,18 +20,14 @@ const EquipmentSlot = ({ slot, item }) => {
     }),
   });
 
-  const isEmptySlot = item.id === 'empty-slot';
-  console.log('hello', item)
+  const isEmptySlot = !item || item.id === 'empty-slot';
 
   return (
     <div ref={dropRef} className="item-box" style={{ backgroundColor: isOver ? 'lightgreen' : canDrop ? 'lightblue' : 'transparent' }}>
       {!isEmptySlot ? (
         <>
           <div className="item-icon">
-            <img src={item.image} alt={item.name} />
-          </div>
-          <div className="item-details">
-            <span>{item.type} - {item.name}</span>
+            <DraggableItem item={{ ...item, equipmentSlot: slot }} index={slot} />
           </div>
         </>
       ) : (

@@ -18,7 +18,7 @@ const DraggableItem = ({ item, index }) => {
   }));
 
   return (
-    <div ref={dragRef} className="item-box" style={{ opacity: isDragging ? 0.5 : 1 }}>
+    <div ref={dragRef} className="inventory-slot" style={{ opacity: isDragging ? 0.5 : 1 }}>
       <div className="item-icon">
         <img src={item.image} alt={item.name} />
       </div>
