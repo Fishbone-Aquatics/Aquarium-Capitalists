@@ -10,9 +10,9 @@ const DraggableItem = ({ item, index }) => {
     }),
     end: (droppedItem, monitor) => {
       if (monitor.didDrop()) {
-        console.log('Item dropped');
+        console.log('Item dropped:', droppedItem.name);
       } else {
-        console.log('Drop canceled', item.name);
+        console.log('Drop canceled:', droppedItem.name);
       }
     }
   }));
