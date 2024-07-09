@@ -1,11 +1,11 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
 
-const DraggableItem = ({ item, onClick }) => {
+const DraggableItem = ({ item, index }) => {
   const [{ isDragging }, dragRef] = useDrag(() => ({
     type: 'item',
-    item: item,
-    collect: monitor => ({
+    item: { ...item, index },
+    collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
     end: (droppedItem, monitor) => {
@@ -18,7 +18,7 @@ const DraggableItem = ({ item, onClick }) => {
   }));
 
   return (
-    <div ref={dragRef} className="item-box" onClick={() => onClick(item)} style={{ opacity: isDragging ? 0.5 : 1 }}>
+    <div ref={dragRef} className="item-box" style={{ opacity: isDragging ? 0.5 : 1 }}>
       <div className="item-icon">
         <img src={item.image} alt={item.name} />
       </div>

@@ -23,7 +23,7 @@ const loadInitialState = () => {
         { ...items.equipment.filter, quantity: 1 },
         { ...items.equipment.spongeFilter, quantity: 1 },
         { ...items.equipment.light, quantity: 1 },
-        ...Array(13).fill(null)
+        ...Array(13).fill(items.equipment.emptySlot)
       ],
       status: 'idle',
       maxInventorySlots: 16,
@@ -115,13 +115,9 @@ export const playerSlice = createSlice({
     },
     swapItems: (state, action) => {
       const { from, to } = action.payload;
-      const temp = state.equipment[from];
-      state.equipment[from] = state.equipment[to];
-      state.equipment[to] = temp;
-      if (state.equipment[from]) {
-        state.inventory.push(state.equipment[from]);
-        state.equipment[from] = null;
-      }
+      const temp = state.inventory[from];
+      state.inventory[from] = state.inventory[to];
+      state.inventory[to] = temp;
     },
   },
   extraReducers: (builder) => {
