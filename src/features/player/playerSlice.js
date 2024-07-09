@@ -21,8 +21,9 @@ const loadInitialState = () => {
       },
       inventory: [
         { ...items.equipment.filter, quantity: 1 },
+        { ...items.equipment.spongeFilter, quantity: 1 },
         { ...items.equipment.light, quantity: 1 },
-        ...Array(14).fill(null)
+        ...Array(13).fill(null)
       ],
       status: 'idle',
       maxInventorySlots: 16,
@@ -85,7 +86,7 @@ export const playerSlice = createSlice({
             }
           }
           state.inventory = state.inventory.map(it => it && it.id === item.id ? null : it);
-          if (currentItem && currentItem.type !== items.equipment.emptySlot.type) {
+          if (currentItem && currentItem.id !== items.equipment.emptySlot.id) {
             const emptyIndex = state.inventory.findIndex(it => it === null);
             if (emptyIndex !== -1) {
               state.inventory[emptyIndex] = currentItem;
@@ -109,11 +110,13 @@ export const playerSlice = createSlice({
             state.stats[stat] -= value;
           }
         }
-        const emptyIndex = state.inventory.findIndex(it => it === null);
-        if (emptyIndex !== -1) {
-          state.inventory[emptyIndex] = item;
-        } else {
-          console.log('Inventory full. Cannot add item:', item.name);
+        if (item.id !== items.equipment.emptySlot.id) {
+          const emptyIndex = state.inventory.findIndex(it => it === null);
+          if (emptyIndex !== -1) {
+            state.inventory[emptyIndex] = item;
+          } else {
+            console.log('Inventory full. Cannot add item:', item.name);
+          }
         }
       }
     },
