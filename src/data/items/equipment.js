@@ -1,7 +1,15 @@
 // TODO: Add R.O machine.
 
 const equipment = {
-    spongeFilter: {
+    emptySlot: {
+      id: 'empty-slot',
+      name: "Empty Slot",
+      category: "Equipment",
+      image: "/icons/equipment/empty.png",
+      description: "An item slot with nothing equipped.",
+      statChanges: {}
+    },
+      spongeFilter: {
       id: 'sponge-filter',
       name: "Sponge Filter",
       type: "Filter",

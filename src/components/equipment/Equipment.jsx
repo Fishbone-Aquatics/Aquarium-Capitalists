@@ -2,15 +2,13 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrop } from 'react-dnd';
 import { equipItem } from '../../features/player/playerSlice';
+import items from '../../data/items/items'; // Make sure this path is correct
 
 const EquipmentSlot = ({ slot, item }) => {
   const dispatch = useDispatch();
   const [{ canDrop, isOver }, dropRef] = useDrop({
     accept: 'item',
     drop: (droppedItem) => {
-      // Validate dropped item
-      console.log(droppedItem, item)
-      //if (!droppedItem || droppedItem.type === item.type) {
       if (droppedItem) {
         console.log(`Dropped item: ${droppedItem.name} into slot: ${slot}`);
         dispatch(equipItem({ item: droppedItem, slot }));
@@ -21,14 +19,26 @@ const EquipmentSlot = ({ slot, item }) => {
       canDrop: !!monitor.canDrop()
     }),
   });
+
+  const isEmptySlot = item.id === 'empty-slot';
+  console.log('hello', item)
+
   return (
     <div ref={dropRef} className="item-box" style={{ backgroundColor: isOver ? 'lightgreen' : canDrop ? 'lightblue' : 'transparent' }}>
-      <div className="item-icon">
-        {item ? <img src={item.image} alt={item.name} /> : <span>Empty `{slot}` slot.</span>}
-      </div>
-      <div className="item-details">
-      {item ? <span>{item.type} - {item.name} </span> : <span></span>}
-      </div>
+      {!isEmptySlot ? (
+        <>
+          <div className="item-icon">
+            <img src={item.image} alt={item.name} />
+          </div>
+          <div className="item-details">
+            <span>{item.type} - {item.name}</span>
+          </div>
+        </>
+      ) : (
+        <div className="item-details">
+          <span>Empty {slot} slot</span>
+        </div>
+      )}
     </div>
   );
 };

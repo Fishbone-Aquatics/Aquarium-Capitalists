@@ -15,13 +15,14 @@ const loadInitialState = () => {
         currency: 0,
       },
       equipment: {
-        heater: items.equipment.heater,
-        filter: items.equipment.spongeFilter,
-        lights: null
+        heater: { ...items.equipment.emptySlot, type: 'Heater' },
+        filter: { ...items.equipment.emptySlot, type: 'Filter' },
+        light: { ...items.equipment.emptySlot, type: 'Light' },
       },
       inventory: [
-        { ...items.equipment.filter, quantity: 1 }, 
-        ...Array(13).fill(null)
+        { ...items.equipment.filter, quantity: 1 },
+        { ...items.equipment.light, quantity: 1 },
+        ...Array(14).fill(null)
       ],
       status: 'idle',
       maxInventorySlots: 16,
@@ -84,7 +85,7 @@ export const playerSlice = createSlice({
             }
           }
           state.inventory = state.inventory.map(it => it && it.id === item.id ? null : it);
-          if (currentItem) {
+          if (currentItem && currentItem.type !== items.equipment.emptySlot.type) {
             const emptyIndex = state.inventory.findIndex(it => it === null);
             if (emptyIndex !== -1) {
               state.inventory[emptyIndex] = currentItem;
@@ -94,7 +95,7 @@ export const playerSlice = createSlice({
           }
           console.log('Equipped:', item.name, 'in slot:', slot, 'with item id:', item.id);
         } else {
-          console.log(`Cannot equip ${item.name} in ${slot}. Item type does not match slot type.`);
+          console.log(`Cannot equip ${item.name} in ${slot}. Item type does not match slot type. ${item.type}`);
         }
       }
     },
