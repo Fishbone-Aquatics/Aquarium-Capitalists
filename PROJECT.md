@@ -143,3 +143,21 @@
   - Collect player feedback.
   - Refine and balance gameplay mechanics.
   - Finalize and polish UI/UX.
+
+  Core mechanics & gameplay.
+
+
+## potential rewrite for phases:  
+This will consist of the basic functionality and the initial things to do, expeditions, players shop, gathering.
+Leveling (and level locks), stats, equipment.
+It will include things like tests, versioning and a basic deployment pipeline.
+
+Additional gameplay mechanics
+This will be the stuff that adds some depth to the game.
+Breeding / genetics / minigames / clans / ironman etc.
+
+Advanced features
+This will be things planned for the future after release - laying out baselines and ideas / projects.
+
+Testing and refinement
+This will be where we test everything

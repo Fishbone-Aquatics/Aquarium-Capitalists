@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrop } from 'react-dnd';
-import '../css/inventory.css';
-import DraggableItem from '../components/inventory/draggableItems';
+import '../styles/inventory.css';
+import DraggableItem from '../components/draggableItems';
 import { swapItems, unequipItem } from '../features/player/playerSlice';
 import Tooltip from '../components/Tooltip';
 

@@ -8,11 +8,11 @@ import Home from './pages/Home';
 import Inventory from './pages/Inventory';
 import Expeditions from './pages/Expeditions';
 import Breeding from './pages/Breeding';
-import Equipment from './components/equipment/Equipment';
-import Stats from './components/equipment/Stats';
+import Equipment from './components/Equipment';
+import Stats from './components/Stats';
 import Action from './components/Action'; // Import Action component
 import './App.css';
-import './css/tooltip.css'; // Import the tooltip CSS
+import './styles/tooltip.css'; // Import the tooltip CSS
 
 function App() {
   return (

@@ -1,7 +1,7 @@
 // src/components/Grid.jsx
 import React from 'react';
 import { useDrop } from 'react-dnd';
-import './Grid.css';
+import '../styles/grid.css';
 
 const Grid = ({ gridSize }) => {
   const [, drop] = useDrop({

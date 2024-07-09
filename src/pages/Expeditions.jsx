@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveZone, clearActiveZone } from '../features/expeditionSlice';
 import { addXp, addItemToInventory, addCurrency } from '../features/player/playerSlice';
-import './expeditions.css';
+import '../styles/expeditions.css';
 
 const Expeditions = () => {
   const dispatch = useDispatch();

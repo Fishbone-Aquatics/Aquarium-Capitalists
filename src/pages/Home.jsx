@@ -1,7 +1,7 @@
 // src/pages/Home.jsx
 import React from 'react';
-import Grid from '../components/Grid';
-import './Home.css';
+import Grid from '../components/PlayersShopGrid';
+import '../styles/home.css';
 
 function Home() {
   return (
