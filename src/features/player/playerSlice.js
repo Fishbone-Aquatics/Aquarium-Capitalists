@@ -15,15 +15,21 @@ const loadInitialState = () => {
         currency: 0,
       },
       equipment: {
+        // heater: { ...items.equipment.filter, type: 'Heater' }, // testing
+        // filter: { ...items.equipment.spongeFilter, type: 'Filter' },
+        // light: { ...items.equipment.light, type: 'Light' },
         heater: { ...items.equipment.emptySlot, type: 'Heater' },
         filter: { ...items.equipment.emptySlot, type: 'Filter' },
         light: { ...items.equipment.emptySlot, type: 'Light' },
       },
+      // inventory: [ // testing
+      //   { ...items.equipment.filter, quantity: 1 },
+      //   { ...items.equipment.spongeFilter, quantity: 1 },
+      //   { ...items.equipment.light, quantity: 1 },
+      //   ...Array(13).fill({ ...items.equipment.emptySlot }),
+      // ],
       inventory: [
-        { ...items.equipment.filter, quantity: 1 },
-        { ...items.equipment.spongeFilter, quantity: 1 },
-        { ...items.equipment.light, quantity: 1 },
-        ...Array(13).fill({ ...items.equipment.emptySlot }),
+        ...Array(16).fill({ ...items.equipment.emptySlot }),
       ],
       status: 'idle',
       maxInventorySlots: 16,

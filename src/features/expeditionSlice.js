@@ -12,10 +12,12 @@ const loadInitialState = () => {
         {
           name: 'Coral Reefs',
           description: 'Rich in colorful fish and rare coral species.',
-          duration: 10, // seconds
+          duration: 3, // seconds
           xpRange: [1, 3],
           itemDrops: [
-            { item: items.equipment.heater, chance: 0.05 }
+            { item: items.equipment.heater, chance: 0.75 },
+            { item: items.equipment.filter, chance: 0.05 },
+            { item: items.equipment.light, chance: 0.05 }
           ],
           currencyDrops: [
             { amount: 5, chance: 0.2 },
@@ -29,7 +31,7 @@ const loadInitialState = () => {
           xpRange: [3, 5],
           itemDrops: [
             { item: items.equipment.canisterFilter, chance: 0.005 },
-            { item: items.equipment.smallHeater, chance: 0.02 }
+            { item: items.equipment.largeFilter, chance: 0.002 }
           ],
           currencyDrops: [
             { amount: 10, chance: 0.2 },
