@@ -3,8 +3,6 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import '../styles/inventory.css';
 import InventorySlot from '../components/InventorySlot';
-import Equipment from '../components/Equipment';
-import Stats from '../components/Stats';
 
 const Inventory = () => {
   const player = useSelector(state => state.player);

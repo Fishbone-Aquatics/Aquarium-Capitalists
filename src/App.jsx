@@ -52,8 +52,8 @@ function RightSideContent() {
   if (location.pathname === '/inventory') {
     return (
       <div className="right-side-content">
-        <Equipment />
         <Stats />
+        <Equipment />
       </div>
     );
   }
