@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import '../styles/gathering.css';
 import items from '../data/items/items';
-import { updateSkillXp } from '../features/player/playerSlice'; // Import the action to update XP
+import { updateSkillXp, addItemToInventory } from '../features/player/playerSlice'; // Import the action to update XP
 
 const Gathering = () => {
-  console.log('Rendering Gathering component');
+  //console.log('Rendering Gathering component');
 
   const [activeTab, setActiveTab] = useState('minerals');
   const [activePlaceholderTab, setActivePlaceholderTab] = useState('placeholder1');
@@ -51,6 +51,7 @@ const Gathering = () => {
       const xpGainedValue = Math.floor(Math.random() * (gatheringDrops.xpRange[1] - gatheringDrops.xpRange[0] + 1)) + gatheringDrops.xpRange[0];
       console.log('XP gained:', xpGainedValue);
       dispatch(updateSkillXp({ skill: 'gathering', xp: xpGainedValue }));
+      dispatch(addItemToInventory({ item: selectedItem }));
       setXpGained(xpGainedValue);
       setTimeout(() => {
         gatheringCompletedRef.current = false; // Reset the ref after processing
@@ -69,12 +70,12 @@ const Gathering = () => {
   }, [isGathering, selectedItem.duration, handleGather]);
 
   useEffect(() => {
-    console.log('isGathering changed:', isGathering);
+    //console.log('isGathering changed:', isGathering);
     if (isGathering) {
       startGathering();
     } else {
       clearTimeout(timeoutRef.current);
-      console.log('Timeout cleared');
+      //console.log('Timeout cleared');
     }
   }, [isGathering, startGathering]);
 
@@ -86,7 +87,7 @@ const Gathering = () => {
   }, [xpGained, selectedItem.name]);
 
   useEffect(() => {
-    console.log('notificationMessage changed:', notificationMessage);
+   // console.log('notificationMessage changed:', notificationMessage);
     if (notificationMessage) {
       const timer = setTimeout(() => {
         setNotificationMessage(null);
@@ -101,6 +102,8 @@ const Gathering = () => {
     console.log('Item clicked:', item);
     setSelectedItem({
       name: item.name,
+      id: item.id,
+      type: item.type,
       image: item.image,
       duration: item.duration,
       gatheringDrops: item.gatheringDrops,

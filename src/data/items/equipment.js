@@ -21,6 +21,7 @@ const equipment = {
     category: "Equipment",
     image: "/icons/equipment/spongeFilter.png",
     description: "An essential aquarium filter for shrimp.",
+    stackLimit: 1,
     statChanges: {},
     tooltip: {
       name: 'Sponge Filter',
@@ -36,6 +37,7 @@ const equipment = {
     category: "Equipment",
     image: "/icons/equipment/filter.png",
     description: "An essential hang on back aquarium filter.",
+    stackLimit: 1,
     statChanges: {},
     tooltip: {
       name: 'Filter',
@@ -51,6 +53,7 @@ const equipment = {
     category: "Equipment",
     image: "/icons/equipment/filter.png",
     description: "An extremely large canister aquarium filter.",
+    stackLimit: 1,
     statChanges: {},
     tooltip: {
       name: 'Large Filter',
@@ -66,6 +69,7 @@ const equipment = {
     category: "Equipment",
     image: "/icons/equipment/canisterFilter.png",
     description: "An essential canister back aquarium filter.",
+    stackLimit: 1,
     statChanges: {},
     tooltip: {
       name: 'Canister Filter',
@@ -98,6 +102,7 @@ const equipment = {
     stackLimit: 10,
     image: "/icons/equipment/boostAccelerator.png",
     description: "Increases speed of Expeditions by 2%",
+    stackLimit: 1,
     statChanges: {
       speed: 2,
     },
@@ -118,6 +123,7 @@ const equipment = {
     category: "Equipment",
     image: "/icons/equipment/treasurescanner.png",
     description: "Expedition drop rate increased by 5%",
+    stackLimit: 1,
     statChanges: {
       dropChance: 5,
     },
@@ -138,6 +144,7 @@ const equipment = {
     category: "Equipment",
     image: "/icons/equipment/light.png",
     description: "A light for your aquarium.",
+    stackLimit: 1,
     statChanges: {
       aquariumMaxLightStrength: 5,
     },
