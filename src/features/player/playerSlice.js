@@ -7,7 +7,7 @@ import { saveState } from './saveState'; // Import the shared saveState function
 const initialState = loadInitialState();
 
 const playerSlice = createSlice({
-  name: 'player',
+  name: initialState.name,
   initialState,
   reducers: {
     ...playerReducers,
@@ -42,7 +42,12 @@ export const {
   equipItem,
   unequipItem,
   swapItems,
-  swapEquipmentAndInventory
+  swapEquipmentAndInventory,
+  updateSkillXp,
+  updateSkillBoostPercent,
+  updateGatheringSpeed,
+  updateGatheringEfficiency,
+  updateExpeditionSpeed,
 } = playerSlice.actions;
 
 export default playerSlice.reducer;
