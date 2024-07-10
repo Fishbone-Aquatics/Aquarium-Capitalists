@@ -42,9 +42,10 @@ one for equipment, settings and something else - stats should be a pop out butto
 `-- index.jsx
 ```
 
-## Commit docs
+## Useful docs for me
 https://github.com/SobieskiCodes/Codefolio/blob/websocket/.github/workflows/CONVENTIONAL_COMMITS.md
 https://github.com/SobieskiCodes/Codefolio/blob/websocket/.github/workflows/PROPERLY_SCOPED_BRANCH.MD
+https://docs.google.com/document/d/1_K5F1I7iJGMqax2JdnS1ja4mLUppdm_f7yZoA6i8TqA/edit
 
 
 
