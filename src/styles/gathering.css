@@ -77,10 +77,10 @@
 .gathering-tabs {
   display: flex;
   justify-content: space-around;
-  margin-bottom: 20px;
-  border: 1px solid #4caf50; /* Border around the tabs */
-  border-radius: 10px;
+  margin-bottom: 0; /* Remove bottom margin */
+  border-radius: 10px 10px 0 0; /* Rounded corners only on the top */
   overflow: hidden; /* Hide overflow to get rounded corners */
+  background-color: #2b2b2b; /* Background color for the tabs */
 }
 
 .tab-button {
@@ -90,7 +90,6 @@
   color: #fff;
   border: none;
   cursor: pointer;
-  border-right: 1px solid #4caf50; /* Border between tabs */
 }
 
 .tab-button:last-child {
@@ -108,8 +107,9 @@
 
 .gathering-content {
   background-color: #2b2b2b;
-  border-radius: 10px;
+  border-radius: 0 0 10px 10px; /* Rounded corners only on the bottom */
   padding: 20px;
+  border-top: none; /* Remove top border to connect with the tabs */
 }
 
 .gathering-content ul {
@@ -238,9 +238,6 @@
 .notification.hide {
   opacity: 0;
 }
-
-
-
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
