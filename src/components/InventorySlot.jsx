@@ -1,4 +1,5 @@
 // src/components/InventorySlot.js
+
 import React, { useState } from 'react';
 import { useDrop } from 'react-dnd';
 import DraggableItem from './DraggableItems';
@@ -46,6 +47,9 @@ const InventorySlot = ({ item, index, dispatch }) => {
         >
           <DraggableItem item={item} index={index} />
           {showTooltip && <Tooltip data={tooltipData} />}
+          {item.quantity > 0 && (
+            <div className="quantity">{item.quantity}</div>
+          )}
         </div>
       ) : (
         <div className="item-details">

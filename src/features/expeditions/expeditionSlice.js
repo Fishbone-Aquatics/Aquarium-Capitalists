@@ -16,9 +16,9 @@ const loadInitialState = () => {
           duration: 3, // seconds
           xpRange: [1, 3],
           lootDrops: [
-            { type: 'item', item: items.equipment.heater, chance: 0.75 },
-            { type: 'item', item: items.equipment.filter, chance: 0.05 },
-            { type: 'item', item: items.equipment.light, chance: 0.05 },
+            { type: 'item', item: items.equipment.filter, chance: 0.33 },
+            { type: 'item', item: items.equipment.spongeFilter, chance: 0.33 },
+            { type: 'item', item: items.equipment.light, chance: 0.33 },
             { type: 'currency', amountRange: [5, 10], chance: 0.2 },
             { type: 'currency', amountRange: [10, 20], chance: 0.1 }
           ]

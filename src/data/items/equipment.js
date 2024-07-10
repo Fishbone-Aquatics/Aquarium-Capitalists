@@ -5,6 +5,7 @@ const equipment = {
     category: "Equipment",
     image: "/icons/equipment/empty.png",
     description: "An item slot with nothing equipped.",
+    stackLimit: 1,
     statChanges: {},
     tooltip: {
       name: 'Empty Slot',
@@ -80,6 +81,7 @@ const equipment = {
     category: "Equipment",
     image: "/icons/equipment/heater.png",
     description: "An essential aquarium heater.",
+    stackLimit: 1,
     statChanges: {},
     tooltip: {
       name: 'Heater',
