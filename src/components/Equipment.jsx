@@ -52,10 +52,13 @@ const Equipment = () => {
   const equipment = useSelector(state => state.player.equipment);
 
   return (
-    <div className="equipment-grid">
-      {Object.entries(equipment).map(([slot, item]) => (
-        <EquipmentSlot key={slot} slot={slot} item={item} />
-      ))}
+    <div> 
+      <h3>Equipment</h3> 
+      <div className="equipment-grid">
+        {Object.entries(equipment).map(([slot, item]) => (
+          <EquipmentSlot key={slot} slot={slot} item={item} />
+        ))}
+      </div>
     </div>
   );
 };
