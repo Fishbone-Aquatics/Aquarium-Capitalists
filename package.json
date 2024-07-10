@@ -5,7 +5,8 @@
     "description": "React TypeScript on Replit, using Vite bundler",
     "scripts": {
       "dev": "vite",
-      "build": "vite build"
+      "build": "vite build",
+      "test": "react-scripts test"
     },
     "keywords": [],
     "author": "",

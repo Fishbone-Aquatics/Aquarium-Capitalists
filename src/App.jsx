@@ -8,7 +8,7 @@ import { store } from './app/store';
 import Home from './pages/Home';
 import Inventory from './pages/Inventory';
 import Expeditions from './pages/Expeditions';
-import Breeding from './pages/Breeding';
+import Gathering from './pages/Gathering';
 import Action from './components/Action';
 import Equipment from './components/Equipment';
 import Stats from './components/Stats';
@@ -25,14 +25,14 @@ function App() {
               <Link to="/">Home</Link>
               <Link to="/inventory">Inventory</Link>
               <Link to="/expeditions">Expeditions</Link>
-              <Link to="/breeding">Breeding</Link>
+              <Link to="/gathering">Gathering</Link>
             </div>
             <main className="main-display">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/inventory" element={<Inventory />} />
                 <Route path="/expeditions" element={<Expeditions />} />
-                <Route path="/breeding" element={<Breeding />} />
+                <Route path="/gathering" element={<Gathering />} />
               </Routes>
             </main>
             <aside className="right-side">
