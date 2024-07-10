@@ -117,15 +117,26 @@ export const playerReducers = {
   },
   // New reducers for skills and other properties
   updateSkillXp: (state, action) => {
-    const { skillName, xp } = action.payload;
-    const skill = state.skills[skillName];
-    if (skill) {
-      skill.xp += xp;
-      console.log(`Added ${xp} XP to ${skillName}. New XP: ${skill.xp}`);
-      // Optionally handle leveling up logic here
+    console.log('Updating skill xp', action.payload);
+    const { skill, xp } = action.payload;
+    console.log('Skill:', skill, 'XP:', xp);
+  
+    if (skill in state.skills) {
+      const skillObject = state.skills[skill];
+      if (skillObject) {
+        skillObject.xp += xp;
+        console.log(`Added ${xp} XP to ${skill}. New XP: ${skillObject.xp}`);
+        // Optionally handle leveling up logic here
+      } else {
+        console.warn(`Skill object for ${skill} not found.`);
+      }
+    } else {
+      console.warn(`Skill ${skill} does not exist in state.skills.`);
     }
+  
     saveState(state);
   },
+  
   updateSkillBoostPercent: (state, action) => {
     state.skillBoostPercent = action.payload;
     console.log(`Updated skill boost percent to: ${state.skillBoostPercent}`);

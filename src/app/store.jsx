@@ -2,6 +2,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import playerReducer from '../features/player/playerSlice';
 import expeditionReducer from '../features/expeditions/expeditionSlice';
+import { saveState } from '../features/player/saveState';
+
 // Import other reducers as needed
 
 const rootReducer = {
@@ -10,9 +12,15 @@ const rootReducer = {
   // Add other reducers here
 };
 
-export const store = configureStore({
+const store = configureStore({
   reducer: rootReducer,
   devTools: process.env.NODE_ENV !== 'production',
 });
 
-export default store;
+// Subscribe to store changes to save player state to localStorage
+store.subscribe(() => {
+  saveState(store.getState().player);
+});
+
+export { store }; // Export as a named export
+export default store; // Also export as default export

@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { loadInitialState } from './playerInitialState';
+import loadInitialState from './playerInitialState'; // Correct import for default export
 import { playerReducers } from './playerReducers';
 import { setActiveZone, clearActiveZone } from '../expeditions/expeditionSlice';
-import { saveState } from './saveState'; // Import the shared saveState function
+import { saveState } from './saveState'; 
 
 const initialState = loadInitialState();
 

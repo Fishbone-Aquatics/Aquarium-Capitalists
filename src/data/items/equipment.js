@@ -140,7 +140,7 @@ const equipment = {
       aquariumMaxLightStrength: 5,
     },
     tooltip: {
-      name: 'Light',
+      name: "Light",
       type: 'Light',
       description: 'A light for your aquarium.',
       id: 'light',
