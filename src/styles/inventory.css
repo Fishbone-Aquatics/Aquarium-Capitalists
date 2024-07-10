@@ -48,3 +48,14 @@
   text-align: center;
   margin-top: 15px;
 }
+
+.equipment-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.stats-container {
+  display: flex;
+  flex-direction: column;
+}

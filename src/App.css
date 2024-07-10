@@ -1,3 +1,4 @@
+/* App.css */
 .app-grid {
   display: grid;
   height: 100vh; /* Full-screen height */
@@ -44,4 +45,15 @@
   background-color: #333333;
   color: white;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Allow scrolling if content overflows */
+}
+
+.right-side-content {
+  margin-top: 20px;
+}
+
+.right-side-content > * {
+  margin-bottom: 20px;
 }

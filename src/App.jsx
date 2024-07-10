@@ -1,5 +1,6 @@
+// App.js
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Provider } from 'react-redux';
@@ -8,11 +9,11 @@ import Home from './pages/Home';
 import Inventory from './pages/Inventory';
 import Expeditions from './pages/Expeditions';
 import Breeding from './pages/Breeding';
+import Action from './components/Action';
 import Equipment from './components/Equipment';
 import Stats from './components/Stats';
-import Action from './components/Action'; // Import Action component
 import './App.css';
-import './styles/tooltip.css'; // Import the tooltip CSS
+import './styles/tooltip.css';
 
 function App() {
   return (
@@ -36,14 +37,27 @@ function App() {
             </main>
             <aside className="right-side">
               <Action />
-              <Stats />
-              <Equipment />
+              <RightSideContent />
             </aside>
           </div>
         </Router>
       </DndProvider>
     </Provider>
   );
+}
+
+function RightSideContent() {
+  const location = useLocation();
+
+  if (location.pathname === '/inventory') {
+    return (
+      <div className="right-side-content">
+        <Equipment />
+        <Stats />
+      </div>
+    );
+  }
+  return null;
 }
 
 export default App;
