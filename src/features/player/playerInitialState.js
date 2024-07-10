@@ -1,31 +1,29 @@
-// src/features/player/playerInitialState.js
 import items from '../../data/items/items';
-import { deepMerge } from '../../utils/deepMerge'; // Import the deep merge utility
-
-export const loadInitialState = () => {
-  const initialState = {
-    name: "Player",
-    stats: {
+export const loadInitialState = () => ({
+  name: 'player',
+  stats: {
+    xp: 0,
+    currency: 0,
+    level: 1,
+  },
+  inventory: new Array(10).fill({ ...items.equipment.emptySlot }),
+  equipment: {
+    head: { ...items.equipment.emptySlot },
+    body: { ...items.equipment.emptySlot },
+    legs: { ...items.equipment.emptySlot },
+    feet: { ...items.equipment.emptySlot },
+    weapon: { ...items.equipment.emptySlot },
+  },
+  status: 'idle',
+  skills: {
+    gathering: {
       level: 1,
       xp: 0,
-      currency: 0,
     },
-    equipment: {
-      heater: { ...items.equipment.emptySlot, type: 'Heater' },
-      filter: { ...items.equipment.emptySlot, type: 'Filter' },
-      light: { ...items.equipment.emptySlot, type: 'Light' },
-    },
-    inventory: [
-      ...Array(16).fill({ ...items.equipment.emptySlot }),
-    ],
-    status: 'idle',
-    maxInventorySlots: 16,
-  };
-
-  const savedState = localStorage.getItem('playerState');
-  if (savedState) {
-    return deepMerge(initialState, JSON.parse(savedState));
-  } else {
-    return initialState;
-  }
-};
+  },
+  skillBoostPercent: 0,
+  gatheringSpeed: 1,
+  gatheringEfficiency: 1,
+  expeditionSpeed: 1,
+  maxInventorySlots: 10
+});

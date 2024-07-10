@@ -115,6 +115,37 @@ export const playerReducers = {
     }
     saveState(state);
   },
+  // New reducers for skills and other properties
+  updateSkillXp: (state, action) => {
+    const { skillName, xp } = action.payload;
+    const skill = state.skills[skillName];
+    if (skill) {
+      skill.xp += xp;
+      console.log(`Added ${xp} XP to ${skillName}. New XP: ${skill.xp}`);
+      // Optionally handle leveling up logic here
+    }
+    saveState(state);
+  },
+  updateSkillBoostPercent: (state, action) => {
+    state.skillBoostPercent = action.payload;
+    console.log(`Updated skill boost percent to: ${state.skillBoostPercent}`);
+    saveState(state);
+  },
+  updateGatheringSpeed: (state, action) => {
+    state.gatheringSpeed = action.payload;
+    console.log(`Updated gathering speed to: ${state.gatheringSpeed}`);
+    saveState(state);
+  },
+  updateGatheringEfficiency: (state, action) => {
+    state.gatheringEfficiency = action.payload;
+    console.log(`Updated gathering efficiency to: ${state.gatheringEfficiency}`);
+    saveState(state);
+  },
+  updateExpeditionSpeed: (state, action) => {
+    state.expeditionSpeed = action.payload;
+    console.log(`Updated expedition speed to: ${state.expeditionSpeed}`);
+    saveState(state);
+  },
 };
 
 export default playerReducers;
