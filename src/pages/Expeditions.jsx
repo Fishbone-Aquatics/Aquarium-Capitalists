@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setActiveZone, clearActiveZone } from '../features/expeditions/expeditionSlice';
 import { addXp, addItemToInventory, addCurrency } from '../features/player/playerSlice';
 import '../styles/expeditions.css';
+import { randomNumberInRange } from '../utils/randomNumberInRange'; // Import the utility function
 
 const Expeditions = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const Expeditions = () => {
         setProgress(prevProgress => prevProgress + 1);
       }, 1000);
       setIntervalId(id);
+      console.log(`Expedition started in zone: ${activeZone}`);
     }
 
     return () => {
@@ -35,20 +37,27 @@ const Expeditions = () => {
         const xp = Math.floor(Math.random() * (zone.xpRange[1] - zone.xpRange[0] + 1)) + zone.xpRange[0];
         dispatch(addXp(xp));
 
-        // Calculate item drops
-        zone.itemDrops.forEach(drop => {
-          if (Math.random() < drop.chance) {
-            dispatch(addItemToInventory({ item: drop.item }));
-          }
-        });
+        // Calculate loot drops
+        const totalChance = zone.lootDrops.reduce((total, drop) => total + drop.chance, 0);
+        const randomChance = Math.random() * totalChance;
 
-        // Calculate currency drops
-        zone.currencyDrops.forEach(drop => {
-          if (Math.random() < drop.chance) {
-            dispatch(addCurrency(drop.amount));
+        let cumulativeChance = 0;
+        for (let drop of zone.lootDrops) {
+          cumulativeChance += drop.chance;
+          if (randomChance <= cumulativeChance) {
+            if (drop.type === 'item') {
+              dispatch(addItemToInventory({ item: drop.item }));
+              console.log(`Added item: ${drop.item.name} to inventory`);
+            } else if (drop.type === 'currency') {
+              const amount = randomNumberInRange(drop.amountRange[0], drop.amountRange[1]);
+              dispatch(addCurrency(amount));
+              console.log(`Added currency: ${amount}`);
+            }
+            break;
           }
-        });
+        }
 
+        // Reset progress
         setProgress(0);
       }
     }
@@ -66,6 +75,7 @@ const Expeditions = () => {
     }
     dispatch(clearActiveZone());
     setProgress(0);
+    console.log('Expedition stopped.');
   };
 
   return (
