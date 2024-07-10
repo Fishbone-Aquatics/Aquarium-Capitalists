@@ -8,6 +8,7 @@ const Gathering = () => {
   console.log('Rendering Gathering component');
 
   const [activeTab, setActiveTab] = useState('minerals');
+  const [activePlaceholderTab, setActivePlaceholderTab] = useState('placeholder1');
   const [isGathering, setIsGathering] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(null);
   const [xpGained, setXpGained] = useState(null);
@@ -159,16 +160,16 @@ const Gathering = () => {
         </div>
         <div className="gathering-toggle">
           <button
-            className={`toggle-button ${activeTab === 'minerals' ? 'active' : ''}`}
-            onClick={() => setActiveTab('minerals')}
+            className={`toggle-button ${activePlaceholderTab === 'placeholder1' ? 'active' : ''}`}
+            onClick={() => setActivePlaceholderTab('placeholder1')}
           >
-            Minerals
+            Place holder 1
           </button>
           <button
-            className={`toggle-button ${activeTab === 'resources' ? 'active' : ''}`}
-            onClick={() => setActiveTab('resources')}
+            className={`toggle-button ${activePlaceholderTab === 'placeholder2' ? 'active' : ''}`}
+            onClick={() => setActivePlaceholderTab('placeholder2')}
           >
-            Resources
+            Place holder 2
           </button>
         </div>
         <div className="gathering-consumables">
