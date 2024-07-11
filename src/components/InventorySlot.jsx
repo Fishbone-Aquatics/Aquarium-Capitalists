@@ -60,7 +60,7 @@ const InventorySlot = ({ item, index, dispatch }) => {
           onMouseEnter={() => setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}
         >
-          <DraggableItem key={`${item.id}-${index}`} item={item} index={index} />
+          <DraggableItem key={`${item.id}-${index}`} item={item} index={index} isEquipmentSlot={true}/>
           {showTooltip && <Tooltip data={tooltipData} />}
           {item.quantity > 0 && (
             <div className="quantity">{item.quantity}</div>
