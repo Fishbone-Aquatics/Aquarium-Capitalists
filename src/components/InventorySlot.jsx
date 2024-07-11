@@ -30,21 +30,16 @@ const InventorySlot = ({ item, index, dispatch }) => {
     drop: (draggedItem) => {
       console.log("Dropping item:", draggedItem);
       if (draggedItem.isEquipmentSlot) {
-        // Dragging from equipment slot to inventory slot
-        if (isEmptySlot) {
+        if(isEmptySlot) {
           console.log("Dispatching unequipItem:", { slot: draggedItem.index, targetIndex: index });
           dispatch(unequipItem({ slot: draggedItem.index, targetIndex: index }));
           dispatch(setEquipmentFlag({ index: index, isEquipmentSlot: false }));
-        } else if (item.type === draggedItem.type || item.id === 'empty-slot') {
-          dispatch(swapInventoryAndEquipment({ fromEquipmentSlot: draggedItem.index, toInventoryIndex: index }));
-          dispatch(setEquipmentFlag({ index: index, isEquipmentSlot: false }));
-        } else {
-          console.error('Cannot swap items of different types');
         }
-      } else {
-        // Swapping within inventory
-        console.log("Dispatching swapItems:", { from: draggedItem.index, to: index });
-        dispatch(swapItems({ from: draggedItem.index, to: index }));
+        else {
+          console.log("Dispatching swap inv items:")
+          //dispatch(swapInventoryAndEquipment({ fromEquipmentSlot: draggedItem.index, toInventoryIndex: index }));
+          //dispatch(setEquipmentFlag({ index: index, isEquipmentSlot: false }));
+        }
       }
     },
     collect: (monitor) => ({

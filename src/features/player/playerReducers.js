@@ -59,15 +59,15 @@ export const playerReducers = {
       const equipmentType = slot.toLowerCase();
       if (item.type.toLowerCase() === equipmentType) {
         const currentItem = { ...state.equipment[slot] };
-        state.equipment[slot] = { ...item };
+        state.equipment[slot] = { ...item, isEquipmentSlot: true };
         state.inventory = state.inventory.map(it => it && it.id === item.id ? { ...items.equipment.emptySlot } : it);
-
+  
         if (currentItem && currentItem.id !== items.equipment.emptySlot.id) {
           const emptyIndex = state.inventory.findIndex(it => it.id === items.equipment.emptySlot.id);
           if (emptyIndex !== -1) {
-            state.inventory[emptyIndex] = { ...currentItem };
+            state.inventory[emptyIndex] = { ...currentItem, isEquipmentSlot: false };
           } else {
-            state.inventory.push({ ...currentItem });
+            state.inventory.push({ ...currentItem, isEquipmentSlot: false });
           }
         }
       } else {
@@ -76,6 +76,7 @@ export const playerReducers = {
     }
     saveState(state);
   },
+  
   unequipItem: (state, action) => {
     const { slot, targetIndex } = action.payload;
     const currentItem = { ...state.equipment[slot] };
@@ -115,13 +116,13 @@ export const playerReducers = {
     const { fromInventoryIndex, toEquipmentSlot } = action.payload;
     const fromItem = state.inventory[fromInventoryIndex];
     const toItem = state.equipment[toEquipmentSlot];
-
+  
     console.log("Attempting to swap inventory item with equipment:", fromItem, toItem);
-
+  
     if (fromItem && toItem) {
       if (fromItem.type === toItem.type) {
-        state.inventory[fromInventoryIndex] = toItem;
-        state.equipment[toEquipmentSlot] = fromItem;
+        state.inventory[fromInventoryIndex] = { ...toItem, isEquipmentSlot: false };
+        state.equipment[toEquipmentSlot] = { ...fromItem, isEquipmentSlot: true };
         console.log(`Swapped inventory item at index ${fromInventoryIndex} with equipment slot ${toEquipmentSlot}`);
       } else {
         console.error('Cannot swap items of different types');
@@ -131,6 +132,7 @@ export const playerReducers = {
     }
     saveState(state);
   },
+  
   swapInventoryAndEquipment: (state, action) => {
     const { fromEquipmentSlot, toInventoryIndex } = action.payload;
     const fromItem = state.equipment[fromEquipmentSlot];
