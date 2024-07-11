@@ -80,19 +80,25 @@ export const playerReducers = {
     const { slot, targetIndex } = action.payload;
     const currentItem = { ...state.equipment[slot] };
     if (currentItem && currentItem.id !== items.equipment.emptySlot.id) {
-      state.equipment[slot] = { ...items.equipment.emptySlot, type: slot.charAt(0).toUpperCase() + slot.slice(1) };
-      state.inventory[targetIndex] = currentItem;
+      const targetItem = state.inventory[targetIndex];
+      if (targetItem.id === items.equipment.emptySlot.id || targetItem.type === currentItem.type) {
+        state.equipment[slot] = { ...items.equipment.emptySlot, type: slot.charAt(0).toUpperCase() + slot.slice(1) };
+        state.inventory[targetIndex] = currentItem;
+      } else {
+        console.error('Cannot swap items of different types');
+      }
     }
     saveState(state);
   },
   swapItems: (state, action) => {
     const { from, to } = action.payload;
+    console.log('from to', from, to)
     if (typeof from === 'number' && typeof to === 'number' && from < state.inventory.length && to < state.inventory.length) {
       const fromItem = { ...state.inventory[from] };
       const toItem = { ...state.inventory[to] };
-  
+
       console.log("Attempting to swap items:", fromItem, toItem);
-  
+
       if (fromItem && toItem) {
         state.inventory[from] = toItem;
         state.inventory[to] = fromItem;
@@ -105,64 +111,76 @@ export const playerReducers = {
     }
     saveState(state);
   },  
-swapEquipmentAndInventory: (state, action) => {
-  const { fromInventoryIndex, toEquipmentSlot } = action.payload;
-  const fromItem = state.inventory[fromInventoryIndex];
-  const toItem = state.equipment[toEquipmentSlot];
+  swapEquipmentAndInventory: (state, action) => {
+    const { fromInventoryIndex, toEquipmentSlot } = action.payload;
+    const fromItem = state.inventory[fromInventoryIndex];
+    const toItem = state.equipment[toEquipmentSlot];
 
-  console.log("Attempting to swap inventory item with equipment:", fromItem, toItem);
+    console.log("Attempting to swap inventory item with equipment:", fromItem, toItem);
 
-  if (fromItem && toItem) {
-    state.inventory[fromInventoryIndex] = toItem;
-    state.equipment[toEquipmentSlot] = fromItem;
-    console.log(`Swapped inventory item at index ${fromInventoryIndex} with equipment slot ${toEquipmentSlot}`);
-  } else {
-    console.error("Invalid swap operation:", { fromItem, toItem });
-  }
-  saveState(state);
-},
-// New reducers for skills and other properties
-updateSkillXp: (state, action) => {
-  console.log('Updating skill xp', action.payload);
-  const { skill, xp } = action.payload;
-  console.log('Skill:', skill, 'XP:', xp);
-
-  if (skill in state.skills) {
-    const skillObject = state.skills[skill];
-    if (skillObject) {
-      skillObject.xp += xp;
-      console.log(`Added ${xp} XP to ${skill}. New XP: ${skillObject.xp}`);
-      // Optionally handle leveling up logic here
+    if (fromItem && toItem) {
+      if (fromItem.type === toItem.type) {
+        state.inventory[fromInventoryIndex] = toItem;
+        state.equipment[toEquipmentSlot] = fromItem;
+        console.log(`Swapped inventory item at index ${fromInventoryIndex} with equipment slot ${toEquipmentSlot}`);
+      } else {
+        console.error('Cannot swap items of different types');
+      }
     } else {
-      console.warn(`Skill object for ${skill} not found.`);
+      console.error("Invalid swap operation:", { fromItem, toItem });
     }
-  } else {
-    console.warn(`Skill ${skill} does not exist in state.skills.`);
-  }
+    saveState(state);
+  },
+  setEquipmentFlag: (state, action) => {
+    const { index, isEquipmentSlot } = action.payload;
+    const item = state.inventory[index] || state.equipment[index];
+    if (item) {
+      item.isEquipmentSlot = isEquipmentSlot;
+      console.log(`Set equipment flag for item at index ${index} to ${isEquipmentSlot}`);
+    }
+    saveState(state);
+  },
+  // New reducers for skills and other properties
+  updateSkillXp: (state, action) => {
+    console.log('Updating skill xp', action.payload);
+    const { skill, xp } = action.payload;
+    console.log('Skill:', skill, 'XP:', xp);
 
-  saveState(state);
-},
+    if (skill in state.skills) {
+      const skillObject = state.skills[skill];
+      if (skillObject) {
+        skillObject.xp += xp;
+        console.log(`Added ${xp} XP to ${skill}. New XP: ${skillObject.xp}`);
+        // Optionally handle leveling up logic here
+      } else {
+        console.warn(`Skill object for ${skill} not found.`);
+      }
+    } else {
+      console.warn(`Skill ${skill} does not exist in state.skills.`);
+    }
 
-updateSkillBoostPercent: (state, action) => {
-  state.skillBoostPercent = action.payload;
-  console.log(`Updated skill boost percent to: ${state.skillBoostPercent}`);
-  saveState(state);
-},
-updateGatheringSpeed: (state, action) => {
-  state.gatheringSpeed = action.payload;
-  console.log(`Updated gathering speed to: ${state.gatheringSpeed}`);
-  saveState(state);
-},
-updateGatheringEfficiency: (state, action) => {
-  state.gatheringEfficiency = action.payload;
-  console.log(`Updated gathering efficiency to: ${state.gatheringEfficiency}`);
-  saveState(state);
-},
-updateExpeditionSpeed: (state, action) => {
-  state.expeditionSpeed = action.payload;
-  console.log(`Updated expedition speed to: ${state.expeditionSpeed}`);
-  saveState(state);
-},
+    saveState(state);
+  },
+  updateSkillBoostPercent: (state, action) => {
+    state.skillBoostPercent = action.payload;
+    console.log(`Updated skill boost percent to: ${state.skillBoostPercent}`);
+    saveState(state);
+  },
+  updateGatheringSpeed: (state, action) => {
+    state.gatheringSpeed = action.payload;
+    console.log(`Updated gathering speed to: ${state.gatheringSpeed}`);
+    saveState(state);
+  },
+  updateGatheringEfficiency: (state, action) => {
+    state.gatheringEfficiency = action.payload;
+    console.log(`Updated gathering efficiency to: ${state.gatheringEfficiency}`);
+    saveState(state);
+  },
+  updateExpeditionSpeed: (state, action) => {
+    state.expeditionSpeed = action.payload;
+    console.log(`Updated expedition speed to: ${state.expeditionSpeed}`);
+    saveState(state);
+  },
 };
 
 export default playerReducers;

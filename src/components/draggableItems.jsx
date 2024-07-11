@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDrag } from 'react-dnd';
 
-const DraggableItem = ({ item, index, isEquipmentSlot = false }) => {
+const DraggableItem = ({ item, index, isEquipmentSlot }) => {
   useEffect(() => {
-    console.log("DraggableItem updated:", item, index);
-  }, [item, index]);
+    console.log("DraggableItem updated:", item, index, isEquipmentSlot);
+  }, [item, index, isEquipmentSlot]);
 
   const [{ isDragging }, dragRef] = useDrag(() => ({
     type: 'item',

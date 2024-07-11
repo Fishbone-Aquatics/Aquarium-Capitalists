@@ -36,7 +36,7 @@ const EquipmentSlot = ({ slot, item }) => {
       {!isEmptySlot ? (
         <>
           <div className="item-icon">
-            <DraggableItem item={{ ...item, equipmentSlot: slot }} index={slot} />
+            <DraggableItem item={{ ...item, equipmentSlot: slot }} index={slot} isEquipmentSlot={true} />
           </div>
         </>
       ) : (
