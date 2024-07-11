@@ -34,7 +34,7 @@ const InventorySlot = ({ item, index, dispatch }) => {
         console.log('Current item in target slot:', item);
         if (isEmptySlot) {
           console.log("Dispatching unequipItem:", { slot: draggedItem.index, targetIndex: index });
-          //dispatch(unequipItem({ slot: draggedItem.index, targetIndex: index }));
+          dispatch(unequipItem({ slot: draggedItem.index, targetIndex: index }));
         } else {
           console.log("Dispatching swap inv items:");
           dispatch(swapInventoryAndEquipment({ fromEquipmentSlot: draggedItem.index, toInventoryIndex: index }));
