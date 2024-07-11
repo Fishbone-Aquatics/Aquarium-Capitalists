@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDrag } from 'react-dnd';
 
-const DraggableItem = ({ item, index }) => {
+const DraggableItem = ({ item, index, isEquipmentSlot = false }) => {
+  useEffect(() => {
+    console.log("DraggableItem updated:", item, index);
+  }, [item, index]);
+
   const [{ isDragging }, dragRef] = useDrag(() => ({
     type: 'item',
-    item: { ...item, index },
+    item: { ...item, index, isEquipmentSlot },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),

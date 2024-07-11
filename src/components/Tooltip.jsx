@@ -6,7 +6,7 @@ const Tooltip = ({ data }) => {
     return null;
   }
 
-  console.log('Displaying tooltip data:', data);
+  //console.log('Displaying tooltip data:', data);
   return (
     <div className="tooltip">
       <h3>Name: {data.name} | Type: {data.type} | ID: {data.id}</h3>

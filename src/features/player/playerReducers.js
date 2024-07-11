@@ -88,23 +88,23 @@ export const playerReducers = {
   swapItems: (state, action) => {
     const { from, to } = action.payload;
     if (typeof from === 'number' && typeof to === 'number' && from < state.inventory.length && to < state.inventory.length) {
-      const fromItem = state.inventory[from];
-      const toItem = state.inventory[to];
-
-    console.log("Attempting to swap items:", fromItem, toItem);
-
-    if (fromItem && toItem) {
-      state.inventory[from] = toItem;
-      state.inventory[to] = fromItem;
-      console.log(`Swapped items in inventory from index ${from} to index ${to}`);
+      const fromItem = { ...state.inventory[from] };
+      const toItem = { ...state.inventory[to] };
+  
+      console.log("Attempting to swap items:", fromItem, toItem);
+  
+      if (fromItem && toItem) {
+        state.inventory[from] = toItem;
+        state.inventory[to] = fromItem;
+        console.log(`Swapped items in inventory from index ${from} to index ${to}`);
+      } else {
+        console.error("Invalid swap operation:", { fromItem, toItem });
+      }
     } else {
-      console.error("Invalid swap operation:", { fromItem, toItem });
+      console.error("Invalid swap indices:", { from, to });
     }
-  } else {
-    console.error("Invalid swap indices:", { from, to });
-  }
-  saveState(state);
-},
+    saveState(state);
+  },  
 swapEquipmentAndInventory: (state, action) => {
   const { fromInventoryIndex, toEquipmentSlot } = action.payload;
   const fromItem = state.inventory[fromInventoryIndex];
