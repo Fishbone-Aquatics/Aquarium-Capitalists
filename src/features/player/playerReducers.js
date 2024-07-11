@@ -131,6 +131,26 @@ export const playerReducers = {
     }
     saveState(state);
   },
+  swapInventoryAndEquipment: (state, action) => {
+    const { fromEquipmentSlot, toInventoryIndex } = action.payload;
+    const fromItem = state.equipment[fromEquipmentSlot];
+    const toItem = state.inventory[toInventoryIndex];
+
+    console.log("Attempting to swap equipment item with inventory:", fromItem, toItem);
+
+    if (fromItem && toItem) {
+      if (fromItem.type === toItem.type || toItem.id === items.equipment.emptySlot.id) {
+        state.equipment[fromEquipmentSlot] = toItem;
+        state.inventory[toInventoryIndex] = fromItem;
+        console.log(`Swapped equipment item at slot ${fromEquipmentSlot} with inventory index ${toInventoryIndex}`);
+      } else {
+        console.error('Cannot swap items of different types');
+      }
+    } else {
+      console.error("Invalid swap operation:", { fromItem, toItem });
+    }
+    saveState(state);
+  },
   setEquipmentFlag: (state, action) => {
     const { index, isEquipmentSlot } = action.payload;
     const item = state.inventory[index] || state.equipment[index];

@@ -49,6 +49,7 @@ export const {
   updateGatheringEfficiency,
   updateExpeditionSpeed,
   setEquipmentFlag,
+  swapInventoryAndEquipment,
 } = playerSlice.actions;
 
 export default playerSlice.reducer;

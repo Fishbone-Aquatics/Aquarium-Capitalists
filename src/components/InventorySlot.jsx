@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 import DraggableItem from './DraggableItems';
-import { swapItems, unequipItem, setEquipmentFlag } from '../features/player/playerSlice';
+import { swapItems, unequipItem, setEquipmentFlag, swapInventoryAndEquipment } from '../features/player/playerSlice';
 import Tooltip from './Tooltip';
 
 const extractTooltipData = (item) => {
@@ -31,12 +31,12 @@ const InventorySlot = ({ item, index, dispatch }) => {
       console.log("Dropping item:", draggedItem);
       if (draggedItem.isEquipmentSlot) {
         // Dragging from equipment slot to inventory slot
-        console.log("Dispatching unequipItem:", { slot: draggedItem.index, targetIndex: index });
         if (isEmptySlot) {
+          console.log("Dispatching unequipItem:", { slot: draggedItem.index, targetIndex: index });
           dispatch(unequipItem({ slot: draggedItem.index, targetIndex: index }));
           dispatch(setEquipmentFlag({ index: index, isEquipmentSlot: false }));
-        } else if (item.type === draggedItem.type) {
-          dispatch(unequipItem({ slot: draggedItem.index, targetIndex: index }));
+        } else if (item.type === draggedItem.type || item.id === 'empty-slot') {
+          dispatch(swapInventoryAndEquipment({ fromEquipmentSlot: draggedItem.index, toInventoryIndex: index }));
           dispatch(setEquipmentFlag({ index: index, isEquipmentSlot: false }));
         } else {
           console.error('Cannot swap items of different types');
@@ -51,7 +51,7 @@ const InventorySlot = ({ item, index, dispatch }) => {
       isOver: !!monitor.isOver(),
     }),
   }));
-
+  
   return (
     <div ref={dropRef} className={`item-box ${isOver ? 'highlight' : ''}`}>
       {!isEmptySlot ? (
