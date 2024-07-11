@@ -30,6 +30,8 @@ const InventorySlot = ({ item, index, dispatch }) => {
     drop: (draggedItem) => {
       console.log("Dropping item:", draggedItem);
       if (draggedItem.isEquipmentSlot) {
+        console.log('item is from equipment slot')
+        console.log('item:', item)
         if(isEmptySlot) {
           console.log("Dispatching unequipItem:", { slot: draggedItem.index, targetIndex: index });
           dispatch(unequipItem({ slot: draggedItem.index, targetIndex: index }));
@@ -40,6 +42,9 @@ const InventorySlot = ({ item, index, dispatch }) => {
           //dispatch(swapInventoryAndEquipment({ fromEquipmentSlot: draggedItem.index, toInventoryIndex: index }));
           //dispatch(setEquipmentFlag({ index: index, isEquipmentSlot: false }));
         }
+      }
+      else {
+        console.log("here")
       }
     },
     collect: (monitor) => ({

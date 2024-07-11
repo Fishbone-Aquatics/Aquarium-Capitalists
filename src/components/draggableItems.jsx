@@ -14,9 +14,9 @@ const DraggableItem = ({ item, index, isEquipmentSlot }) => {
     }),
     end: (droppedItem, monitor) => {
       if (monitor.didDrop()) {
-        console.log('Item dropped:', droppedItem.name);
+        console.log('Item dropped:', droppedItem);
       } else {
-        console.log('Drop canceled:', droppedItem.name);
+        console.log('Drop canceled:', droppedItem);
       }
     }
   }));
