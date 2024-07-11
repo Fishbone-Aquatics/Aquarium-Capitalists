@@ -10,7 +10,13 @@ const loadInitialState = () => {
       currency: 0,
       level: 1,
     },
-    inventory: new Array(10).fill({ ...items.equipment.emptySlot }),
+    // inventory: new Array(10).fill({ ...items.equipment.emptySlot }),
+    inventory: [ // testing
+      { ...items.equipment.filter, quantity: 1 },
+      { ...items.equipment.spongeFilter, quantity: 1 },
+      { ...items.equipment.light, quantity: 1 },
+      ...Array(13).fill({ ...items.equipment.emptySlot }),
+    ],
     equipment: {
       heater: { ...items.equipment.emptySlot, type: 'Heater' },
       filter: { ...items.equipment.emptySlot, type: 'Filter' },
