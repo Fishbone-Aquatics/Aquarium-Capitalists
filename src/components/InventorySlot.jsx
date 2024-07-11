@@ -30,28 +30,26 @@ const InventorySlot = ({ item, index, dispatch }) => {
     drop: (draggedItem) => {
       console.log("Dropping item:", draggedItem);
       if (draggedItem.isEquipmentSlot) {
-        console.log('item is from equipment slot')
-        console.log('item:', item)
-        if(isEmptySlot) {
+        console.log('Item is from equipment slot');
+        console.log('Current item in target slot:', item);
+        if (isEmptySlot) {
           console.log("Dispatching unequipItem:", { slot: draggedItem.index, targetIndex: index });
-          dispatch(unequipItem({ slot: draggedItem.index, targetIndex: index }));
-          dispatch(setEquipmentFlag({ index: index, isEquipmentSlot: false }));
+          //dispatch(unequipItem({ slot: draggedItem.index, targetIndex: index }));
+        } else {
+          console.log("Dispatching swap inv items:");
+          dispatch(swapInventoryAndEquipment({ fromEquipmentSlot: draggedItem.index, toInventoryIndex: index }));
         }
-        else {
-          console.log("Dispatching swap inv items:")
-          //dispatch(swapInventoryAndEquipment({ fromEquipmentSlot: draggedItem.index, toInventoryIndex: index }));
-          //dispatch(setEquipmentFlag({ index: index, isEquipmentSlot: false }));
-        }
-      }
-      else {
-        console.log("here")
+        dispatch(setEquipmentFlag({ index: draggedItem.index, isEquipmentSlot: false }));
+      } else {
+        console.log("Dispatching swap items:");
+        dispatch(swapItems({ from: draggedItem.index, to: index }));
       }
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
   }));
-  
+
   return (
     <div ref={dropRef} className={`item-box ${isOver ? 'highlight' : ''}`}>
       {!isEmptySlot ? (
@@ -60,7 +58,7 @@ const InventorySlot = ({ item, index, dispatch }) => {
           onMouseEnter={() => setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}
         >
-          <DraggableItem key={`${item.id}-${index}`} item={item} index={index} isEquipmentSlot={true}/>
+          <DraggableItem key={`${item.id}-${index}`} item={item} index={index} isEquipmentSlot={item.isEquipmentSlot}/>
           {showTooltip && <Tooltip data={tooltipData} />}
           {item.quantity > 0 && (
             <div className="quantity">{item.quantity}</div>

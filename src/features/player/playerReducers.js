@@ -80,14 +80,21 @@ export const playerReducers = {
   unequipItem: (state, action) => {
     const { slot, targetIndex } = action.payload;
     const currentItem = { ...state.equipment[slot] };
+    console.log(`Unequipping item from slot ${slot} to inventory index ${targetIndex}`, currentItem);
+  
     if (currentItem && currentItem.id !== items.equipment.emptySlot.id) {
       const targetItem = state.inventory[targetIndex];
+      console.log('Target inventory item:', targetItem);
+  
       if (targetItem.id === items.equipment.emptySlot.id || targetItem.type === currentItem.type) {
         state.equipment[slot] = { ...items.equipment.emptySlot, type: slot.charAt(0).toUpperCase() + slot.slice(1) };
-        state.inventory[targetIndex] = currentItem;
+        state.inventory[targetIndex] = { ...currentItem, isEquipmentSlot: false };
+        console.log(`Successfully unequipped item:`, currentItem);
       } else {
         console.error('Cannot swap items of different types');
       }
+    } else {
+      console.error('Current item is empty slot or invalid', currentItem);
     }
     saveState(state);
   },
@@ -137,13 +144,13 @@ export const playerReducers = {
     const { fromEquipmentSlot, toInventoryIndex } = action.payload;
     const fromItem = state.equipment[fromEquipmentSlot];
     const toItem = state.inventory[toInventoryIndex];
-
+  
     console.log("Attempting to swap equipment item with inventory:", fromItem, toItem);
-
+  
     if (fromItem && toItem) {
       if (fromItem.type === toItem.type || toItem.id === items.equipment.emptySlot.id) {
-        state.equipment[fromEquipmentSlot] = toItem;
-        state.inventory[toInventoryIndex] = fromItem;
+        state.equipment[fromEquipmentSlot] = { ...toItem, isEquipmentSlot: true };
+        state.inventory[toInventoryIndex] = { ...fromItem, isEquipmentSlot: false };
         console.log(`Swapped equipment item at slot ${fromEquipmentSlot} with inventory index ${toInventoryIndex}`);
       } else {
         console.error('Cannot swap items of different types');
