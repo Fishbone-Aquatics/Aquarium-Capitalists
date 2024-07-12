@@ -9,9 +9,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    env:
+      BRANCH: development
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          ref: ${{ env.BRANCH }}
 
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
@@ -22,7 +27,9 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@3.133.13.184 << 'EOF'
             cd Aquarium-Capitalists || exit 1
-            git pull
+            git fetch origin
+            git checkout ${{ env.BRANCH }}
+            git pull origin ${{ env.BRANCH }}
             npm install
             npm run build
             pm2 restart react-app
