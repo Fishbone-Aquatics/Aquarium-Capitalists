@@ -106,9 +106,9 @@ const ProgressBar = styled.div`
 
 const ProgressText = styled.span`
   position: absolute;
-  left: 10px;
+  left: 50%;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translate(-50%, -50%);
   color: #fff;
   font-weight: bold;
 `;
@@ -181,7 +181,43 @@ const Expeditions = () => {
   useEffect(() => {
     if (activeZone && !intervalId) {
       const id = setInterval(() => {
-        setProgress(prevProgress => prevProgress + 1);
+        setProgress(prevProgress => {
+          const zone = zones.find(zone => zone.name === activeZone);
+          const newProgress = prevProgress + 1;
+          if (newProgress >= zone.duration) {
+            // Calculate XP
+            const xp = Math.floor(Math.random() * (zone.xpRange[1] - zone.xpRange[0] + 1)) + zone.xpRange[0];
+            dispatch(addXp(xp));
+
+            // Calculate loot drops
+            const totalChance = zone.lootDrops.reduce((total, drop) => total + drop.chance, 0);
+            const randomChance = Math.random() * totalChance;
+
+            let cumulativeChance = 0;
+            for (let drop of zone.lootDrops) {
+              cumulativeChance += drop.chance;
+              if (randomChance <= cumulativeChance) {
+                if (drop.type === 'item') {
+                  dispatch(addItemToInventory({ item: drop.item }));
+                  console.log(`Added item: ${drop.item.name} to inventory`);
+                } else if (drop.type === 'currency') {
+                  const amount = randomNumberInRange(drop.amountRange[0], drop.amountRange[1]);
+                  dispatch(addCurrency(amount));
+                  console.log(`Added currency: ${amount}`);
+                }
+                break;
+              }
+            }
+
+            // Delay for 1 second before resetting progress
+            setTimeout(() => {
+              setProgress(0);
+            }, 1000);
+
+            return zone.duration; // Ensure it shows 100% for the delay duration
+          }
+          return newProgress;
+        });
       }, 1000);
       setIntervalId(id);
       console.log(`Expedition started in zone: ${activeZone}`);
@@ -193,7 +229,7 @@ const Expeditions = () => {
         setIntervalId(null);
       }
     };
-  }, [activeZone, intervalId]);
+  }, [activeZone, intervalId, zones, dispatch]);
 
   useEffect(() => {
     if (hoveredZone) {
@@ -214,40 +250,6 @@ const Expeditions = () => {
       setBubbles([]);
     }
   }, [hoveredZone]);
-
-  useEffect(() => {
-    if (activeZone) {
-      const zone = zones.find(zone => zone.name === activeZone);
-      if (progress >= zone.duration) {
-        // Calculate XP
-        const xp = Math.floor(Math.random() * (zone.xpRange[1] - zone.xpRange[0] + 1)) + zone.xpRange[0];
-        dispatch(addXp(xp));
-
-        // Calculate loot drops
-        const totalChance = zone.lootDrops.reduce((total, drop) => total + drop.chance, 0);
-        const randomChance = Math.random() * totalChance;
-
-        let cumulativeChance = 0;
-        for (let drop of zone.lootDrops) {
-          cumulativeChance += drop.chance;
-          if (randomChance <= cumulativeChance) {
-            if (drop.type === 'item') {
-              dispatch(addItemToInventory({ item: drop.item }));
-              console.log(`Added item: ${drop.item.name} to inventory`);
-            } else if (drop.type === 'currency') {
-              const amount = randomNumberInRange(drop.amountRange[0], drop.amountRange[1]);
-              dispatch(addCurrency(amount));
-              console.log(`Added currency: ${amount}`);
-            }
-            break;
-          }
-        }
-
-        // Reset progress
-        setProgress(0);
-      }
-    }
-  }, [progress, activeZone, zones, dispatch]);
 
   const handleStart = (zoneName) => {
     dispatch(setActiveZone({ zoneName }));
@@ -314,3 +316,7 @@ const Expeditions = () => {
 };
 
 export default Expeditions;
+
+
+
+
