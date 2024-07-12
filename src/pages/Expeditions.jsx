@@ -290,7 +290,7 @@ const Expeditions = () => {
               />
             ))}
             <HeaderContainer>
-              <Heading>{zone.name}</Heading>
+              <Heading title={zone.name}>{zone.name}</Heading>
               <ButtonContainer>
                 {activeZone === zone.name ? (
                   <StopButton onClick={handleStop}>Stop</StopButton>
@@ -316,6 +316,7 @@ const Expeditions = () => {
 };
 
 export default Expeditions;
+
 
 
 
