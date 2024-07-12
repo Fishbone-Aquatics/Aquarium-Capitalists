@@ -18,6 +18,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
+
       - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@3.133.13.184 << 'EOF'
