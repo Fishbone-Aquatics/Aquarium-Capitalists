@@ -83,10 +83,17 @@ const Expeditions = () => {
       <h1>Expeditions</h1>
       <div className="zones">
         {zones.map((zone, index) => (
-          <div key={index} className={`zone ${activeZone === zone.name ? 'active' : ''}`}>
-            <h2>{zone.name}</h2>
+          <div 
+            key={index} 
+            className={`zone ${activeZone === zone.name ? 'active' : ''}`} 
+            style={{ backgroundImage: `url(${zone.image})` }}
+          >
+            <div className="header-container">
+              <h2>{zone.name}</h2>
+              {activeZone !== zone.name && <button onClick={() => handleStart(zone.name)}>Start</button>}
+            </div>
             <p>{zone.description}</p>
-            {activeZone === zone.name ? (
+            {activeZone === zone.name && (
               <>
                 <button onClick={handleStop}>Stop</button>
                 <div className="progress-bar-container">
@@ -94,8 +101,6 @@ const Expeditions = () => {
                   <span>{progress}s / {zone.duration}s</span>
                 </div>
               </>
-            ) : (
-              <button onClick={() => handleStart(zone.name)}>Start</button>
             )}
           </div>
         ))}

@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import items from '../../data/items/items';
-import { randomNumberInRange } from '../../utils/randomNumberInRange'; // Import the utility function
 
 const loadInitialState = () => {
   const savedState = localStorage.getItem('expeditionState');
@@ -21,7 +20,8 @@ const loadInitialState = () => {
             { type: 'item', item: items.equipment.light, chance: 0.33 },
             { type: 'currency', amountRange: [5, 10], chance: 0.2 },
             { type: 'currency', amountRange: [10, 20], chance: 0.1 }
-          ]
+          ],
+          image: 'icons/expeditions/coralReef.png' 
         },
         {
           name: 'Shipwrecks',
@@ -33,7 +33,8 @@ const loadInitialState = () => {
             { type: 'item', item: items.equipment.largeFilter, chance: 0.002 },
             { type: 'currency', amountRange: [10, 20], chance: 0.2 },
             { type: 'currency', amountRange: [20, 30], chance: 0.1 }
-          ]
+          ],
+          image: 'icons/expeditions/shipwreck.png' 
         },
         {
           name: 'Deep Sea Trenches',
@@ -45,7 +46,8 @@ const loadInitialState = () => {
             { type: 'item', item: items.equipment.mediumHeater, chance: 0.05 },
             { type: 'currency', amountRange: [15, 25], chance: 0.2 },
             { type: 'currency', amountRange: [25, 35], chance: 0.1 }
-          ]
+          ],
+          image: 'icons/expeditions/trench.png' 
         },
         {
           name: 'Underwater Caves',
@@ -57,7 +59,8 @@ const loadInitialState = () => {
             { type: 'item', item: items.apple, chance: 0.05 },
             { type: 'currency', amountRange: [20, 30], chance: 0.2 },
             { type: 'currency', amountRange: [30, 40], chance: 0.1 }
-          ]
+          ],
+          image: 'icons/expeditions/underwaterCave.png'
         }
       ],
       activeZone: null,
