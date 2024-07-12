@@ -2,8 +2,144 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveZone, clearActiveZone } from '../features/expeditions/expeditionSlice';
 import { addXp, addItemToInventory, addCurrency } from '../features/player/playerSlice';
-import '../styles/expeditions.css';
+import styled, { keyframes } from 'styled-components';
 import { randomNumberInRange } from '../utils/randomNumberInRange'; // Import the utility function
+
+// Keyframes for bubble animation
+const rise = keyframes`
+  0% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-350px);
+    opacity: 0;
+  }
+`;
+
+// Styled components
+const Zones = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  background-color: #121212; /* Dark background color */
+  padding: 20px;
+  border-radius: 10px;
+`;
+
+const Zone = styled.div`
+  position: relative;
+  width: 300px;
+  height: 400px;
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-size 0.3s ease;
+  cursor: pointer;
+`;
+
+const HeaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Space between h2 and button */
+  position: absolute;
+  bottom: 100px;
+  left: 20px;
+  right: 20px; /* Add padding to the right */
+  padding: 5px 10px;
+  border-radius: 5px;
+  box-sizing: border-box; /* Include padding in width calculation */
+`;
+
+const Heading = styled.h2`
+  margin: 0;
+  color: white;
+  font-size: 1.5em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  padding: 5px 10px;
+  white-space: nowrap; /* Ensure the text does not wrap */
+  overflow: hidden; /* Hide overflow text */
+  text-overflow: ellipsis; /* Add ellipsis for overflow text */
+  max-width: 70%; /* Adjust max width for shorter headers */
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  border-radius: 5px; /* Rounded corners */
+`;
+
+const Description = styled.p`
+  position: absolute;
+  bottom: 40px;
+  left: 0; /* Adjust to cover the full width */
+  width: 100%; /* Ensure it spans the full width */
+  margin: 0;
+  color: white;
+  font-size: 1em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  padding: 5px 20px; /* Adjust padding to match the left padding of the container */
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  border-radius: 0 0 5px 5px; /* Rounded bottom corners */
+  box-sizing: border-box; /* Include padding in width calculation */
+`;
+
+const StartButton = styled.button`
+  padding: 5px 10px;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  font-size: 1em; /* Increase font size */
+
+  &:hover {
+    background-color: #32CD32; /* Lime green on hover */
+  }
+`;
+
+const StopButton = styled(StartButton)`
+  background-color: #FF0000; /* Red background for Stop button */
+  &:hover {
+    background-color: #FF6347; /* Tomato red on hover */
+  }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const Bubble = styled.div`
+  position: absolute;
+  bottom: -50px;
+  width: 20px;
+  height: 20px;
+  background-color: ${props => props.color};
+  border-radius: 50%;
+  opacity: 0.7;
+  animation: ${rise} 5s infinite ease-in-out;
+  left: ${props => props.left || '50%'};
+  animation-duration: ${props => props.duration || '5s'};
+  animation-delay: ${props => props.delay || '0s'};
+  width: ${props => props.size || '20px'};
+  height: ${props => props.size || '20px'};
+  border: ${props => props.border};
+`;
+
+const getRandomBubbleProperties = () => {
+  const colors = ['rgba(255, 255, 255, 0.8)', 'rgba(135, 206, 235, 0.8)'];
+  const borders = ['2px solid rgba(255, 255, 255, 0.5)', '2px solid rgba(135, 206, 235, 0.5)'];
+
+  const color = colors[Math.floor(Math.random() * colors.length)];
+  const border = borders[Math.floor(Math.random() * borders.length)];
+
+  return { color, border };
+};
 
 const Expeditions = () => {
   const dispatch = useDispatch();
@@ -11,6 +147,8 @@ const Expeditions = () => {
   const zones = useSelector((state) => state.expedition.zones);
   const [progress, setProgress] = useState(0);
   const [intervalId, setIntervalId] = useState(null);
+  const [bubbles, setBubbles] = useState([]);
+  const [hoveredZone, setHoveredZone] = useState(null);
 
   useEffect(() => {
     if (activeZone && !intervalId) {
@@ -28,6 +166,26 @@ const Expeditions = () => {
       }
     };
   }, [activeZone, intervalId]);
+
+  useEffect(() => {
+    if (hoveredZone) {
+      const interval = setInterval(() => {
+        const newBubble = {
+          id: Date.now(),
+          left: `${Math.random() * 100}%`,
+          duration: `${4 + Math.random() * 2}s`,
+          delay: `${Math.random() * 2}s`,
+          size: `${10 + Math.random() * 15}px`,
+          ...getRandomBubbleProperties(),
+        };
+        setBubbles(prevBubbles => [...prevBubbles, newBubble]);
+      }, 500);
+
+      return () => clearInterval(interval);
+    } else {
+      setBubbles([]);
+    }
+  }, [hoveredZone]);
 
   useEffect(() => {
     if (activeZone) {
@@ -81,30 +239,46 @@ const Expeditions = () => {
   return (
     <div>
       <h1>Expeditions</h1>
-      <div className="zones">
+      <Zones>
         {zones.map((zone, index) => (
-          <div 
-            key={index} 
-            className={`zone ${activeZone === zone.name ? 'active' : ''}`} 
+          <Zone
+            key={index}
+            className={activeZone === zone.name ? 'active' : ''}
             style={{ backgroundImage: `url(${zone.image})` }}
+            onMouseEnter={() => setHoveredZone(zone.name)}
+            onMouseLeave={() => setHoveredZone(null)}
           >
-            <div className="header-container">
-              <h2>{zone.name}</h2>
-              {activeZone !== zone.name && <button onClick={() => handleStart(zone.name)}>Start</button>}
-            </div>
-            <p>{zone.description}</p>
+            {hoveredZone === zone.name && bubbles.map(bubble => (
+              <Bubble
+                key={bubble.id}
+                left={bubble.left}
+                duration={bubble.duration}
+                delay={bubble.delay}
+                size={bubble.size}
+                color={bubble.color}
+                border={bubble.border}
+              />
+            ))}
+            <HeaderContainer>
+              <Heading>{zone.name}</Heading>
+              <ButtonContainer>
+                {activeZone === zone.name ? (
+                  <StopButton onClick={handleStop}>Stop</StopButton>
+                ) : (
+                  <StartButton onClick={() => handleStart(zone.name)}>Start</StartButton>
+                )}
+              </ButtonContainer>
+            </HeaderContainer>
+            <Description>{zone.description}</Description>
             {activeZone === zone.name && (
-              <>
-                <button onClick={handleStop}>Stop</button>
-                <div className="progress-bar-container">
-                  <div className="progress-bar" style={{ width: `${(progress / zone.duration) * 100}%` }}></div>
-                  <span>{progress}s / {zone.duration}s</span>
-                </div>
-              </>
+              <div className="progress-bar-container">
+                <div className="progress-bar" style={{ width: `${(progress / zone.duration) * 100}%` }}></div>
+                <span>{progress}s / {zone.duration}s</span>
+              </div>
             )}
-          </div>
+          </Zone>
         ))}
-      </div>
+      </Zones>
     </div>
   );
 };
