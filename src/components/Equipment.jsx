@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrop } from 'react-dnd';
 import { equipItem, swapEquipmentAndInventory } from '../features/player/playerSlice';
-import DraggableItem from './DraggableItems';
+import DraggableItem from './DraggableItem';
 
 const EquipmentSlot = ({ slot, item }) => {
   const dispatch = useDispatch();

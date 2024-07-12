@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
-import DraggableItem from './DraggableItems';
+import DraggableItem from './DraggableItem';
 import { swapItems, unequipItem, setEquipmentFlag, swapInventoryAndEquipment } from '../features/player/playerSlice';
 import Tooltip from './Tooltip';
 
