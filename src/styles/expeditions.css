@@ -33,7 +33,7 @@
   align-items: center;
   justify-content: space-between; /* Space between h2 and button */
   position: absolute;
-  bottom: 100px;
+  bottom: 140px; /* Adjusted to move it down */
   left: 20px;
   right: 20px; /* Add padding to the right */
   background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
@@ -56,7 +56,7 @@
 
 .zone p {
   position: absolute;
-  bottom: 40px;
+  bottom: 110px; /* Adjusted to move it up */
   left: 0; /* Adjust to cover the full width */
   width: 100%; /* Ensure it spans the full width */
   margin: 0;
@@ -87,11 +87,13 @@
 .progress-bar-container {
   position: relative;
   width: 100%;
-  height: 20px;
+  height: 30px; /* Increase the height */
   background: #ddd;
   border-radius: 10px;
   overflow: hidden;
   margin-top: 10px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  padding: 0; /* Remove padding */
 }
 
 .progress-bar {
@@ -100,9 +102,9 @@
   transition: width 1s linear;
 }
 
-.progress-bar-container span {
+.progress-text {
   position: absolute;
-  right: 10px;
+  left: 10px;
   top: 50%;
   transform: translateY(-50%);
   color: #fff;

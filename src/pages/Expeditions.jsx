@@ -50,7 +50,7 @@ const HeaderContainer = styled.div`
   align-items: center;
   justify-content: space-between; /* Space between h2 and button */
   position: absolute;
-  bottom: 100px;
+  bottom: 140px; /* Adjusted to move it down */
   left: 20px;
   right: 20px; /* Add padding to the right */
   padding: 5px 10px;
@@ -72,19 +72,45 @@ const Heading = styled.h2`
   border-radius: 5px; /* Rounded corners */
 `;
 
-const Description = styled.p`
+const DescriptionContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the progress bar */
   position: absolute;
-  bottom: 40px;
-  left: 0; /* Adjust to cover the full width */
+  bottom: 0; /* Adjusted to move it up */
+  left: 0;
   width: 100%; /* Ensure it spans the full width */
-  margin: 0;
-  color: white;
-  font-size: 1em;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-  padding: 5px 20px; /* Adjust padding to match the left padding of the container */
+  padding: 10px 20px; /* Ensure there is at least 10px of padding */
   background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
   border-radius: 0 0 5px 5px; /* Rounded bottom corners */
   box-sizing: border-box; /* Include padding in width calculation */
+`;
+
+const ProgressBarContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 30px; /* Increase the height */
+  background: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 10px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  padding: 0; /* Remove padding */
+`;
+
+const ProgressBar = styled.div`
+  height: 100%;
+  background: #4caf50;
+  transition: width 1s linear;
+`;
+
+const ProgressText = styled.span`
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+  font-weight: bold;
 `;
 
 const StartButton = styled.button`
@@ -95,17 +121,19 @@ const StartButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
-  font-size: 1em; /* Increase font size */
+  font-size: 1.5em; /* Increase font size to match h2 */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Match shadow */
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Match shadow */
 
   &:hover {
-    background-color: #32CD32; /* Lime green on hover */
+    background-color: #32cd32; /* Lime green on hover */
   }
 `;
 
 const StopButton = styled(StartButton)`
-  background-color: #FF0000; /* Red background for Stop button */
+  background-color: #ff0000; /* Red background for Stop button */
   &:hover {
-    background-color: #FF6347; /* Tomato red on hover */
+    background-color: #ff6347; /* Tomato red on hover */
   }
 `;
 
@@ -269,13 +297,15 @@ const Expeditions = () => {
                 )}
               </ButtonContainer>
             </HeaderContainer>
-            <Description>{zone.description}</Description>
-            {activeZone === zone.name && (
-              <div className="progress-bar-container">
-                <div className="progress-bar" style={{ width: `${(progress / zone.duration) * 100}%` }}></div>
-                <span>{progress}s / {zone.duration}s</span>
-              </div>
-            )}
+            <DescriptionContainer>
+              <p>{zone.description}</p>
+              {activeZone === zone.name && (
+                <ProgressBarContainer>
+                  <ProgressBar style={{ width: `${(progress / zone.duration) * 100}%` }}></ProgressBar>
+                  <ProgressText>{progress}s / {zone.duration}s</ProgressText>
+                </ProgressBarContainer>
+              )}
+            </DescriptionContainer>
           </Zone>
         ))}
       </Zones>
