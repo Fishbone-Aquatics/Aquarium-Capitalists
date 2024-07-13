@@ -1,9 +1,23 @@
+@keyframes rise {
+  0% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-350px);
+    opacity: 0;
+  }
+}
+
 .zones {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
-  background-color: #121212; /* Dark background color */
+  background-color: #121212;
   padding: 20px;
   border-radius: 10px;
 }
@@ -22,78 +36,57 @@
   cursor: pointer;
 }
 
-.zone:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-  background-size: 110%;
-}
-
 .header-container {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Space between h2 and button */
+  justify-content: space-between;
   position: absolute;
-  bottom: 140px; /* Adjusted to move it down */
+  bottom: 140px;
   left: 20px;
-  right: 20px; /* Add padding to the right */
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  right: 20px;
   padding: 5px 10px;
   border-radius: 5px;
-  box-sizing: border-box; /* Include padding in width calculation */
+  box-sizing: border-box;
 }
 
-.zone h2 {
+.heading {
   margin: 0;
   color: white;
   font-size: 1.5em;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-  padding: 0;
-  white-space: nowrap; /* Ensure the text does not wrap */
-  overflow: hidden; /* Hide overflow text */
-  text-overflow: ellipsis; /* Add ellipsis for overflow text */
-  max-width: 70%; /* Adjust max width for shorter headers */
-}
-
-.zone p {
-  position: absolute;
-  bottom: 110px; /* Adjusted to move it up */
-  left: 0; /* Adjust to cover the full width */
-  width: 100%; /* Ensure it spans the full width */
-  margin: 0;
-  color: white;
-  font-size: 1em;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-  padding: 5px 20px; /* Adjust padding to match the left padding of the container */
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  border-radius: 0 0 5px 5px; /* Rounded bottom corners */
-  box-sizing: border-box; /* Include padding in width calculation */
-}
-
-.zone button {
   padding: 5px 10px;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  color: white;
-  border: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70%;
+  background: rgba(0, 0, 0, 0.5);
   border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  font-size: 1em; /* Increase font size */
 }
 
-.zone button:hover {
-  background-color: #32CD32; /* Lime green on hover */
+.description-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 0 0 5px 5px;
+  box-sizing: border-box;
 }
 
 .progress-bar-container {
   position: relative;
   width: 100%;
-  height: 30px; /* Increase the height */
+  height: 30px;
   background: #ddd;
   border-radius: 10px;
   overflow: hidden;
   margin-top: 10px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-  padding: 0; /* Remove padding */
+  padding: 0;
 }
 
 .progress-bar {
@@ -109,4 +102,49 @@
   transform: translate(-50%, -50%);
   color: #fff;
   font-weight: bold;
+}
+
+.start-button,
+.stop-button {
+  padding: 5px 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  font-size: 1.5em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.start-button:hover {
+  background-color: #32cd32;
+}
+
+.stop-button {
+  background-color: #ff0000;
+}
+
+.stop-button:hover {
+  background-color: #ff6347;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+}
+
+.bubble {
+  position: absolute;
+  bottom: -50px;
+  width: 20px;
+  height: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  opacity: 0.7;
+  animation: rise 5s infinite ease-in-out;
+  left: 50%;
+  animation-duration: 5s;
+  animation-delay: 0s;
 }
