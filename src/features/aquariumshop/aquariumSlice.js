@@ -1,4 +1,3 @@
-// src/features/aquariumshop/aquariumSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -9,6 +8,7 @@ const initialState = {
     { id: 3, name: '20 Gallon Tank', icon: '/icons/playersStore/20-gallon-tank.png', size: { rows: 2, cols: 3 } },
   ],
   gridItems: Array(25).fill(null), // Initialize grid items
+  dropIndicator: null, // Initialize drop indicator as null
 };
 
 const aquariumSlice = createSlice({
@@ -41,9 +41,12 @@ const aquariumSlice = createSlice({
         }
       }
     },
+    setDropIndicator(state, action) {
+      state.dropIndicator = action.payload;
+    },
   },
 });
 
-export const { increaseShopSize, resetShopSize, setItems, addItemToGrid } = aquariumSlice.actions;
+export const { increaseShopSize, resetShopSize, setItems, addItemToGrid, setDropIndicator } = aquariumSlice.actions;
 
 export default aquariumSlice.reducer;

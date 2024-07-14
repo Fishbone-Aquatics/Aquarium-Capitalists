@@ -1,8 +1,8 @@
 // src/components/PlayersShopGrid.jsx
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItemToGrid } from '../features/aquariumshop/aquariumSlice';
+import { addItemToGrid, setDropIndicator } from '../features/aquariumshop/aquariumSlice';
 import '../styles/grid.css';
 
 const ItemTypes = {
@@ -13,7 +13,7 @@ const Grid = ({ gridSize }) => {
   const dispatch = useDispatch();
   const gridRef = useRef(null);
   const gridItems = useSelector((state) => state.aquarium.gridItems || []);
-  const [dropIndicator, setDropIndicator] = useState({ visible: false, top: 0, left: 0, width: 0, height: 0 });
+  const dropIndicator = useSelector((state) => state.aquarium.dropIndicator);
 
   useEffect(() => {
     if (gridRef.current) {
@@ -21,7 +21,7 @@ const Grid = ({ gridSize }) => {
     }
   }, [gridRef]);
 
-  const [{ isOver, canDrop, itemType }, drop] = useDrop(() => ({
+  const [{ isOver, canDrop }, drop] = useDrop(() => ({
     accept: ItemTypes.ITEM,
     drop: (item, monitor) => {
       console.log('Item dropped:', item);
@@ -52,7 +52,7 @@ const Grid = ({ gridSize }) => {
       } else {
         console.warn('Invalid client offset or grid rect:', clientOffset, gridRect);
       }
-      setDropIndicator({ visible: false, top: 0, left: 0, width: 0, height: 0 });
+      dispatch(setDropIndicator(null));
     },
     hover: (item, monitor) => {
       const clientOffset = monitor.getClientOffset();
@@ -71,13 +71,17 @@ const Grid = ({ gridSize }) => {
         const width = item.size.cols * cellSize;
         const height = item.size.rows * cellSize;
 
-        setDropIndicator({ visible: true, top, left, width, height });
+        dispatch(setDropIndicator({ visible: true, top, left, width, height }));
+      }
+    },
+    end: (item, monitor) => {
+      if (!monitor.didDrop()) {
+        dispatch(setDropIndicator(null));
       }
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
       canDrop: !!monitor.canDrop(),
-      itemType: monitor.getItemType(),
     }),
   }), [dispatch, gridSize, gridItems]);
 
@@ -92,7 +96,7 @@ const Grid = ({ gridSize }) => {
       className="grid-container"
       style={{ '--grid-size': gridSize }}
     >
-      {dropIndicator.visible && (
+      {dropIndicator && dropIndicator.visible && (
         <div
           className="drop-indicator"
           style={{
