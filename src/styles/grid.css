@@ -1,18 +1,18 @@
-/* src/components/Grid.css */
+/* src/components/grid.css */
 .grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); /* Ensure it fits within the container */
-    grid-template-rows: repeat(auto-fill, minmax(50px, 1fr)); /* Expand downwards */
-    gap: 0; /* Remove gap between cells */
-    width: 100%;
-    height: 100%;
-  }
-  
-  .grid-cell {
-    width: 100%;
-    height: 100%;
-    background-color: #ddd;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-  }
-  
+  display: grid;
+  grid-template-columns: repeat(var(--grid-size), 1fr); /* Use CSS variable for grid size */
+  grid-template-rows: repeat(var(--grid-size), 1fr); /* Use CSS variable for grid size */
+  gap: 0; /* Remove gap between cells */
+  width: 50vmin; /* Make width and height equal using viewport units */
+  height: 50vmin; /* This ensures the grid is a square */
+  margin: auto; /* Center the grid */
+}
+
+.grid-cell {
+  width: 100%;
+  height: 100%;
+  background-color: #ddd;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}

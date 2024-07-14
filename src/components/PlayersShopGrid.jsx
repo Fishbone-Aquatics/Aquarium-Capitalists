@@ -1,23 +1,19 @@
-// src/components/Grid.jsx
+// src/components/PlayersShopGrid.jsx
 import React from 'react';
-import { useDrop } from 'react-dnd';
 import '../styles/grid.css';
 
 const Grid = ({ gridSize }) => {
-  const [, drop] = useDrop({
-    accept: 'shape',
-    drop: (item, monitor) => {
-      // Handle the drop logic here
-    },
-  });
-
-  const cells = Array.from({ length: gridSize * gridSize }).map((_, index) => (
-    <div key={index} className="grid-cell"></div>
-  ));
+  // Create an array with the size of gridSize * gridSize
+  const cells = Array.from({ length: gridSize * gridSize });
 
   return (
-    <div className="grid-container" ref={drop}>
-      {cells}
+    <div
+      className="grid-container"
+      style={{ '--grid-size': gridSize }}
+    >
+      {cells.map((_, index) => (
+        <div key={index} className="grid-cell"></div>
+      ))}
     </div>
   );
 };

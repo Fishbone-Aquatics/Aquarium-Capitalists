@@ -2,24 +2,26 @@
 import { configureStore } from '@reduxjs/toolkit';
 import playerReducer from '../features/player/playerSlice';
 import expeditionReducer from '../features/expeditions/expeditionSlice';
-import { saveState } from '../features/player/saveState';
+import aquariumReducer from '../features/aquariumshop/aquariumSlice';
+import { saveState, loadState } from '../features/player/saveState';
 
-// Import other reducers as needed
+const preloadedState = loadState();
 
 const rootReducer = {
   player: playerReducer,
   expedition: expeditionReducer,
-  // Add other reducers here
+  aquarium: aquariumReducer,
 };
 
 const store = configureStore({
   reducer: rootReducer,
   devTools: process.env.NODE_ENV !== 'production',
+  preloadedState,
 });
 
-// Subscribe to store changes to save player state to localStorage
+// Subscribe to store changes to save state to localStorage
 store.subscribe(() => {
-  saveState(store.getState().player);
+  saveState(store.getState());
 });
 
 export { store }; // Export as a named export
