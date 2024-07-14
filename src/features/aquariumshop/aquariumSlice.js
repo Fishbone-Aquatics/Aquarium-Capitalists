@@ -30,7 +30,9 @@ const aquariumSlice = createSlice({
     },
     addItemToGrid(state, action) {
       const { item, index } = action.payload;
-      state.gridItems[index] = item;
+      if (index >= 0 && index < state.gridItems.length) {
+        state.gridItems[index] = item;
+      }
     },
   },
 });
