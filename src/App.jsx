@@ -1,3 +1,4 @@
+// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
@@ -11,6 +12,7 @@ import Gathering from './pages/Gathering';
 import CurrentStatus from './components/CurrentStatus';
 import Equipment from './components/Equipment';
 import Stats from './components/Stats';
+import AquariumShop from './components/AquariumShop';
 import './App.css';
 import './styles/tooltip.css';
 
@@ -49,6 +51,14 @@ function App() {
 
 function RightSideContent() {
   const location = useLocation();
+
+  if (location.pathname === '/') {
+    return (
+      <div className="right-side-content">
+        <AquariumShop />
+      </div>
+    );
+  }
 
   if (location.pathname === '/inventory') {
     return (

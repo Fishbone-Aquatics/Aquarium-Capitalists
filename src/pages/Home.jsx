@@ -2,6 +2,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Grid from '../components/PlayersShopGrid';
+import AquariumShop from '../components/AquariumShop';
 import { increaseShopSize } from '../features/aquariumshop/aquariumSlice';
 import '../styles/home.css';
 
@@ -16,7 +17,6 @@ function Home() {
   return (
     <div className="home-container">
       <Grid gridSize={maxShopSize} />
-      <button onClick={handleIncreaseSize}>Increase Shop Size</button>
     </div>
   );
 }
