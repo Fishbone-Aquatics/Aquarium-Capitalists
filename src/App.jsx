@@ -1,4 +1,3 @@
-// App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
@@ -9,7 +8,7 @@ import Home from './pages/Home';
 import Inventory from './pages/Inventory';
 import Expeditions from './pages/Expeditions';
 import Gathering from './pages/Gathering';
-import Action from './components/Action';
+import CurrentStatus from './components/CurrentStatus';
 import Equipment from './components/Equipment';
 import Stats from './components/Stats';
 import './App.css';
@@ -27,6 +26,9 @@ function App() {
               <Link to="/expeditions">Expeditions</Link>
               <Link to="/gathering">Gathering</Link>
             </div>
+            <div className="status-bar">
+              <CurrentStatus />
+            </div>
             <main className="main-display">
               <Routes>
                 <Route path="/" element={<Home />} />
@@ -36,7 +38,6 @@ function App() {
               </Routes>
             </main>
             <aside className="right-side">
-              <Action />
               <RightSideContent />
             </aside>
           </div>
