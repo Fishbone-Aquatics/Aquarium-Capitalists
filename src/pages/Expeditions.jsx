@@ -18,7 +18,8 @@ const Expeditions = () => {
     currencyPerHour: 0,
     totalXp: 0,
     xpPerHour: 0,
-    lootedItems: []
+    lootedItems: [],
+    totalDuration: 0 // To accumulate total duration
   });
   const startTimeRef = useRef(0);
 
@@ -46,9 +47,9 @@ const Expeditions = () => {
             clearInterval(intervalIdRef.current);
 
             setTimeout(() => {
-              elapsedSeconds = 0;
               const endTime = Date.now();
-              const durationHours = (endTime - startTimeRef.current) / 3600000;
+              const durationSeconds = Math.floor((endTime - startTimeRef.current) / 1000);
+              statisticsRef.current.totalDuration += durationSeconds;
 
               // Reset progress bar
               if (progressBarRef.current) {
@@ -64,7 +65,6 @@ const Expeditions = () => {
               const xp = Math.floor(Math.random() * (zone.xpRange[1] - zone.xpRange[0] + 1)) + zone.xpRange[0];
               dispatch(addXp(xp));
               statisticsRef.current.totalXp += xp;
-              statisticsRef.current.xpPerHour = (statisticsRef.current.totalXp / durationHours).toFixed(2);
 
               // Calculate loot drops
               const totalChance = zone.lootDrops.reduce((total, drop) => total + drop.chance, 0);
@@ -102,12 +102,16 @@ const Expeditions = () => {
                   dispatch(addCurrency(amount));
                   console.log(`Added currency: ${amount}`);
                   statisticsRef.current.totalCurrency += amount;
-                  statisticsRef.current.currencyPerHour = (statisticsRef.current.totalCurrency / durationHours).toFixed(2);
                 }
               }
-              
 
               statisticsRef.current.expeditionsCompleted += 1;
+
+              // Calculate per-hour rates
+              const durationHours = statisticsRef.current.totalDuration / 3600;
+              statisticsRef.current.xpPerHour = Math.floor(statisticsRef.current.totalXp / durationHours).toLocaleString();
+              statisticsRef.current.currencyPerHour = Math.floor(statisticsRef.current.totalCurrency / durationHours).toLocaleString();
+
               dispatch(updateStatistics({ ...statisticsRef.current }));
               dispatch(calculateExpeditionDuration());
 
