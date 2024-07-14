@@ -48,13 +48,19 @@ function AquariumShop() {
 }
 
 function ShopItem({ item }) {
-  const [, drag] = useDrag(() => ({
+  const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.ITEM,
     item,
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+    end: (item, monitor) => {
+      console.log('Drag ended:', { item, didDrop: monitor.didDrop() });
+    },
   }), [item]);
 
   return (
-    <div ref={drag} className="shop-item">
+    <div ref={drag} className="shop-item" style={{ opacity: isDragging ? 0.5 : 1 }}>
       <img src={item.icon} alt={item.name} className="item-icon" />
       <p>{item.name}</p>
     </div>

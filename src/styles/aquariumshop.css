@@ -32,10 +32,22 @@
   display: grid;
   grid-template-columns: repeat(var(--grid-size), 1fr);
   gap: 5px;
+  position: relative;
 }
 
 .grid-cell {
   width: 100px;
   height: 100px;
   border: 1px solid #ccc;
+  position: relative;
+}
+
+.drop-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 255, 0, 0.3);
+  z-index: 1;
 }
