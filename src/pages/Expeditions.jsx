@@ -80,12 +80,23 @@ const Expeditions = () => {
                 if (selectedDrop.type === 'item') {
                   dispatch(addItemToInventory({ item: selectedDrop.item }));
                   console.log(`Added item: ${selectedDrop.item.name} to inventory`);
-                  const existingItem = statisticsRef.current.lootedItems.find(item => item.name === selectedDrop.item.name);
-                  if (existingItem) {
-                    existingItem.quantity += 1;
+                  
+                  // Create a copy of lootedItems to avoid direct mutation
+                  const lootedItemsCopy = [...statisticsRef.current.lootedItems];
+                  const existingItemIndex = lootedItemsCopy.findIndex(item => item.name === selectedDrop.item.name);
+                  
+                  if (existingItemIndex !== -1) {
+                    // Create a new object for the updated item
+                    lootedItemsCopy[existingItemIndex] = {
+                      ...lootedItemsCopy[existingItemIndex],
+                      quantity: lootedItemsCopy[existingItemIndex].quantity + 1
+                    };
                   } else {
-                    statisticsRef.current.lootedItems = [...statisticsRef.current.lootedItems, { name: selectedDrop.item.name, quantity: 1 }];
+                    lootedItemsCopy.push({ name: selectedDrop.item.name, quantity: 1 });
                   }
+                  
+                  // Update the reference
+                  statisticsRef.current.lootedItems = lootedItemsCopy;
                 } else if (selectedDrop.type === 'currency') {
                   const amount = randomNumberInRange(selectedDrop.amountRange[0], selectedDrop.amountRange[1]);
                   dispatch(addCurrency(amount));
@@ -94,6 +105,7 @@ const Expeditions = () => {
                   statisticsRef.current.currencyPerHour = (statisticsRef.current.totalCurrency / durationHours).toFixed(2);
                 }
               }
+              
 
               statisticsRef.current.expeditionsCompleted += 1;
               dispatch(updateStatistics({ ...statisticsRef.current }));
