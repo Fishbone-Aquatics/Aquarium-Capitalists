@@ -4,17 +4,21 @@ import { saveState } from './saveState'; // Import the shared saveState function
 export const playerReducers = {
   updateStats: (state, action) => {
     state.stats = { ...state.stats, ...action.payload };
-    saveState(state);
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
   addXp: (state, action) => {
+    console.log('Reducer: addXp', action.payload);
+    console.log('State before addXp:', state);
     state.stats.xp += action.payload;
     console.log(`Added XP: ${action.payload}, new XP: ${state.stats.xp}`);
-    saveState(state);
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
   addCurrency: (state, action) => {
+    console.log('Reducer: addCurrency', action.payload);
+    console.log('State before addCurrency:', state);
     state.stats.currency += action.payload;
     console.log(`Added currency: ${action.payload}, new currency: ${state.stats.currency}`);
-    saveState(state);
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
   addItemToInventory: (state, action) => {
     console.log('Adding item to inventory', action.payload);
@@ -32,13 +36,13 @@ export const playerReducers = {
       }
     }
 
-    saveState(state);
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
   removeItemFromInventory: (state, action) => {
     const { itemId } = action.payload;
     state.inventory = state.inventory.map(item => item && item.id === itemId ? { ...items.equipment.emptySlot } : item);
     console.log(`Removed item with id: ${itemId} from inventory`);
-    saveState(state);
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
   updateInventorySize: (state, action) => {
     const newSize = action.payload;
@@ -51,7 +55,7 @@ export const playerReducers = {
     state.inventory = resizedInventory;
     state.stats.maxInventorySlots = newSize;
     console.log(`Updated inventory size to: ${newSize}`);
-    saveState(state);
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
   equipItem: (state, action) => {
     const { item, slot } = action.payload;
@@ -61,7 +65,7 @@ export const playerReducers = {
         const currentItem = { ...state.equipment[slot] };
         state.equipment[slot] = { ...item, isEquipmentSlot: true };
         state.inventory = state.inventory.map(it => it && it.id === item.id ? { ...items.equipment.emptySlot } : it);
-
+  
         if (currentItem && currentItem.id !== items.equipment.emptySlot.id) {
           const emptyIndex = state.inventory.findIndex(it => it.id === items.equipment.emptySlot.id);
           if (emptyIndex !== -1) {
@@ -74,17 +78,17 @@ export const playerReducers = {
         console.log(`Cannot equip ${item.name} in ${slot}. Item type does not match slot type. ${item.type}`);
       }
     }
-    saveState(state);
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
   unequipItem: (state, action) => {
     const { slot, targetIndex } = action.payload;
     const currentItem = { ...state.equipment[slot] };
     console.log(`Unequipping item from slot ${slot} to inventory index ${targetIndex}`, currentItem);
-
+  
     if (currentItem && currentItem.id !== items.equipment.emptySlot.id) {
       const targetItem = state.inventory[targetIndex];
       console.log('Target inventory item:', targetItem);
-
+  
       if (targetItem.id === items.equipment.emptySlot.id || targetItem.type === currentItem.type) {
         state.equipment[slot] = { ...items.equipment.emptySlot, type: slot.charAt(0).toUpperCase() + slot.slice(1) };
         state.inventory[targetIndex] = { ...currentItem, isEquipmentSlot: false };
@@ -95,7 +99,7 @@ export const playerReducers = {
     } else {
       console.error('Current item is empty slot or invalid', currentItem);
     }
-    saveState(state);
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
   swapItems: (state, action) => {
     const { from, to } = action.payload;
@@ -116,15 +120,15 @@ export const playerReducers = {
     } else {
       console.error("Invalid swap indices:", { from, to });
     }
-    saveState(state);
-  },
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
+  },  
   swapEquipmentAndInventory: (state, action) => {
     const { fromInventoryIndex, toEquipmentSlot } = action.payload;
     const fromItem = state.inventory[fromInventoryIndex];
     const toItem = state.equipment[toEquipmentSlot];
-
+  
     console.log("Attempting to swap inventory item with equipment:", fromItem, toItem);
-
+  
     if (fromItem && toItem) {
       if (fromItem.type === toItem.type) {
         state.inventory[fromInventoryIndex] = { ...toItem, isEquipmentSlot: false };
@@ -136,15 +140,16 @@ export const playerReducers = {
     } else {
       console.error("Invalid swap operation:", { fromItem, toItem });
     }
-    saveState(state);
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
+  
   swapInventoryAndEquipment: (state, action) => {
     const { fromEquipmentSlot, toInventoryIndex } = action.payload;
     const fromItem = state.equipment[fromEquipmentSlot];
     const toItem = state.inventory[toInventoryIndex];
-
+  
     console.log("Attempting to swap equipment item with inventory:", fromItem, toItem);
-
+  
     if (fromItem && toItem) {
       if (fromItem.type === toItem.type || toItem.id === items.equipment.emptySlot.id) {
         state.equipment[fromEquipmentSlot] = { ...toItem, isEquipmentSlot: true };
@@ -156,7 +161,7 @@ export const playerReducers = {
     } else {
       console.error("Invalid swap operation:", { fromItem, toItem });
     }
-    saveState(state);
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
   setEquipmentFlag: (state, action) => {
     const { index, isEquipmentSlot } = action.payload;
@@ -165,8 +170,9 @@ export const playerReducers = {
       item.isEquipmentSlot = isEquipmentSlot;
       console.log(`Set equipment flag for item at index ${index} to ${isEquipmentSlot}`);
     }
-    saveState(state);
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
+  // New reducers for skills and other properties
   updateSkillXp: (state, action) => {
     console.log('Updating skill xp', action.payload);
     const { skill, xp } = action.payload;
@@ -185,27 +191,27 @@ export const playerReducers = {
       console.warn(`Skill ${skill} does not exist in state.skills.`);
     }
 
-    saveState(state);
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
   updateSkillBoostPercent: (state, action) => {
     state.skillBoostPercent = action.payload;
     console.log(`Updated skill boost percent to: ${state.skillBoostPercent}`);
-    saveState(state);
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
   updateGatheringSpeed: (state, action) => {
     state.gatheringSpeed = action.payload;
     console.log(`Updated gathering speed to: ${state.gatheringSpeed}`);
-    saveState(state);
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
   updateGatheringEfficiency: (state, action) => {
     state.gatheringEfficiency = action.payload;
     console.log(`Updated gathering efficiency to: ${state.gatheringEfficiency}`);
-    saveState(state);
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
   updateExpeditionSpeed: (state, action) => {
     state.expeditionSpeed = action.payload;
     console.log(`Updated expedition speed to: ${state.expeditionSpeed}`);
-    saveState(state);
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
 };
 

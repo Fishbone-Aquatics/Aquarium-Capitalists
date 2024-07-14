@@ -7,7 +7,7 @@ import { saveState } from './saveState';
 const initialState = loadInitialState();
 
 const playerSlice = createSlice({
-  name: initialState.name,
+  name: 'player',
   initialState,
   reducers: {
     ...playerReducers,
@@ -16,17 +16,17 @@ const playerSlice = createSlice({
     builder.addCase(setActiveZone, (state, action) => {
       state.status = `Exploring ${action.payload.zoneName}`;
       console.log('status should be exploring:', state.status);
-      saveState(state); // Save the state
+      saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium }); // Pass the complete state
     });
     builder.addCase(clearActiveZone, (state) => {
       console.log('Expedition complete. - player slice');
       state.status = 'idle';
-      saveState(state); // Save the state
+      saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium }); // Pass the complete state
     });
     builder.addMatcher(
       action => action.type.startsWith('player/'),
       (state) => {
-        saveState(state); // Save the state for all player actions
+        saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium }); // Pass the complete state
       }
     );
   }
