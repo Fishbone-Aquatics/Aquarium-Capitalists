@@ -65,7 +65,6 @@ function ShopItem({ item }) {
   return (
     <div ref={drag} className="shop-item" style={{ opacity: isDragging ? 0.5 : 1 }}>
       <img src={item.icon} alt={item.name} className="item-icon" />
-      <p>{item.name}</p>
     </div>
   );
 }
