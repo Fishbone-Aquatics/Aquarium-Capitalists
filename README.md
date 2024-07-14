@@ -55,3 +55,6 @@ https://docs.google.com/document/d/1_K5F1I7iJGMqax2JdnS1ja4mLUppdm_f7yZoA6i8TqA/
 ## nice to know commands
 git commit --allow-empty -m "chore: trigger release-please"
 testing
+
+## start commands for ec2
+`pm2 start npm --name "react-app" -- run dev`
