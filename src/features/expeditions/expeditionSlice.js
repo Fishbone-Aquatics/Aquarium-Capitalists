@@ -11,10 +11,10 @@ const initialState = {
       duration: 3, // seconds
       xpRange: [1, 3],
       lootDrops: [
-        { type: 'item', item: items.equipment.filter, chance: .9 },
+        { type: 'item', item: items.equipment.filter, chance: 0.0033 },
         { type: 'item', item: items.equipment.spongeFilter, chance: 0.0033 },
         { type: 'item', item: items.equipment.light, chance: 0.0033 },
-        //{ type: 'currency', amountRange: [5, 10], chance: 0.002 },
+        { type: 'currency', amountRange: [5, 10], chance: 0.2 },
       ],
       image: 'icons/expeditions/coralReef.png' 
     },
