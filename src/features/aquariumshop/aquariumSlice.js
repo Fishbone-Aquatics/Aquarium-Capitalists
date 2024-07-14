@@ -4,9 +4,9 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   maxShopSize: 5,
   items: [
-    { id: 1, name: '5 Gallon Tank', icon: '/icons/playersStore/5-gallon-tank.png' },
-    { id: 2, name: '10 Gallon Tank', icon: '/icons/playersStore/10-gallon-tank.png' },
-    { id: 3, name: '20 Gallon Tank', icon: '/icons/playersStore/20-gallon-tank.png' },
+    { id: 1, name: '5 Gallon Tank', icon: '/icons/playersStore/5-gallon-tank.png', size: { rows: 1, cols: 1 } },
+    { id: 2, name: '10 Gallon Tank', icon: '/icons/playersStore/10-gallon-tank.png', size: { rows: 2, cols: 2 } },
+    { id: 3, name: '20 Gallon Tank', icon: '/icons/playersStore/20-gallon-tank.png', size: { rows: 2, cols: 3 } },
   ],
   gridItems: Array(25).fill(null), // Initialize grid items
 };
@@ -30,8 +30,15 @@ const aquariumSlice = createSlice({
     },
     addItemToGrid(state, action) {
       const { item, index } = action.payload;
-      if (index >= 0 && index < state.gridItems.length) {
-        state.gridItems[index] = item;
+      const { rows, cols } = item.size;
+      const gridSize = Math.sqrt(state.gridItems.length);
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const targetIndex = index + r * gridSize + c;
+          if (targetIndex >= 0 && targetIndex < state.gridItems.length) {
+            state.gridItems[targetIndex] = item;
+          }
+        }
       }
     },
   },
