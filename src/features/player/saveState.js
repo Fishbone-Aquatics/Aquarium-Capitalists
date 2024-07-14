@@ -1,3 +1,4 @@
+// saveState.js
 export const saveState = (state) => {
   try {
     console.log('Saving state:', JSON.parse(JSON.stringify(state))); // Deep clone for better logging
@@ -19,6 +20,7 @@ export const saveState = (state) => {
         equipment: playerState.equipment,
         skills: playerState.skills,
         status: playerState.status,
+        expeditionDuration: playerState.expeditionDuration, // Include expeditionDuration
         skillBoostPercent: playerState.skillBoostPercent,
         gatheringSpeed: playerState.gatheringSpeed,
         gatheringEfficiency: playerState.gatheringEfficiency,

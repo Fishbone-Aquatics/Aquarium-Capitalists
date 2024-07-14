@@ -20,6 +20,38 @@ export const playerReducers = {
     console.log(`Added currency: ${action.payload}, new currency: ${state.stats.currency}`);
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
+  startExpedition: (state) => {
+    state.expeditionStartTime = Date.now();
+    state.status = 'exploring';
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
+  },
+  stopExpedition: (state) => {
+    state.expeditionDuration = '0 seconds';
+    state.status = 'idle';
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
+  },
+  calculateExpeditionDuration: (state) => {
+    const now = Date.now();
+    console.log('Calculating expedition duration', state.expeditionStartTime, now);
+    const startTime = state.expeditionStartTime || now;
+    const duration = Math.floor((now - startTime) / 1000); // duration in seconds
+
+    let formattedDuration;
+    if (duration < 60) {
+      formattedDuration = `${duration} seconds`;
+    } else if (duration < 3600) {
+      const minutes = Math.floor(duration / 60);
+      const seconds = duration % 60;
+      formattedDuration = `${minutes} minute${minutes !== 1 ? 's' : ''} ${seconds} second${seconds !== 1 ? 's' : ''}`;
+    } else {
+      const hours = Math.floor(duration / 3600);
+      const minutes = Math.floor((duration % 3600) / 60);
+      formattedDuration = `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+    }
+
+    state.expeditionDuration = formattedDuration;
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
+  },
   addItemToInventory: (state, action) => {
     console.log('Adding item to inventory', action.payload);
     const { item } = action.payload;
@@ -65,7 +97,7 @@ export const playerReducers = {
         const currentItem = { ...state.equipment[slot] };
         state.equipment[slot] = { ...item, isEquipmentSlot: true };
         state.inventory = state.inventory.map(it => it && it.id === item.id ? { ...items.equipment.emptySlot } : it);
-  
+
         if (currentItem && currentItem.id !== items.equipment.emptySlot.id) {
           const emptyIndex = state.inventory.findIndex(it => it.id === items.equipment.emptySlot.id);
           if (emptyIndex !== -1) {
@@ -84,11 +116,11 @@ export const playerReducers = {
     const { slot, targetIndex } = action.payload;
     const currentItem = { ...state.equipment[slot] };
     console.log(`Unequipping item from slot ${slot} to inventory index ${targetIndex}`, currentItem);
-  
+
     if (currentItem && currentItem.id !== items.equipment.emptySlot.id) {
       const targetItem = state.inventory[targetIndex];
       console.log('Target inventory item:', targetItem);
-  
+
       if (targetItem.id === items.equipment.emptySlot.id || targetItem.type === currentItem.type) {
         state.equipment[slot] = { ...items.equipment.emptySlot, type: slot.charAt(0).toUpperCase() + slot.slice(1) };
         state.inventory[targetIndex] = { ...currentItem, isEquipmentSlot: false };
@@ -121,14 +153,14 @@ export const playerReducers = {
       console.error("Invalid swap indices:", { from, to });
     }
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
-  },  
+  },
   swapEquipmentAndInventory: (state, action) => {
     const { fromInventoryIndex, toEquipmentSlot } = action.payload;
     const fromItem = state.inventory[fromInventoryIndex];
     const toItem = state.equipment[toEquipmentSlot];
-  
+
     console.log("Attempting to swap inventory item with equipment:", fromItem, toItem);
-  
+
     if (fromItem && toItem) {
       if (fromItem.type === toItem.type) {
         state.inventory[fromInventoryIndex] = { ...toItem, isEquipmentSlot: false };
@@ -142,14 +174,13 @@ export const playerReducers = {
     }
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
-  
   swapInventoryAndEquipment: (state, action) => {
     const { fromEquipmentSlot, toInventoryIndex } = action.payload;
     const fromItem = state.equipment[fromEquipmentSlot];
     const toItem = state.inventory[toInventoryIndex];
-  
+
     console.log("Attempting to swap equipment item with inventory:", fromItem, toItem);
-  
+
     if (fromItem && toItem) {
       if (fromItem.type === toItem.type || toItem.id === items.equipment.emptySlot.id) {
         state.equipment[fromEquipmentSlot] = { ...toItem, isEquipmentSlot: true };
