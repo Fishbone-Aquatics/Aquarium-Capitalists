@@ -1,8 +1,7 @@
-// src/components/Expeditions.js
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActiveZone, clearActiveZone, updateStatistics } from '../features/expeditions/expeditionSlice';
-import { addXp, addItemToInventory, addCurrency, startExpedition, stopExpedition, calculateExpeditionDuration } from '../features/player/playerSlice';
+import { setActiveZone, clearActiveZone, updateStatistics, calculateExpeditionDuration } from '../features/expeditions/expeditionSlice';
+import { addXp, addItemToInventory, addCurrency } from '../features/player/playerSlice';
 import { randomNumberInRange } from '../utils/randomNumberInRange';
 import '../styles/expeditions.css';
 
@@ -140,7 +139,6 @@ const Expeditions = () => {
       console.log('Cleared existing interval before starting a new one');
     }
     dispatch(setActiveZone({ zoneName }));
-    dispatch(startExpedition());
     console.log(`Expedition started in zone: ${zoneName}`);
   };
 
@@ -158,7 +156,7 @@ const Expeditions = () => {
       console.log('Interval cleared in handleStop');
     }
     dispatch(clearActiveZone());
-    dispatch(stopExpedition());
+    dispatch(calculateExpeditionDuration());
     console.log('Expedition stopped.');
 
     // Reset per-hour calculations

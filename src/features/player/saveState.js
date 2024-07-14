@@ -1,16 +1,20 @@
-// saveState.js
+// src/features/player/saveState.js
 export const saveState = (state) => {
   try {
-    console.log('Saving state:', JSON.parse(JSON.stringify(state))); // Deep clone for better logging
+    const playerState = state.player || {};
+    const expeditionState = state.expedition || {};
+    const aquariumState = state.aquarium || {};
 
-    const playerState = state.player;
-
-    // Check if playerState or playerState.stats is undefined
-    if (!playerState) {
-      throw new Error('playerState is undefined');
-    }
     if (!playerState.stats) {
-      throw new Error('playerState.stats is undefined');
+      playerState.stats = {};
+    }
+
+    if (!expeditionState.statistics) {
+      expeditionState.statistics = {};
+    }
+
+    if (!expeditionState.statistics.expeditionDuration) {
+      expeditionState.statistics.expeditionDuration = '0 seconds';
     }
 
     const serializedState = JSON.stringify({
@@ -20,25 +24,30 @@ export const saveState = (state) => {
         equipment: playerState.equipment,
         skills: playerState.skills,
         status: playerState.status,
-        expeditionDuration: playerState.expeditionDuration, // Include expeditionDuration
         skillBoostPercent: playerState.skillBoostPercent,
         gatheringSpeed: playerState.gatheringSpeed,
         gatheringEfficiency: playerState.gatheringEfficiency,
         expeditionSpeed: playerState.expeditionSpeed,
         maxInventorySlots: playerState.maxInventorySlots,
       },
-      aquarium: state.aquarium ? {
-        maxShopSize: state.aquarium.maxShopSize,
-        items: state.aquarium.items,
-        gridItems: state.aquarium.gridItems,
-      } : {}, // Provide an empty object if state.aquarium is undefined
-      expedition: state.expedition || {}, // Handle expedition state if it exists
+      aquarium: {
+        maxShopSize: aquariumState.maxShopSize,
+        items: aquariumState.items,
+        gridItems: aquariumState.gridItems,
+      },
+      expedition: {
+        ...expeditionState,
+        statistics: {
+          ...expeditionState.statistics,
+          expeditionDuration: expeditionState.statistics.expeditionDuration,
+        },
+      },
     });
 
     localStorage.setItem('gameState', serializedState);
   } catch (e) {
     console.error('Error saving state:', e);
-    console.log('State at error:', JSON.parse(JSON.stringify(state))); // Log the state at the point of error
+    console.log('State at error:', JSON.parse(JSON.stringify(state)));
   }
 };
 

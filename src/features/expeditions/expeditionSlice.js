@@ -1,6 +1,6 @@
-// src/features/expeditions/expeditionSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 import items from '../../data/items/items';
+import { saveState } from '../player/saveState';
 
 const initialState = {
   name: "expedition",
@@ -62,11 +62,13 @@ const initialState = {
     currencyPerHour: 0,
     totalXp: 0,
     xpPerHour: 0,
-    lootedItems: []
-  }
+    lootedItems: [],
+    expeditionDuration: '0 seconds' // Initialize the duration
+  },
+  expeditionStartTime: null,
 };
 
-export const expeditionSlice = createSlice({
+const expeditionSlice = createSlice({
   name: 'expedition',
   initialState,
   reducers: {
@@ -78,8 +80,10 @@ export const expeditionSlice = createSlice({
         currencyPerHour: 0,
         totalXp: 0,
         xpPerHour: 0,
-        lootedItems: []
+        lootedItems: [],
+        expeditionDuration: '0 seconds', // Reset the duration
       };
+      state.expeditionStartTime = Date.now();
     },
     clearActiveZone: (state) => {
       state.activeZone = null;
@@ -92,12 +96,34 @@ export const expeditionSlice = createSlice({
         currencyPerHour,
         totalXp,
         xpPerHour,
-        lootedItems
+        lootedItems,
+        expeditionDuration: state.statistics.expeditionDuration, // Ensure the duration is preserved
       };
-    }
+    },
+    calculateExpeditionDuration: (state) => {
+      const now = Date.now();
+      const startTime = state.expeditionStartTime || now;
+      const duration = Math.floor((now - startTime) / 1000); // duration in seconds
+
+      let formattedDuration;
+      if (duration < 60) {
+        formattedDuration = `${duration} seconds`;
+      } else if (duration < 3600) {
+        const minutes = Math.floor(duration / 60);
+        const seconds = duration % 60;
+        formattedDuration = `${minutes} minute${minutes !== 1 ? 's' : ''} ${seconds} second${seconds !== 1 ? 's' : ''}`;
+      } else {
+        const hours = Math.floor(duration / 3600);
+        const minutes = Math.floor((duration % 3600) / 60);
+        formattedDuration = `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+      }
+
+      state.statistics.expeditionDuration = formattedDuration;
+      saveState({ player: state.player, expedition: state, aquarium: state.aquarium }); // Correct saveState call
+    },
   },
 });
 
-export const { setActiveZone, clearActiveZone, updateStatistics } = expeditionSlice.actions;
+export const { setActiveZone, clearActiveZone, updateStatistics, calculateExpeditionDuration } = expeditionSlice.actions;
 
 export default expeditionSlice.reducer;
