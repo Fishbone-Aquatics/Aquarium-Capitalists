@@ -12,11 +12,13 @@ export const saveState = (state) => {
         gatheringSpeed: state.player.gatheringSpeed,
         gatheringEfficiency: state.player.gatheringEfficiency,
         expeditionSpeed: state.player.expeditionSpeed,
-        maxInventorySlots: state.player.maxInventorySlots
+        maxInventorySlots: state.player.maxInventorySlots,
       },
       aquarium: {
-        maxShopSize: state.aquarium.maxShopSize
-      }
+        maxShopSize: state.aquarium.maxShopSize,
+        items: state.aquarium.items,
+        gridItems: state.aquarium.gridItems,
+      },
     });
     localStorage.setItem('gameState', serializedState);
   } catch (e) {
