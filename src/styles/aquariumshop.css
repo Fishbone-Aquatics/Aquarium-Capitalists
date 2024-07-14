@@ -33,6 +33,9 @@
   grid-template-columns: repeat(var(--grid-size), 1fr);
   gap: 5px;
   position: relative;
+  padding: 0;
+  margin: 0;
+  width: fit-content; /* Ensures the container is only as wide as the grid */
 }
 
 .grid-cell {
@@ -47,3 +50,4 @@
   background: rgba(0, 255, 0, 0.3);
   z-index: 1;
 }
+
