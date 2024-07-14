@@ -1,24 +1,28 @@
 /* src/styles/aquariumshop.css */
 .aquarium-shop {
-    padding: 20px;
-    background-color: #f0f0f0;
-    border-radius: 8px;
-  }
-  
-  .aquarium-shop h2 {
-    margin-bottom: 10px;
-  }
-  
-  .shop-items {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .shop-item {
-    margin-bottom: 10px;
-    padding: 10px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
+  padding: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.shop-items {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.shop-item {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-align: center;
+  padding: 10px;
+}
+
+.item-icon {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 5px;
+}

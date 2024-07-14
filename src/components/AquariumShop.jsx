@@ -1,11 +1,12 @@
 // src/components/AquariumShop.jsx
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { increaseShopSize } from '../features/aquariumshop/aquariumSlice';
 import '../styles/aquariumshop.css';
 
 function AquariumShop() {
   const dispatch = useDispatch();
+  const items = useSelector((state) => state.aquarium.items);
 
   const handleIncreaseSize = () => {
     dispatch(increaseShopSize());
@@ -14,11 +15,13 @@ function AquariumShop() {
   return (
     <div className="aquarium-shop">
       <h2>Aquarium Shop</h2>
-      {/* Placeholder items */}
       <div className="shop-items">
-        <div className="shop-item">Item 1</div>
-        <div className="shop-item">Item 2</div>
-        <div className="shop-item">Item 3</div>
+        {items.map((item) => (
+          <div key={item.id} className="shop-item">
+            <img src={item.icon} alt={item.name} className="item-icon" />
+            <p>{item.name}</p>
+          </div>
+        ))}
       </div>
       <button onClick={handleIncreaseSize}>Increase Shop Size</button>
     </div>
