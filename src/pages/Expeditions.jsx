@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActiveZone, clearActiveZone } from '../features/expeditions/expeditionSlice';
+import { setActiveZone, clearActiveZone, updateStatistics } from '../features/expeditions/expeditionSlice';
 import { addXp, addItemToInventory, addCurrency } from '../features/player/playerSlice';
-import { randomNumberInRange } from '../utils/randomNumberInRange'; // Import the utility function
-import '../styles/expeditions.css'; // Import the CSS file
+import { randomNumberInRange } from '../utils/randomNumberInRange';
+import '../styles/expeditions.css';
 
 const Expeditions = () => {
   const dispatch = useDispatch();
@@ -12,6 +12,15 @@ const Expeditions = () => {
   const intervalIdRef = useRef(null);
   const progressBarRef = useRef(null);
   const progressTextRef = useRef(null);
+  const statisticsRef = useRef({
+    expeditionsCompleted: 0,
+    totalCurrency: 0,
+    currencyPerHour: 0,
+    totalXp: 0,
+    xpPerHour: 0,
+    lootedItems: []
+  });
+  const startTimeRef = useRef(0);
 
   useEffect(() => {
     const startInterval = () => {
@@ -20,6 +29,7 @@ const Expeditions = () => {
         console.log(`Starting expedition in zone: ${activeZone}`);
         let elapsedSeconds = 0;
         const totalDuration = zone.duration;
+        startTimeRef.current = Date.now();
 
         intervalIdRef.current = setInterval(() => {
           elapsedSeconds += 1;
@@ -37,6 +47,8 @@ const Expeditions = () => {
 
             setTimeout(() => {
               elapsedSeconds = 0;
+              const endTime = Date.now();
+              const durationHours = (endTime - startTimeRef.current) / 3600000;
 
               // Reset progress bar
               if (progressBarRef.current) {
@@ -51,6 +63,8 @@ const Expeditions = () => {
               // Calculate XP
               const xp = Math.floor(Math.random() * (zone.xpRange[1] - zone.xpRange[0] + 1)) + zone.xpRange[0];
               dispatch(addXp(xp));
+              statisticsRef.current.totalXp += xp;
+              statisticsRef.current.xpPerHour = (statisticsRef.current.totalXp / durationHours).toFixed(2);
 
               // Calculate loot drops
               const totalChance = zone.lootDrops.reduce((total, drop) => total + drop.chance, 0);
@@ -66,12 +80,23 @@ const Expeditions = () => {
                 if (selectedDrop.type === 'item') {
                   dispatch(addItemToInventory({ item: selectedDrop.item }));
                   console.log(`Added item: ${selectedDrop.item.name} to inventory`);
+                  const existingItem = statisticsRef.current.lootedItems.find(item => item.name === selectedDrop.item.name);
+                  if (existingItem) {
+                    existingItem.quantity += 1;
+                  } else {
+                    statisticsRef.current.lootedItems = [...statisticsRef.current.lootedItems, { name: selectedDrop.item.name, quantity: 1 }];
+                  }
                 } else if (selectedDrop.type === 'currency') {
                   const amount = randomNumberInRange(selectedDrop.amountRange[0], selectedDrop.amountRange[1]);
                   dispatch(addCurrency(amount));
                   console.log(`Added currency: ${amount}`);
+                  statisticsRef.current.totalCurrency += amount;
+                  statisticsRef.current.currencyPerHour = (statisticsRef.current.totalCurrency / durationHours).toFixed(2);
                 }
               }
+
+              statisticsRef.current.expeditionsCompleted += 1;
+              dispatch(updateStatistics({ ...statisticsRef.current }));
 
               // Restart the interval
               startInterval();
@@ -131,11 +156,15 @@ const Expeditions = () => {
     }
     dispatch(clearActiveZone());
     console.log('Expedition stopped.');
+
+    // Reset per-hour calculations
+    statisticsRef.current.currencyPerHour = 0;
+    statisticsRef.current.xpPerHour = 0;
+    dispatch(updateStatistics({ ...statisticsRef.current }));
   };
 
   return (
     <div>
-      <h1>Expeditions</h1>
       <div className="zones">
         {zones.map((zone, index) => (
           <div

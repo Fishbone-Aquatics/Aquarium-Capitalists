@@ -150,3 +150,25 @@
   animation-duration: 5s;
   animation-delay: 0s;
 }
+
+/* src/styles/statistics.css */
+.statistics {
+  background: #2c3e50;
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.statistics h2 {
+  margin-top: 0;
+}
+
+.statistics ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.statistics ul li {
+  margin-bottom: 10px;
+}

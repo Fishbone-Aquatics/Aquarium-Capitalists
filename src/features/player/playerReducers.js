@@ -17,7 +17,7 @@ export const playerReducers = {
     saveState(state);
   },
   addItemToInventory: (state, action) => {
-    console.log('Adding item to inventory', action.payload)
+    console.log('Adding item to inventory', action.payload);
     const { item } = action.payload;
     const existingItem = state.inventory.find(i => i.id === item.id);
 
@@ -61,7 +61,7 @@ export const playerReducers = {
         const currentItem = { ...state.equipment[slot] };
         state.equipment[slot] = { ...item, isEquipmentSlot: true };
         state.inventory = state.inventory.map(it => it && it.id === item.id ? { ...items.equipment.emptySlot } : it);
-  
+
         if (currentItem && currentItem.id !== items.equipment.emptySlot.id) {
           const emptyIndex = state.inventory.findIndex(it => it.id === items.equipment.emptySlot.id);
           if (emptyIndex !== -1) {
@@ -76,16 +76,15 @@ export const playerReducers = {
     }
     saveState(state);
   },
-  
   unequipItem: (state, action) => {
     const { slot, targetIndex } = action.payload;
     const currentItem = { ...state.equipment[slot] };
     console.log(`Unequipping item from slot ${slot} to inventory index ${targetIndex}`, currentItem);
-  
+
     if (currentItem && currentItem.id !== items.equipment.emptySlot.id) {
       const targetItem = state.inventory[targetIndex];
       console.log('Target inventory item:', targetItem);
-  
+
       if (targetItem.id === items.equipment.emptySlot.id || targetItem.type === currentItem.type) {
         state.equipment[slot] = { ...items.equipment.emptySlot, type: slot.charAt(0).toUpperCase() + slot.slice(1) };
         state.inventory[targetIndex] = { ...currentItem, isEquipmentSlot: false };
@@ -100,7 +99,7 @@ export const playerReducers = {
   },
   swapItems: (state, action) => {
     const { from, to } = action.payload;
-    console.log('from to', from, to)
+    console.log('from to', from, to);
     if (typeof from === 'number' && typeof to === 'number' && from < state.inventory.length && to < state.inventory.length) {
       const fromItem = { ...state.inventory[from] };
       const toItem = { ...state.inventory[to] };
@@ -118,14 +117,14 @@ export const playerReducers = {
       console.error("Invalid swap indices:", { from, to });
     }
     saveState(state);
-  },  
+  },
   swapEquipmentAndInventory: (state, action) => {
     const { fromInventoryIndex, toEquipmentSlot } = action.payload;
     const fromItem = state.inventory[fromInventoryIndex];
     const toItem = state.equipment[toEquipmentSlot];
-  
+
     console.log("Attempting to swap inventory item with equipment:", fromItem, toItem);
-  
+
     if (fromItem && toItem) {
       if (fromItem.type === toItem.type) {
         state.inventory[fromInventoryIndex] = { ...toItem, isEquipmentSlot: false };
@@ -139,14 +138,13 @@ export const playerReducers = {
     }
     saveState(state);
   },
-  
   swapInventoryAndEquipment: (state, action) => {
     const { fromEquipmentSlot, toInventoryIndex } = action.payload;
     const fromItem = state.equipment[fromEquipmentSlot];
     const toItem = state.inventory[toInventoryIndex];
-  
+
     console.log("Attempting to swap equipment item with inventory:", fromItem, toItem);
-  
+
     if (fromItem && toItem) {
       if (fromItem.type === toItem.type || toItem.id === items.equipment.emptySlot.id) {
         state.equipment[fromEquipmentSlot] = { ...toItem, isEquipmentSlot: true };
@@ -169,7 +167,6 @@ export const playerReducers = {
     }
     saveState(state);
   },
-  // New reducers for skills and other properties
   updateSkillXp: (state, action) => {
     console.log('Updating skill xp', action.payload);
     const { skill, xp } = action.payload;

@@ -13,6 +13,7 @@ import CurrentStatus from './components/CurrentStatus';
 import Equipment from './components/Equipment';
 import Stats from './components/Stats';
 import AquariumShop from './components/AquariumShop';
+import Statistics from './components/Statistics';
 import './App.css';
 import './styles/tooltip.css';
 
@@ -68,6 +69,15 @@ function RightSideContent() {
       </div>
     );
   }
+
+  if (location.pathname === '/expeditions') {
+    return (
+      <div className="right-side-content">
+        <Statistics />
+      </div>
+    );
+  }
+
   return null;
 }
 

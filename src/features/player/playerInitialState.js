@@ -1,4 +1,4 @@
-// playerInitialState.js
+// src/features/player/playerInitialState.js
 import deepmerge from 'deepmerge';
 import items from '../../data/items/items';
 

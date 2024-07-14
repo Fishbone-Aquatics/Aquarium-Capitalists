@@ -5,6 +5,7 @@ import expeditionReducer from '../features/expeditions/expeditionSlice';
 import aquariumReducer from '../features/aquariumshop/aquariumSlice';
 import { saveState, loadState } from '../features/player/saveState';
 
+// Load the preloaded state from localStorage
 const preloadedState = loadState();
 
 const rootReducer = {
