@@ -10,52 +10,90 @@ const Expeditions = () => {
   const activeZone = useSelector((state) => state.expedition.activeZone);
   const zones = useSelector((state) => state.expedition.zones);
   const intervalIdRef = useRef(null);
+  const progressBarRef = useRef(null);
+  const progressTextRef = useRef(null);
 
   useEffect(() => {
-    if (intervalIdRef.current) {
-      clearInterval(intervalIdRef.current);
-      intervalIdRef.current = null;
-      console.log('Cleared existing interval in useEffect');
-    }
+    const startInterval = () => {
+      if (activeZone) {
+        const zone = zones.find(zone => zone.name === activeZone);
+        console.log(`Starting expedition in zone: ${activeZone}`);
+        let elapsedSeconds = 0;
+        const totalDuration = zone.duration;
 
-    if (activeZone) {
-      const zone = zones.find(zone => zone.name === activeZone);
-      console.log(`Starting expedition in zone: ${activeZone}`);
+        intervalIdRef.current = setInterval(() => {
+          elapsedSeconds += 1;
+          const progress = (elapsedSeconds / totalDuration) * 100;
 
-      intervalIdRef.current = setInterval(() => {
-        console.log('Granting rewards...');
-        
-        // Calculate XP
-        const xp = Math.floor(Math.random() * (zone.xpRange[1] - zone.xpRange[0] + 1)) + zone.xpRange[0];
-        dispatch(addXp(xp));
-
-        // Calculate loot drops
-        const totalChance = zone.lootDrops.reduce((total, drop) => total + drop.chance, 0);
-        const randomChance = Math.random() * totalChance;
-
-        let cumulativeChance = 0;
-        const selectedDrop = zone.lootDrops.find(drop => {
-          cumulativeChance += drop.chance;
-          return randomChance <= cumulativeChance;
-        });
-
-        if (selectedDrop) {
-          if (selectedDrop.type === 'item') {
-            dispatch(addItemToInventory({ item: selectedDrop.item }));
-            console.log(`Added item: ${selectedDrop.item.name} to inventory`);
-          } else if (selectedDrop.type === 'currency') {
-            const amount = randomNumberInRange(selectedDrop.amountRange[0], selectedDrop.amountRange[1]);
-            dispatch(addCurrency(amount));
-            console.log(`Added currency: ${amount}`);
+          if (progressBarRef.current) {
+            progressBarRef.current.style.width = `${progress}%`;
           }
-        }
-      }, zone.duration * 1000); // Using duration in seconds for simplicity
-    }
+          if (progressTextRef.current) {
+            progressTextRef.current.textContent = `${elapsedSeconds} / ${totalDuration} seconds`;
+          }
+
+          if (elapsedSeconds >= totalDuration) {
+            clearInterval(intervalIdRef.current);
+
+            setTimeout(() => {
+              elapsedSeconds = 0;
+
+              // Reset progress bar
+              if (progressBarRef.current) {
+                progressBarRef.current.style.width = '0%';
+              }
+              if (progressTextRef.current) {
+                progressTextRef.current.textContent = `0 / ${totalDuration} seconds`;
+              }
+
+              console.log('Granting rewards...');
+
+              // Calculate XP
+              const xp = Math.floor(Math.random() * (zone.xpRange[1] - zone.xpRange[0] + 1)) + zone.xpRange[0];
+              dispatch(addXp(xp));
+
+              // Calculate loot drops
+              const totalChance = zone.lootDrops.reduce((total, drop) => total + drop.chance, 0);
+              const randomChance = Math.random() * totalChance;
+
+              let cumulativeChance = 0;
+              const selectedDrop = zone.lootDrops.find(drop => {
+                cumulativeChance += drop.chance;
+                return randomChance <= cumulativeChance;
+              });
+
+              if (selectedDrop) {
+                if (selectedDrop.type === 'item') {
+                  dispatch(addItemToInventory({ item: selectedDrop.item }));
+                  console.log(`Added item: ${selectedDrop.item.name} to inventory`);
+                } else if (selectedDrop.type === 'currency') {
+                  const amount = randomNumberInRange(selectedDrop.amountRange[0], selectedDrop.amountRange[1]);
+                  dispatch(addCurrency(amount));
+                  console.log(`Added currency: ${amount}`);
+                }
+              }
+
+              // Restart the interval
+              startInterval();
+            }, 1000); // Delay of 1 second before resetting
+          }
+        }, 1000); // Using 1 second interval for simplicity
+      }
+    };
+
+    startInterval();
 
     return () => {
       if (intervalIdRef.current) {
         clearInterval(intervalIdRef.current);
         intervalIdRef.current = null;
+        // Reset progress bar
+        if (progressBarRef.current) {
+          progressBarRef.current.style.width = '0%';
+        }
+        if (progressTextRef.current) {
+          progressTextRef.current.textContent = '';
+        }
         console.log('Interval cleared in cleanup');
       }
     };
@@ -65,6 +103,13 @@ const Expeditions = () => {
     if (intervalIdRef.current) {
       clearInterval(intervalIdRef.current); // Clear any existing interval
       intervalIdRef.current = null;
+      // Reset progress bar
+      if (progressBarRef.current) {
+        progressBarRef.current.style.width = '0%';
+      }
+      if (progressTextRef.current) {
+        progressTextRef.current.textContent = '';
+      }
       console.log('Cleared existing interval before starting a new one');
     }
     dispatch(setActiveZone({ zoneName }));
@@ -75,6 +120,13 @@ const Expeditions = () => {
     if (intervalIdRef.current) {
       clearInterval(intervalIdRef.current);
       intervalIdRef.current = null;
+      // Reset progress bar
+      if (progressBarRef.current) {
+        progressBarRef.current.style.width = '0%';
+      }
+      if (progressTextRef.current) {
+        progressTextRef.current.textContent = '';
+      }
       console.log('Interval cleared in handleStop');
     }
     dispatch(clearActiveZone());
@@ -101,6 +153,12 @@ const Expeditions = () => {
                 )}
               </div>
             </div>
+            {activeZone === zone.name && (
+              <div className="progress-container">
+                <div className="progress-bar" ref={progressBarRef}></div>
+                <p className="progress-text" ref={progressTextRef}></p>
+              </div>
+            )}
             <div className="description-container">
               <p>{zone.description}</p>
             </div>
