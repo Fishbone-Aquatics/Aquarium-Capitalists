@@ -6,7 +6,7 @@ const initialState = {
   items: [
     { id: 1, name: '5 Gallon Tank', icon: '/icons/playersStore/5-gallon-tank.png' },
     { id: 2, name: '10 Gallon Tank', icon: '/icons/playersStore/10-gallon-tank.png' },
-    { id: 2, name: '20 Gallon Tank', icon: '/icons/playersStore/20-gallon-tank.png' },
+    { id: 3, name: '20 Gallon Tank', icon: '/icons/playersStore/20-gallon-tank.png' },
   ],
 };
 
@@ -22,10 +22,12 @@ const aquariumSlice = createSlice({
     resetShopSize(state) {
       state.maxShopSize = 5;
     },
-    // You can add more actions to add/remove/update items as needed
+    setItems(state, action) {
+      state.items = action.payload;
+    },
   },
 });
 
-export const { increaseShopSize, resetShopSize } = aquariumSlice.actions;
+export const { increaseShopSize, resetShopSize, setItems } = aquariumSlice.actions;
 
 export default aquariumSlice.reducer;
