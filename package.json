@@ -25,6 +25,8 @@
     },
     "dependencies": {
         "@reduxjs/toolkit": "^2.2.6",
+        "chart.js": "^4.4.3",
+        "react-chartjs-2": "^5.2.0",
         "react-dnd": "^16.0.1",
         "react-dnd-html5-backend": "^16.0.1",
         "react-markdown": "^9.0.1",

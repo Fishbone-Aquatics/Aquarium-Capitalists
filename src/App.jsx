@@ -15,6 +15,7 @@ import Stats from './components/Stats';
 import AquariumShop from './components/AquariumShop';
 import Statistics from './components/Statistics';
 import About from './pages/About';
+import XP from './pages/Xp';
 
 import './App.css';
 import './styles/tooltip.css';
@@ -31,6 +32,7 @@ function App() {
               <Link to="/expeditions">Expeditions</Link>
               <Link to="/gathering">Gathering</Link>
               <Link to="/about">About</Link>
+              <Link to="/xp">XP Curve Chart</Link>
             </div>
             <div className="status-bar">
               <CurrentStatus />
@@ -42,6 +44,7 @@ function App() {
                 <Route path="/expeditions" element={<Expeditions />} />
                 <Route path="/gathering" element={<Gathering />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/xp" element={<XP />} />
               </Routes>
             </main>
             <aside className="right-side">
