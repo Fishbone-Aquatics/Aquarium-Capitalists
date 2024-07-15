@@ -76,6 +76,7 @@ const Expeditions = () => {
                 return randomChance <= cumulativeChance;
               });
 
+              console.log('Selected drop:', selectedDrop);
               if (selectedDrop) {
                 if (selectedDrop.type === 'item') {
                   dispatch(addItemToInventory({ item: selectedDrop.item }));

@@ -38,8 +38,7 @@ const Gathering = () => {
   const currentLevel = gatheringSkill.level;
   const currentXP = gatheringSkill.xp;
   const requiredXPForCurrentLevel = getRequiredXPForLevel(currentLevel);
-  const requiredXPForNextLevel = getRequiredXPForLevel(currentLevel + 1);
-  const xpPercentage = (currentXP / requiredXPForNextLevel) * 100;
+  const xpPercentage = (currentXP / requiredXPForCurrentLevel) * 100;
 
   const handleGather = useCallback(() => {
     console.log('handleGather called');
