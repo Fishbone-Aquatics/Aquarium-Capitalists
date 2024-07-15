@@ -9,6 +9,11 @@ const playerReducers = {
   },
   addXp: (state, action) => {
     state.stats.xp += action.payload;
+    const newLevel = calculateLevelFromXP(state.stats.xp);
+    if (newLevel > state.stats.level) {
+      console.log(`Level up! New level: ${newLevel}`);
+      state.stats.level = newLevel;
+    }
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
   addCurrency: (state, action) => {
