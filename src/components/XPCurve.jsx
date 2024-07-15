@@ -22,11 +22,17 @@ ChartJS.register(
   Legend
 );
 
-// Function to calculate XP
 const calculateXP = (n) => {
-    const A = 100; // Starting point for level 1
-    const B = Math.pow((200000000 + A) / A, 1 / 100); // Growth factor
-    return A * (Math.pow(B, n) - 1);
+    if (n <= 30) {
+        // Polynomial function for levels 1-30
+        const a = 3e6 / Math.pow(30, 2); // a = 3,000,000 / 900
+        return a * Math.pow(n, 2);
+    } else {
+        // Exponential function for levels 31-100
+        const C = 3e6; // XP at level 30
+        const D = (200e6 - C) / Math.pow(70, 2); // Growth rate for levels 31-100
+        return C + D * Math.pow(n - 30, 2);
+    }
 };
 
 const XPCurve = () => {
