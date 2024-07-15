@@ -19,7 +19,7 @@ const loadInitialState = () => {
     skills: {
       gathering: {
         level: 1,
-        xp: 3332,
+        xp: 0,
       },
     },
     status: 'idle',

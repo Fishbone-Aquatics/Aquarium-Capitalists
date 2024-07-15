@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import '../styles/gathering.css';
 import items from '../data/items/items';
 import { updateSkillXp, addItemToInventory } from '../features/player/playerSlice';
+import { getRequiredXPForLevel } from '../features/player/xpCalculator'; // Import the helper function
 
 const Gathering = () => {
   const [activeTab, setActiveTab] = useState('minerals');
@@ -34,7 +35,12 @@ const Gathering = () => {
   const gatheringSpeed = useSelector(state => state.player.gatheringSpeed);
   const gatheringEfficiency = useSelector(state => state.player.gatheringEfficiency);
 
-  const xpPercentage = ((gatheringSkill.xp % 3975) / 3975) * 100;
+  const currentLevel = gatheringSkill.level;
+  const currentXP = gatheringSkill.xp;
+  const requiredXPForCurrentLevel = getRequiredXPForLevel(currentLevel);
+  console.log('requiredXPForCurrentLevel:', requiredXPForCurrentLevel)
+  const requiredXPForNextLevel = getRequiredXPForLevel(currentLevel + 1);
+  const xpPercentage = (currentXP / requiredXPForNextLevel) * 100;
 
   const handleGather = useCallback(() => {
     console.log('handleGather called');
@@ -178,7 +184,7 @@ const Gathering = () => {
         <div className="gathering-sidebar">
           <h3>Gathering</h3>
           <p>Level: {gatheringSkill.level}</p>
-          <p>XP Progress: {xpPercentage.toFixed(2)}% ({gatheringSkill.xp % 3975} / 3975 XP)</p>
+          <p>XP Progress: {xpPercentage.toFixed(2)}% ({currentXP} / {requiredXPForCurrentLevel} XP)</p>
           <p>Gathering Speed: +{gatheringSpeed * 100}%</p>
           <p>Gathering Efficiency: +{gatheringEfficiency * 100}%</p>
           <p>Total Gathering XP: {gatheringSkill.xp} XP</p>
