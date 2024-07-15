@@ -69,6 +69,22 @@ const XPCurve = () => {
                 beginAtZero: true,
             },
         },
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let label = context.dataset.label || '';
+                        if (label) {
+                            label += ': ';
+                        }
+                        if (context.raw !== null) {
+                            label += new Intl.NumberFormat('en-US').format(Math.round(context.raw));
+                        }
+                        return label;
+                    }
+                }
+            }
+        }
     };
 
     return (
