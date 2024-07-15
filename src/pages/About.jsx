@@ -1,4 +1,3 @@
-// src/pages/About.jsx
 import React, { useEffect, useState, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -28,6 +27,13 @@ function About() {
       updateButtonPosition();
     };
 
+    const handleClick = (event) => {
+      if (event.target.tagName === 'A' && event.target.hash) {
+        setShowButton(true);
+        updateButtonPosition();
+      }
+    };
+
     const updateButtonPosition = () => {
       const button = buttonRef.current;
       const container = containerRef.current;
@@ -51,9 +57,12 @@ function About() {
 
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('resize', updateButtonPosition);
+    document.addEventListener('click', handleClick);
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', updateButtonPosition);
+      document.removeEventListener('click', handleClick);
     };
   }, []);
 
