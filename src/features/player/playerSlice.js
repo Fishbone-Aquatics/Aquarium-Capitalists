@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import playerReducers from './playerReducers';
 import loadInitialState from './playerInitialState';
 import { setActiveZone, clearActiveZone, calculateExpeditionDuration } from '../expeditions/expeditionSlice';
+import { startGatheringResource, stopGatheringResource } from '../gathering/gatheringSlice';
 
 const initialState = loadInitialState();
 
@@ -12,14 +13,21 @@ const playerSlice = createSlice({
     ...playerReducers,
   },
   extraReducers: (builder) => {
-    builder.addCase(setActiveZone, (state, action) => {
-      state.status = `Exploring ${action.payload.zoneName}`;
-      state.expeditionStartTime = Date.now();
-    });
-    builder.addCase(clearActiveZone, (state) => {
-      state.status = 'idle';
-      calculateExpeditionDuration(state); // Update duration when expedition stops
-    });
+    builder
+      .addCase(setActiveZone, (state, action) => {
+        state.status = `Exploring ${action.payload.zoneName}`;
+        state.expeditionStartTime = Date.now();
+      })
+      .addCase(clearActiveZone, (state) => {
+        state.status = 'idle';
+        calculateExpeditionDuration(state); // Update duration when expedition stops
+      })
+      .addCase(startGatheringResource, (state, action) => {
+        state.status = `Gathering ${action.payload.resourceName}`;
+      })
+      .addCase(stopGatheringResource, (state) => {
+        state.status = 'idle';
+      });
   },
 });
 

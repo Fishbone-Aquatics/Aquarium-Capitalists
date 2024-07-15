@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import playerReducer from '../features/player/playerSlice';
 import expeditionReducer from '../features/expeditions/expeditionSlice';
 import aquariumReducer from '../features/aquariumshop/aquariumSlice';
+import gatheringReducer from '../features/gathering/gatheringSlice';
 import { saveState, loadState } from '../features/player/saveState';
 
 // Load the preloaded state from localStorage
@@ -12,6 +13,7 @@ const rootReducer = {
   player: playerReducer,
   expedition: expeditionReducer,
   aquarium: aquariumReducer,
+  gathering: gatheringReducer
 };
 
 const store = configureStore({

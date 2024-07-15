@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import '../styles/gathering.css';
 import items from '../data/items/items';
 import { updateSkillXp, addItemToInventory } from '../features/player/playerSlice';
-import { getRequiredXPForLevel } from '../features/player/xpCalculator'; // Import the helper function
+import { getRequiredXPForLevel } from '../features/player/xpCalculator';
+import { startGatheringResource, stopGatheringResource } from '../features/gathering/gatheringSlice';
 
 const Gathering = () => {
   const [activeTab, setActiveTab] = useState('minerals');
@@ -112,6 +113,7 @@ const Gathering = () => {
       handleStop();
     } else {
       setIsGathering(true);
+      dispatch(startGatheringResource({ resourceName: selectedItem.name })); 
       console.log('Gathering started');
     }
   };
@@ -119,6 +121,7 @@ const Gathering = () => {
   const handleStop = () => {
     console.log('handleStop called');
     setIsGathering(false);
+    dispatch(stopGatheringResource());
     clearTimeout(timeoutRef.current);
     console.log('Gathering stopped');
   };

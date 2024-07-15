@@ -4,6 +4,7 @@ export const saveState = (state) => {
     const playerState = state.player || {};
     const expeditionState = state.expedition || {};
     const aquariumState = state.aquarium || {};
+    const gatheringState = state.gathering || {};
 
     if (!playerState.stats) {
       playerState.stats = {};
@@ -41,6 +42,10 @@ export const saveState = (state) => {
           ...expeditionState.statistics,
           expeditionDuration: expeditionState.statistics.expeditionDuration,
         },
+      },
+      gathering: {
+        activeResource: gatheringState.activeResource,
+        gatheringStartTime: gatheringState.gatheringStartTime,
       },
     });
 
