@@ -2,8 +2,10 @@
   display: grid;
   height: 100vh; /* Full-screen height */
   grid-template-columns: 15% 1fr 300px; /* Sidebar, Main Area, Right-Side Grid */
-  grid-template-rows: 1fr;
+  grid-template-rows: auto 1fr; /* Add a row for the status bar */
   background-color: #121212; /* Dark background for grungy look */
+  position: relative; /* Ensure the app-grid creates a stacking context */
+  overflow: visible; /* Prevent clipping */
 }
 
 .sidebar {
@@ -13,6 +15,8 @@
   display: flex;
   flex-direction: column; /* Aligns links vertically */
   align-items: start; /* Aligns items to the start of the sidebar */
+  position: relative; /* Ensure the sidebar creates a stacking context */
+  grid-row: span 2; /* Make sidebar span both rows */
 }
 
 .sidebar a {
@@ -29,15 +33,42 @@
   background-color: #3a3a3a; /* Changes background on hover for visual feedback */
 }
 
+.status-bar {
+  background-color: #333333;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-column: 1 / -1; /* Span across all columns */
+  grid-row: 1 / 2; /* Place in the first row */
+}
+
 .main-display {
   background-color: #282828;
   color: white;
   padding: 20px;
-  overflow-y: auto; /* Allows scrolling within the main display area */
+  overflow: visible; /* Prevent clipping */
+  position: relative; /* Ensure the main display creates a stacking context */
+  grid-column: 2 / 3; /* Main area */
+  grid-row: 2 / 3; /* Second row */
 }
 
 .right-side {
   background-color: #333333;
   color: white;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Allow scrolling if content overflows */
+  grid-column: 3 / 4; /* Right side column */
+  grid-row: 1 / 3; /* Span both rows */
+}
+
+.right-side-content {
+  margin-top: 20px;
+}
+
+.right-side-content > * {
+  margin-bottom: 20px;
 }

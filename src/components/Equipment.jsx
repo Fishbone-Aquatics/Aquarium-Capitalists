@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrop } from 'react-dnd';
-import { equipItem, swapEquipmentAndInventory } from '../../features/player/playerSlice';
-import DraggableItem from '../../components/inventory/draggableItems';
+import { equipItem, swapEquipmentAndInventory } from '../features/player/playerSlice';
+import DraggableItem from './DraggableItem';
 
 const EquipmentSlot = ({ slot, item }) => {
   const dispatch = useDispatch();
@@ -36,7 +36,7 @@ const EquipmentSlot = ({ slot, item }) => {
       {!isEmptySlot ? (
         <>
           <div className="item-icon">
-            <DraggableItem item={{ ...item, equipmentSlot: slot }} index={slot} />
+            <DraggableItem item={{ ...item, equipmentSlot: slot }} index={slot} isEquipmentSlot={true} />
           </div>
         </>
       ) : (
@@ -52,10 +52,13 @@ const Equipment = () => {
   const equipment = useSelector(state => state.player.equipment);
 
   return (
-    <div className="equipment-grid">
-      {Object.entries(equipment).map(([slot, item]) => (
-        <EquipmentSlot key={slot} slot={slot} item={item} />
-      ))}
+    <div> 
+      <h3>Equipment</h3> 
+      <div className="equipment-grid">
+        {Object.entries(equipment).map(([slot, item]) => (
+          <EquipmentSlot key={slot} slot={slot} item={item} />
+        ))}
+      </div>
     </div>
   );
 };

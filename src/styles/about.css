@@ -1,0 +1,44 @@
+/* src/styles/about.css */
+.about-container {
+    padding: 20px;
+    color: #ffffff; /* Adjust the text color if needed */
+    position: relative;
+}
+
+.about-container ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+.about-container ol {
+    list-style-type: decimal;
+    margin-left: 20px;
+}
+
+.about-container a {
+    color: #1e90ff; /* Adjust link color if needed */
+    text-decoration: none;
+}
+
+.about-container a:hover {
+    text-decoration: underline;
+}
+
+.scroll-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #1e90ff;
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.scroll-to-top:hover {
+    background-color: #105e9e;
+}

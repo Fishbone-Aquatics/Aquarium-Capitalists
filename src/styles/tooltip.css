@@ -1,0 +1,46 @@
+.item-box {
+    position: relative; /* Ensure the tooltip is positioned relative to the item-box */
+    display: inline-block;
+  }
+  
+  .tooltip {
+    position: absolute;
+    top: 50%; /* Center vertically */
+    left: 100%; /* Position to the right of the item-box */
+    transform: translateY(-50%);
+    background-color: rgb(48, 47, 47);
+    border: 1px solid #ccc;
+    padding: 15px; /* Increase padding for more space */
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Ensure tooltip appears above other elements */
+    pointer-events: none; /* Make the tooltip non-interactive */
+    white-space: nowrap; /* Prevents text from wrapping */
+    min-width: 200px; /* Ensure the tooltip has a minimum width */
+    max-width: 350px; /* Optional: Set a maximum width if needed */
+  }
+  
+  .tooltip h3 {
+    margin: 0 0 10px 0; /* Add margin below the heading */
+    font-size: 1.2em;
+    white-space: nowrap; /* Prevent text from wrapping */
+  }
+  
+  .tooltip p {
+    margin: 5px 0; /* Add margin for spacing between paragraphs */
+  }
+  
+  .tooltip ul {
+    margin: 5px 0; /* Add margin for spacing above and below the list */
+    padding: 0;
+    list-style: none;
+  }
+  
+  .tooltip li {
+    margin: 5px 0; /* Add margin between list items */
+  }
+  
+  .highlight {
+    /* Add styles for highlighting when dragging over */
+  }
+  
