@@ -1,28 +1,31 @@
-# Aquarium Capitalists Game - Structured Project Layout
+## Aquarium Capitalists Game - Structured Project Layout
+Aquarium Capitalists is a game about owning an aquarium shop.
+Here you'll breed aquatic life, go on expeditions, complete quests, gather solo or with your (shoal or school tbd). 
 
 ## Table of Contents
-1. [Introduction](#introduction)
-2. [The Basics](#the-basics)
-3. [The Player](#the-player)
-   - [Stats](#stats)
-   - [Inventory Size](#inventory-size)
-   - [Items](#items)
-     - [Weapons](#weapons)
-     - [Armor](#armor)
-     - [Consumables](#consumables)
-4. [Resources](#resources)
-5. [Archetypes / Starting Bonuses](#archetypes--starting-bonuses)
-6. [Currencies](#currencies)
-7. [Items and Market](#items-and-market)
-8. [Quests](#quests)
-9. [Group Content (Guilds / Clans)](#group-content-guilds--clans)
-10. [Expedition Missions](#expedition-missions)
-11. [Equipment](#equipment)
-12. [Shop System](#shop-system)
-13. [Breeding and Genetics](#breeding-and-genetics)
-14. [Minigames](#minigames)
-15. [Monetization](#monetization)
-16. [Implementation Plan](#implementation-plan)
+- [Introduction](#introduction)
+- [The Basics](#the-basics)
+- [The Player](#the-player)
+  - [Stats](#stats)
+  - [Inventory Size](#inventory-size)
+  - [Items](#items)
+  - [Weapons](#weapons)
+  - [Armor](#armor)
+  - [Consumables](#consumables)
+- [Resources](#resources)
+- [Archetypes / Starting Bonuses](#archetypes--starting-bonuses)
+- [Currencies](#currencies)
+- [Items and Market](#items-and-market)
+- [Quests](#quests)
+- [Group Content (Guilds / Clans)](#group-content-guilds-tbd)
+- [Expedition Missions](#expedition-missions)
+- [Equipment](#equipment)
+- [Shop System](#shop-system)
+- [Breeding and Genetics](#breeding-and-genetics)
+- [Minigames](#minigames)
+- [Monetization](#monetization)
+- [Implementation Plan](#implementation-plan)
+- [Other Ideas](#other-ideas)
 
 ## Introduction
 - Brief overview of the game.
@@ -81,11 +84,34 @@
 - Types of quests.
 - Rewards.
 - Quest progression.
+- Anything "daily" should be contributions to "guild" with "premium" reward if we have any premium (tradable) currency.
 
-## Group Content (Guilds / Clans)
+## Group Content guilds tbd
+- Guilds / Clans or "schools/shoals"
 - Formation and management.
 - Idle resource donation.
 - Territory fights and map control.
+- Guilds - or "schools/shoals"
+- Group expeditions
+  - Requires people online within the last 24 hours
+- Resource donating/trading/team gathering
+  - More people = quicker time
+- Quests
+  - Collect and donate
+- Clan building to upgrade/build
+  - Similar appearance to an aquarium shop (can be reskinned for depth)
+  - Only guild master/co-owners can upgrade; all members can view/read
+  - Guilds can buy shareable perks that upgrade XP earned for players and can be further upgraded
+- Collaborative breeding/genetics/research
+  - Achieve certain traits/colors/patterns
+  - Pooling of resources to split offspring
+  - Breeding might originate from guilds to foster community-based gameplay
+- Exhibits to earn reputation/resources
+  - Could have a weekly community voting system
+- Auctions/sales/trade orders to other "shoals"
+- Environmental cleanup as a task/quest
+- Completing trade orders
+  - Other guilds might be looking for supplies you have as a player or as a guild
 
 ## Expedition Missions
 - Locations: Coral Reefs, Shipwrecks, Deep Sea Trenches, Underwater Caves.
@@ -161,3 +187,6 @@ This will be things planned for the future after release - laying out baselines 
 
 Testing and refinement
 This will be where we test everything
+
+## Other Ideas
+Guilds could have spying/sabatoge of rankings / supplys

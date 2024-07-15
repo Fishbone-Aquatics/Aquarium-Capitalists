@@ -1,0 +1,48 @@
+/* src/styles/about.css */
+.about-container {
+    padding: 20px;
+    color: #ffffff; /* Adjust the text color if needed */
+    position: relative;
+  }
+  
+  .about-container ul {
+    list-style-type: disc;
+    margin-left: 20px;
+  }
+  
+  .about-container ol {
+    list-style-type: decimal;
+    margin-left: 20px;
+  }
+  
+  .about-container a {
+    color: #1e90ff; /* Adjust link color if needed */
+    text-decoration: none;
+  }
+  
+  .about-container a:hover {
+    text-decoration: underline;
+  }
+  
+  .scroll-to-top {
+    position: fixed; /* Fixed positioning relative to the viewport */
+    bottom: 20px;
+    right: 20px;
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 20px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .scroll-to-top:hover {
+    background-color: #1c86ee;
+  }
+  

@@ -14,6 +14,8 @@ import Equipment from './components/Equipment';
 import Stats from './components/Stats';
 import AquariumShop from './components/AquariumShop';
 import Statistics from './components/Statistics';
+import About from './pages/About';
+
 import './App.css';
 import './styles/tooltip.css';
 
@@ -28,6 +30,7 @@ function App() {
               <Link to="/inventory">Inventory</Link>
               <Link to="/expeditions">Expeditions</Link>
               <Link to="/gathering">Gathering</Link>
+              <Link to="/about">About</Link>
             </div>
             <div className="status-bar">
               <CurrentStatus />
@@ -38,6 +41,7 @@ function App() {
                 <Route path="/inventory" element={<Inventory />} />
                 <Route path="/expeditions" element={<Expeditions />} />
                 <Route path="/gathering" element={<Gathering />} />
+                <Route path="/about" element={<About />} />
               </Routes>
             </main>
             <aside className="right-side">
