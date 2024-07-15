@@ -179,6 +179,12 @@ const playerReducers = {
       const skillObject = state.skills[skill];
       if (skillObject) {
         skillObject.xp += xp;
+        const newLevel = calculateLevelFromXP(skillObject.xp);
+        console.log(`Adding XP to ${skill}:`, xp, "for a total of", skillObject.xp, "New level:", newLevel, "skill's current level:", skillObject.level);
+        if (newLevel > skillObject.level) {
+          console.log(`Level up! New ${skill} level: ${newLevel}`);
+          skillObject.level = newLevel;
+        }
       }
     }
 

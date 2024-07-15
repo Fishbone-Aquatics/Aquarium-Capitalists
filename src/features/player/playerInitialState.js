@@ -6,7 +6,7 @@ const loadInitialState = () => {
   const initialState = {
     name: 'player',
     stats: {
-      xp: 3332,
+      xp: 0,
       currency: 0,
       level: 1,
     },
@@ -19,7 +19,7 @@ const loadInitialState = () => {
     skills: {
       gathering: {
         level: 1,
-        xp: 0,
+        xp: 3332,
       },
     },
     status: 'idle',

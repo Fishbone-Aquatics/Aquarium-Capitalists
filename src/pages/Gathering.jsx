@@ -2,11 +2,9 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import '../styles/gathering.css';
 import items from '../data/items/items';
-import { updateSkillXp, addItemToInventory } from '../features/player/playerSlice'; // Import the action to update XP
+import { updateSkillXp, addItemToInventory } from '../features/player/playerSlice';
 
 const Gathering = () => {
-  //console.log('Rendering Gathering component');
-
   const [activeTab, setActiveTab] = useState('minerals');
   const [activePlaceholderTab, setActivePlaceholderTab] = useState('placeholder1');
   const [isGathering, setIsGathering] = useState(false);
@@ -17,13 +15,11 @@ const Gathering = () => {
   const resource = items.resource;
   const dispatch = useDispatch();
 
-  // Filter resources by type
   const minerals = Object.values(resource).filter(item => item.type.toLowerCase() === 'mineral');
   const resources = Object.values(resource).filter(item => item.type.toLowerCase() === 'resource');
 
-  // Set initial selected item to the first mineral if available
-  const initialSelectedItem = minerals.length > 0 ? minerals[0] : { 
-    name: 'Silica', 
+  const initialSelectedItem = minerals.length > 0 ? minerals[0] : {
+    name: 'Silica',
     image: '/icons/resource/silica.png',
     duration: 5000,
     gatheringDrops: {
@@ -33,14 +29,12 @@ const Gathering = () => {
   };
   const [selectedItem, setSelectedItem] = useState(initialSelectedItem);
 
-  // Use selectors to get the state
   const gatheringSkill = useSelector(state => state.player.skills.gathering);
   const skillBoostPercent = useSelector(state => state.player.skillBoostPercent);
   const gatheringSpeed = useSelector(state => state.player.gatheringSpeed);
   const gatheringEfficiency = useSelector(state => state.player.gatheringEfficiency);
 
-  // Calculate the XP percentage
-  const xpPercentage = ((gatheringSkill.xp % 3975) / 3975) * 100; // Assuming level up at every 3975 XP
+  const xpPercentage = ((gatheringSkill.xp % 3975) / 3975) * 100;
 
   const handleGather = useCallback(() => {
     console.log('handleGather called');
@@ -54,7 +48,7 @@ const Gathering = () => {
       dispatch(addItemToInventory({ item: selectedItem }));
       setXpGained(xpGainedValue);
       setTimeout(() => {
-        gatheringCompletedRef.current = false; // Reset the ref after processing
+        gatheringCompletedRef.current = false;
         console.log('gatheringCompletedRef reset');
       }, 0);
     }
@@ -64,18 +58,16 @@ const Gathering = () => {
     if (isGathering) {
       timeoutRef.current = setTimeout(() => {
         handleGather();
-        startGathering(); // Call the function again to repeat the process
+        startGathering();
       }, selectedItem.duration);
     }
   }, [isGathering, selectedItem.duration, handleGather]);
 
   useEffect(() => {
-    //console.log('isGathering changed:', isGathering);
     if (isGathering) {
       startGathering();
     } else {
       clearTimeout(timeoutRef.current);
-      //console.log('Timeout cleared');
     }
   }, [isGathering, startGathering]);
 
@@ -87,7 +79,6 @@ const Gathering = () => {
   }, [xpGained, selectedItem.name]);
 
   useEffect(() => {
-   // console.log('notificationMessage changed:', notificationMessage);
     if (notificationMessage) {
       const timer = setTimeout(() => {
         setNotificationMessage(null);
@@ -124,7 +115,7 @@ const Gathering = () => {
   const handleStop = () => {
     console.log('handleStop called');
     setIsGathering(false);
-    clearTimeout(timeoutRef.current); // Clear the timeout
+    clearTimeout(timeoutRef.current);
     console.log('Gathering stopped');
   };
 
