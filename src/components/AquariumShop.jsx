@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDropIndicator } from '../features/aquariumshop/aquariumSlice';
+import { setDropIndicator, increaseShopSize } from '../features/aquariumshop/aquariumSlice';
 import { useDrag } from 'react-dnd';
 import '../styles/aquariumshop.css';
 

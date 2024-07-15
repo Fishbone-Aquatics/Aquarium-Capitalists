@@ -2,7 +2,7 @@
 [http://dev.fishboneaquatics.com/](http://dev.fishboneaquatics.com/)
 
 ## TODO:
-- leveling system.
+- update gathering to have its own slice so we can start the below.
 - background tasks. (you can switch tabs and it will continue the action)
 - offline progression. (We can start with 5 minutes for testing, up to 24 hours but with the consideration that there will be ways to increase it via in game currency later)
 - we lost our beautiful bubbles during expeditions.
