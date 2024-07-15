@@ -9,6 +9,8 @@
 
 [<img src="https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/blob/main/screenshots/GatheringWorking.gif">](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/blob/main/screenshots/GatheringWorking.gif)
 
+[<img src="https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/blob/main/screenshots/ExpeditionStats.gif">](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/blob/main/screenshots/ExpeditionStats.gif)
+
 
 ## TODO:
 Add tooltips/hover for item stats/descriptions etc.
