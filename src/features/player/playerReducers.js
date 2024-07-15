@@ -1,6 +1,7 @@
 // src/features/player/playerReducers.js
 import items from '../../data/items/items';
-import { saveState } from './saveState'; // Import the shared saveState function
+import { saveState } from './saveState'; 
+import { calculateLevelFromXP } from './xpCalculator'; // Import the calculateLevelFromXP function
 
 const playerReducers = {
   updateStats: (state, action) => {
@@ -10,6 +11,7 @@ const playerReducers = {
   addXp: (state, action) => {
     state.stats.xp += action.payload;
     const newLevel = calculateLevelFromXP(state.stats.xp);
+    console.log("Adding XP:", action.payload, "for a total of", state.stats.xp, "New level:", newLevel, "player's current level:", state.stats.level);
     if (newLevel > state.stats.level) {
       console.log(`Level up! New level: ${newLevel}`);
       state.stats.level = newLevel;

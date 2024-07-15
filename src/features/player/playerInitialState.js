@@ -6,7 +6,7 @@ const loadInitialState = () => {
   const initialState = {
     name: 'player',
     stats: {
-      xp: 0,
+      xp: 3332,
       currency: 0,
       level: 1,
     },
