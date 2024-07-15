@@ -38,7 +38,6 @@ const Gathering = () => {
   const currentLevel = gatheringSkill.level;
   const currentXP = gatheringSkill.xp;
   const requiredXPForCurrentLevel = getRequiredXPForLevel(currentLevel);
-  console.log('requiredXPForCurrentLevel:', requiredXPForCurrentLevel)
   const requiredXPForNextLevel = getRequiredXPForLevel(currentLevel + 1);
   const xpPercentage = (currentXP / requiredXPForNextLevel) * 100;
 

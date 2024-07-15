@@ -34,12 +34,14 @@ const playerReducers = {
   addItemToInventory: (state, action) => {
     const { item } = action.payload;
     const existingItem = state.inventory.find(i => i.id === item.id);
+    console.log('Adding item to inventory:', item);
 
-    if (existingItem && (!item.stackLimit || existingItem.quantity < item.stackLimit)) {
-        // If the item stack limit allows adding more
-        if (existingItem.stackLimit > 1) {
+    if (existingItem) {
+        if (!('stackLimit' in item) || existingItem.quantity < (item.stackLimit || Infinity)) {
+            // If the item does not have a stack limit property or the existing quantity is less than the stack limit
             existingItem.quantity += item.quantity || 1;
-        } else {
+            console.log('Added item', item.name, 'to inventory');
+        } else if (item.stackLimit === 1) {
             console.log(`Cannot stack item: ${item.name} as it has a stack limit of 1`);
         }
     } else {
@@ -53,6 +55,7 @@ const playerReducers = {
 
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
 },
+
 
   removeItemFromInventory: (state, action) => {
     const { itemId } = action.payload;
