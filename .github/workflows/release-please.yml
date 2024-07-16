@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - development
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -27,7 +28,6 @@ jobs:
           node-version: '14'
 
       - name: Release Please
-        if: github.ref == 'refs/heads/${{ matrix.branch }}'
         uses: google-github-actions/release-please-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
