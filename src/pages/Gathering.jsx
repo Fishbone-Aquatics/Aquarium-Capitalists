@@ -42,7 +42,7 @@ const Gathering = () => {
     if (activeResource) {
       dispatch(stopGatheringResource());
     } else {
-      dispatch(clearActiveZone());
+      dispatch(clearActiveZone()); // we need a util / helper for this lol
       dispatch(startGatheringResource({ resource: selectedItem }));
       dispatch(setNotificationMessage(`Starting gathering ${selectedItem.name}`));
       setTimeout(() => {

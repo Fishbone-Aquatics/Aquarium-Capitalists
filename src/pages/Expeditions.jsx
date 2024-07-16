@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveZone, clearActiveZone, handleExpedition, resetStatistics } from '../features/expeditions/expeditionSlice';
+import { stopGatheringResource } from '../features/gathering/gatheringSlice';
 import Zone from '../components/Zone'; // Adjust the import path as necessary
 import '../styles/expeditions.css';
 
@@ -76,6 +77,7 @@ const Expeditions = () => {
 
   const handleStart = (zoneName) => {
     console.log('Starting expedition in zone:', zoneName);
+    dispatch(stopGatheringResource()); // we need a util / helper for this lol
     dispatch(resetStatistics());
     dispatch(setActiveZone({ zoneName }));
     dispatch(handleExpedition());
