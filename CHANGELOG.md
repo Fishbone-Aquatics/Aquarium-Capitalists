@@ -6,6 +6,7 @@
 ### Bug Fixes
 
 * **Expeditions:** Adds progress bar. ([f89231f](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/f89231fb996df0fe57283c574537ad6cd35ebbee))
+* **status:** swapping actions stops previous action. ([1bd474e](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/1bd474ea03ba2acec9321bc6e0152fb400aa509a))
 
 ## 1.0.0 (2024-07-16)
 
