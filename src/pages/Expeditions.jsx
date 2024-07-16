@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveZone, clearActiveZone, handleExpedition, resetStatistics } from '../features/expeditions/expeditionSlice';
+import Zone from '../components/Zone'; // Adjust the import path as necessary
 import '../styles/expeditions.css';
 
 const Expeditions = () => {
@@ -85,31 +86,13 @@ const Expeditions = () => {
     <div>
       <div className="zones">
         {zones.map((zone, index) => (
-          <div
+          <Zone
             key={index}
-            className={`zone ${activeZone === zone.name ? 'active' : ''}`}
-            style={{ backgroundImage: `url(${zone.image})` }}
-          >
-            <div className="header-container">
-              <h2 className="heading" title={zone.name}>{zone.name}</h2>
-              <div className="button-container">
-                {activeZone === zone.name ? (
-                  <button className="stop-button" onClick={handleStop}>Stop</button>
-                ) : (
-                  <button className="start-button" onClick={() => handleStart(zone.name)}>Start</button>
-                )}
-              </div>
-            </div>
-            {activeZone === zone.name && (
-              <div className="progress-container">
-                <div className="progress-bar" ref={progressBarRef}></div>
-                <p className="progress-text" ref={progressTextRef}></p>
-              </div>
-            )}
-            <div className="description-container">
-              <p>{zone.description}</p>
-            </div>
-          </div>
+            zone={zone}
+            activeZone={activeZone}
+            handleStart={handleStart}
+            handleStop={handleStop}
+          />
         ))}
       </div>
     </div>
