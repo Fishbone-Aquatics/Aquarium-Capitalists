@@ -14,8 +14,8 @@ export const saveState = (state) => {
       expeditionState.statistics = {};
     }
 
-    if (!expeditionState.statistics.expeditionDuration) {
-      expeditionState.statistics.expeditionDuration = '0 seconds';
+    if (!expeditionState.statistics.totalExpeditionDuration) {
+      expeditionState.statistics.totalExpeditionDuration = '0 seconds';
     }
 
     const serializedState = JSON.stringify({
@@ -40,7 +40,7 @@ export const saveState = (state) => {
         ...expeditionState,
         statistics: {
           ...expeditionState.statistics,
-          expeditionDuration: expeditionState.statistics.expeditionDuration,
+          totalExpeditionDuration: expeditionState.statistics.totalExpeditionDuration,
         },
       },
       gathering: {

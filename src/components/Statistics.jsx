@@ -27,7 +27,7 @@ const Statistics = () => {
       <p>You've completed {statistics?.expeditionsCompleted?.toLocaleString() || 0} expeditions.</p>
       <p>You've received {statistics?.totalCurrency?.toLocaleString() || 0} currency, or {statistics?.currencyPerHour?.toLocaleString() || 0} per hour.</p>
       <p>You've earned {statistics?.totalXp?.toLocaleString() || 0} XP at a rate of {statistics?.xpPerHour?.toLocaleString() || 0} per hour.</p>
-      <p>Expedition duration: {statistics?.expeditionDuration || '0 seconds'}.</p>
+      <p>Expedition duration: {statistics?.totalExpeditionDuration || '0 seconds'}.</p>
       <h4>Looted Items:</h4>
       <ul>
         {Object.keys(lootedItemCounts).length > 0 ? (
