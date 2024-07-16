@@ -1,4 +1,4 @@
-name: Auto-Merge Changelog PRs
+name: Auto-Merge Changelog PR
 
 on:
   pull_request:
@@ -16,8 +16,15 @@ jobs:
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
+      - name: Enable auto-merge
+        if: ${{ startsWith(github.event.pull_request.title, 'chore(development):') }}
+        uses: peter-evans/enable-pull-request-automerge@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ github.event.pull_request.number }}
+
       - name: Auto merge changelog PRs
-        if: ${{ startsWith(github.event.pull_request.title, 'chore(development):')  }}
+        if: ${{ startsWith(github.event.pull_request.title, 'chore(development):') }}
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
