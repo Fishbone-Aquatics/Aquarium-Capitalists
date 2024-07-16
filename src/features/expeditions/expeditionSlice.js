@@ -29,7 +29,9 @@ const expeditionSlice = createSlice({
     setActiveZone: (state, action) => {
       console.log('Setting active zone:', action.payload.zoneName);
       state.activeZone = action.payload.zoneName;
-      state.statistics.expeditionStartTime = Date.now();
+      if (state.statistics.expeditionStartTime === null) {
+        state.statistics.expeditionStartTime = Date.now();
+      }
       state.statistics.currentExpeditionElapsedSeconds = 0;
     },
     clearActiveZone: (state) => {
