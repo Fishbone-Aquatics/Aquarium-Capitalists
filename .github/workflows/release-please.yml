@@ -3,7 +3,6 @@ name: Release Please
 on:
   push:
     branches:
-      - main
       - development
   workflow_dispatch:
 
@@ -16,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        branch: [main, development]
+        branch: [development]
     
     steps:
       - name: Checkout Repository
@@ -27,7 +26,7 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Release Please
+      - name: Run Release Please
         uses: google-github-actions/release-please-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
