@@ -61,5 +61,20 @@ https://docs.google.com/document/d/1_K5F1I7iJGMqax2JdnS1ja4mLUppdm_f7yZoA6i8TqA/
 git commit --allow-empty -m "chore: trigger release-please"
 testing
 
-## start commands for ec2
+## commands for ec2
+
+# pm2
 `pm2 start npm --name "react-app" -- run dev`
+
+# git 
+# do the below when actions errors / locks up with conflicts.
+```cd /Aquarium-Capitalists
+git clone https://github.com/Fishbone-Aquatics/Aquarium-Capitalists.git
+cd Aquarium-Capitalists
+
+# Pull the latest changes (usually this one)
+git pull origin development
+# or
+git pull --rebase origin development
+```
+
