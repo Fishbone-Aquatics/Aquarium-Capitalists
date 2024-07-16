@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.8.0](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.7.3...v1.8.0) (2024-07-16)
+
+
+### Features
+
+* **main:** version display. ([b32dcbd](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/b32dcbd01eb3b964eb67afb2dd41480766eea248))
+* **workflow:** auto pr merger for version. ([3cf21aa](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/3cf21aa72caee60f27ae947471d1f8f1ab4f712a))
+
+
+### Bug Fixes
+
+* **auto-merge.yml:** test ([ffe1433](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/ffe1433946ed55aafe3e3d755c292a1c0159f86a))
+* **automerge:** test 123 ([aec1a07](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/aec1a077d1bad5b5f37bca25782d0dd01558298a))
+* **autoPR:** hopefully ([d19639e](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/d19639e327c9ea44b14197e4f87fdd9b3a8f86f5))
+* **Expeditions:** Adds progress bar. ([f89231f](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/f89231fb996df0fe57283c574537ad6cd35ebbee))
+* **expeditions:** again ([ecf0e98](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/ecf0e98fd885d6e94d951407298177c590aa3f12))
+* **expeditions:** double reward fix ([2d5e83f](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/2d5e83ffa5443970d1a915c244bfefbeee27cd94))
+* **expeditions:** Expedition start time fix. ([b4d6a89](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/b4d6a89cc441c719fa4c29991d7323ca6e216d5a))
+* **expeditions:** interval didn't properly stop ([83e1d14](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/83e1d149dcca4532177f5e953f708ce42867de92))
+* **Expeditions:** progress bar reset when leaving ([c9346be](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/c9346be948149edb3bb9f40ee80c7e114e069edf))
+* **Expeditions:** Shared elapsed time for expeditions. ([cb50be6](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/cb50be6c96cd22f0141afeee197be70d1d539ded))
+* **merger:** pesky ([ddd9aab](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/ddd9aab42632ec3177a18a065947dd4e6884cd62))
+* **prmerge:** test ([794f26d](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/794f26d4ab6b9e523ad311c9120af6a2e83acf88))
+* **status:** swapping actions stops previous action. ([1bd474e](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/1bd474ea03ba2acec9321bc6e0152fb400aa509a))
+* **versiondisplay:** updated value ([39d3e83](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/39d3e837f91c3eaa7a2ea2b9f76eada11e59e37c))
+
 ## [1.7.2](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.7.1...v1.7.2) (2024-07-16)
 
 
