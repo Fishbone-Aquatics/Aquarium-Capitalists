@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.0.1...v1.1.0) (2024-07-16)
+
+
+### Features
+
+* **main:** version display. ([b32dcbd](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/b32dcbd01eb3b964eb67afb2dd41480766eea248))
+
 ## [1.0.1](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.0.0...v1.0.1) (2024-07-16)
 
 
