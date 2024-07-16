@@ -1,4 +1,3 @@
-// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
@@ -16,6 +15,7 @@ import AquariumShop from './components/AquariumShop';
 import Statistics from './components/Statistics';
 import About from './pages/About';
 import XP from './pages/Xp';
+import VersionDisplay from './components/VersionDisplay';
 
 import './App.css';
 import './styles/tooltip.css';
@@ -50,6 +50,7 @@ function App() {
             <aside className="right-side">
               <RightSideContent />
             </aside>
+            <VersionDisplay />
           </div>
         </Router>
       </DndProvider>
