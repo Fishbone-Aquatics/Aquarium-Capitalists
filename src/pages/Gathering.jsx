@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import '../styles/gathering.css';
 import items from '../data/items/items';
-import { updateSkillXp, addItemToInventory } from '../features/player/playerSlice';
 import { startGatheringResource, stopGatheringResource, handleGathering, setNotificationMessage, clearNotificationMessage } from '../features/gathering/gatheringSlice';
 import { clearActiveZone } from '../features/expeditions/expeditionSlice';
 import { getRequiredXPForLevel } from '../features/player/xpCalculator';
