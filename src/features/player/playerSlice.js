@@ -23,7 +23,7 @@ const playerSlice = createSlice({
         calculateExpeditionDuration(state); // Update duration when expedition stops
       })
       .addCase(startGatheringResource, (state, action) => {
-        state.status = `Gathering ${action.payload.resourceName}`;
+        state.status = `Gathering ${action.payload.resource.name}`;
       })
       .addCase(stopGatheringResource, (state) => {
         state.status = 'idle';

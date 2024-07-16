@@ -1,26 +1,23 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+// src/pages/Gathering.js
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import '../styles/gathering.css';
 import items from '../data/items/items';
 import { updateSkillXp, addItemToInventory } from '../features/player/playerSlice';
+import { startGatheringResource, stopGatheringResource, handleGathering } from '../features/gathering/gatheringSlice';
+import { clearActiveZone } from '../features/expeditions/expeditionSlice';
 import { getRequiredXPForLevel } from '../features/player/xpCalculator';
-import { startGatheringResource, stopGatheringResource } from '../features/gathering/gatheringSlice';
 
 const Gathering = () => {
   const [activeTab, setActiveTab] = useState('minerals');
-  const [activePlaceholderTab, setActivePlaceholderTab] = useState('placeholder1');
-  const [isGathering, setIsGathering] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(null);
-  const [xpGained, setXpGained] = useState(null);
-  const timeoutRef = useRef(null);
-  const gatheringCompletedRef = useRef(false);
-  const resource = items.resource;
   const dispatch = useDispatch();
 
-  const minerals = Object.values(resource).filter(item => item.type.toLowerCase() === 'mineral');
-  const resources = Object.values(resource).filter(item => item.type.toLowerCase() === 'resource');
+  const minerals = Object.values(items.resource).filter(item => item.type.toLowerCase() === 'mineral');
+  const resources = Object.values(items.resource).filter(item => item.type.toLowerCase() === 'resource');
 
   const initialSelectedItem = minerals.length > 0 ? minerals[0] : {
+    id: 'silica',
     name: 'Silica',
     image: '/icons/resource/silica.png',
     duration: 5000,
@@ -35,100 +32,44 @@ const Gathering = () => {
   const skillBoostPercent = useSelector(state => state.player.skillBoostPercent);
   const gatheringSpeed = useSelector(state => state.player.gatheringSpeed);
   const gatheringEfficiency = useSelector(state => state.player.gatheringEfficiency);
+  const activeResource = useSelector(state => state.gathering.activeResource);
 
   const currentLevel = gatheringSkill.level;
   const currentXP = gatheringSkill.xp;
   const requiredXPForCurrentLevel = getRequiredXPForLevel(currentLevel);
   const xpPercentage = (currentXP / requiredXPForCurrentLevel) * 100;
 
-  const handleGather = useCallback(() => {
-    console.log('handleGather called');
-    if (!gatheringCompletedRef.current) {
-      gatheringCompletedRef.current = true;
-      console.log('Gathering completed for:', selectedItem);
-      const { gatheringDrops } = selectedItem;
-      const xpGainedValue = Math.floor(Math.random() * (gatheringDrops.xpRange[1] - gatheringDrops.xpRange[0] + 1)) + gatheringDrops.xpRange[0];
-      console.log('XP gained:', xpGainedValue);
-      dispatch(updateSkillXp({ skill: 'gathering', xp: xpGainedValue }));
-      dispatch(addItemToInventory({ item: selectedItem }));
-      setXpGained(xpGainedValue);
+  const handleToggleGathering = async () => {
+    if (activeResource) {
+      dispatch(stopGatheringResource());
+    } else {
+      dispatch(clearActiveZone());
+      dispatch(startGatheringResource({ resource: selectedItem }));
       setTimeout(() => {
-        gatheringCompletedRef.current = false;
-        console.log('gatheringCompletedRef reset');
+        dispatch(handleGathering());
       }, 0);
     }
-  }, [dispatch, selectedItem]);
-
-  const startGathering = useCallback(() => {
-    if (isGathering) {
-      timeoutRef.current = setTimeout(() => {
-        handleGather();
-        startGathering();
-      }, selectedItem.duration);
-    }
-  }, [isGathering, selectedItem.duration, handleGather]);
-
-  useEffect(() => {
-    if (isGathering) {
-      startGathering();
-    } else {
-      clearTimeout(timeoutRef.current);
-    }
-  }, [isGathering, startGathering]);
-
-  useEffect(() => {
-    if (xpGained !== null) {
-      setNotificationMessage(`Gathered ${selectedItem.name} and gained ${xpGained} XP!`);
-      setXpGained(null);
-    }
-  }, [xpGained, selectedItem.name]);
-
-  useEffect(() => {
-    if (notificationMessage) {
-      const timer = setTimeout(() => {
-        setNotificationMessage(null);
-        console.log('Notification message cleared');
-      }, 3000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [notificationMessage]);
+  };
 
   const handleItemClick = (item) => {
-    console.log('Item clicked:', item);
     setSelectedItem({
-      name: item.name,
       id: item.id,
+      name: item.name,
       type: item.type,
       image: item.image,
       duration: item.duration,
       gatheringDrops: item.gatheringDrops,
     });
-    console.log('Selected item set');
-  };
-
-  const handleToggleGathering = () => {
-    console.log('handleToggleGathering called');
-    if (isGathering) {
-      handleStop();
-    } else {
-      setIsGathering(true);
-      dispatch(startGatheringResource({ resourceName: selectedItem.name })); 
-      console.log('Gathering started');
-    }
-  };
-
-  const handleStop = () => {
-    console.log('handleStop called');
-    setIsGathering(false);
-    dispatch(stopGatheringResource());
-    clearTimeout(timeoutRef.current);
-    console.log('Gathering stopped');
   };
 
   useEffect(() => {
-    console.log('Selected item changed:', selectedItem);
-  }, [selectedItem]);
+    if (notificationMessage) {
+      const timer = setTimeout(() => {
+        setNotificationMessage(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [notificationMessage]);
 
   return (
     <div className="gathering-container">
@@ -139,8 +80,8 @@ const Gathering = () => {
             <div className="image-border">
               <img src={selectedItem.image} alt={selectedItem.name} />
             </div>
-            <button className={`toggle-btn ${isGathering ? 'stop' : 'gather'} gather-button`} onClick={handleToggleGathering}>
-              {isGathering ? 'Stop' : 'Gather'}
+            <button className={`toggle-btn ${activeResource ? 'stop' : 'gather'} gather-button`} onClick={handleToggleGathering}>
+              {activeResource ? 'Stop' : 'Gather'}
             </button>
           </div>
           <div className="gathering-drops">
@@ -161,16 +102,16 @@ const Gathering = () => {
         </div>
         <div className="gathering-toggle">
           <button
-            className={`toggle-button ${activePlaceholderTab === 'placeholder1' ? 'active' : ''}`}
-            onClick={() => setActivePlaceholderTab('placeholder1')}
+            className={`toggle-button ${activeTab === 'placeholder1' ? 'active' : ''}`}
+            onClick={() => setActiveTab('placeholder1')}
           >
-            Place holder 1
+            Placeholder 1
           </button>
           <button
-            className={`toggle-button ${activePlaceholderTab === 'placeholder2' ? 'active' : ''}`}
-            onClick={() => setActivePlaceholderTab('placeholder2')}
+            className={`toggle-button ${activeTab === 'placeholder2' ? 'active' : ''}`}
+            onClick={() => setActiveTab('placeholder2')}
           >
-            Place holder 2
+            Placeholder 2
           </button>
         </div>
         <div className="gathering-consumables">
@@ -186,9 +127,9 @@ const Gathering = () => {
           <h3>Gathering</h3>
           <p>Level: {gatheringSkill.level}</p>
           <p>XP Progress: {xpPercentage.toFixed(2)}% ({currentXP} / {requiredXPForCurrentLevel} XP)</p>
-          <p>Gathering Speed: +{gatheringSpeed * 100}%</p>
-          <p>Gathering Efficiency: +{gatheringEfficiency * 100}%</p>
-          <p>Total Gathering XP: {gatheringSkill.xp} XP</p>
+          <p>Gathering Speed: +{(gatheringSpeed * 100).toFixed(2)}%</p>
+          <p>Gathering Efficiency: +{(gatheringEfficiency * 100).toFixed(2)}%</p>
+          <p>Total Gathering XP: {gatheringSkill.xp.toLocaleString()} XP</p>
         </div>
         <div className="gathering-tabs">
           <button

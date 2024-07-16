@@ -1,8 +1,10 @@
+// src/pages/Expeditions.js
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveZone, clearActiveZone, updateStatistics, calculateExpeditionDuration } from '../features/expeditions/expeditionSlice';
 import { addXp, addItemToInventory, addCurrency } from '../features/player/playerSlice';
 import { randomNumberInRange } from '../utils/randomNumberInRange';
+import { stopGatheringResource } from '../features/gathering/gatheringSlice';
 import '../styles/expeditions.css';
 
 const Expeditions = () => {
@@ -27,7 +29,6 @@ const Expeditions = () => {
     const startInterval = () => {
       if (activeZone) {
         const zone = zones.find(zone => zone.name === activeZone);
-        console.log(`Starting expedition in zone: ${activeZone}`);
         let elapsedSeconds = 0;
         const totalDuration = zone.duration;
         startTimeRef.current = Date.now();
@@ -51,7 +52,6 @@ const Expeditions = () => {
               const durationSeconds = Math.floor((endTime - startTimeRef.current) / 1000);
               statisticsRef.current.totalDuration += durationSeconds;
 
-              // Reset progress bar
               if (progressBarRef.current) {
                 progressBarRef.current.style.width = '0%';
               }
@@ -59,14 +59,10 @@ const Expeditions = () => {
                 progressTextRef.current.textContent = `0 / ${totalDuration} seconds`;
               }
 
-              console.log('Granting rewards...');
-
-              // Calculate XP
               const xp = Math.floor(Math.random() * (zone.xpRange[1] - zone.xpRange[0] + 1)) + zone.xpRange[0];
               dispatch(addXp(xp));
               statisticsRef.current.totalXp += xp;
 
-              // Calculate loot drops
               const totalChance = zone.lootDrops.reduce((total, drop) => total + drop.chance, 0);
               const randomChance = Math.random() * totalChance;
 
@@ -76,18 +72,12 @@ const Expeditions = () => {
                 return randomChance <= cumulativeChance;
               });
 
-              console.log('Selected drop:', selectedDrop);
               if (selectedDrop) {
                 if (selectedDrop.type === 'item') {
                   dispatch(addItemToInventory({ item: selectedDrop.item }));
-                  console.log(`Added item: ${selectedDrop.item.name} to inventory`);
-                  
-                  // Create a copy of lootedItems to avoid direct mutation
                   const lootedItemsCopy = [...statisticsRef.current.lootedItems];
                   const existingItemIndex = lootedItemsCopy.findIndex(item => item.name === selectedDrop.item.name);
-                  
                   if (existingItemIndex !== -1) {
-                    // Create a new object for the updated item
                     lootedItemsCopy[existingItemIndex] = {
                       ...lootedItemsCopy[existingItemIndex],
                       quantity: lootedItemsCopy[existingItemIndex].quantity + 1
@@ -95,20 +85,16 @@ const Expeditions = () => {
                   } else {
                     lootedItemsCopy.push({ name: selectedDrop.item.name, quantity: 1 });
                   }
-                  
-                  // Update the reference
                   statisticsRef.current.lootedItems = lootedItemsCopy;
                 } else if (selectedDrop.type === 'currency') {
                   const amount = randomNumberInRange(selectedDrop.amountRange[0], selectedDrop.amountRange[1]);
                   dispatch(addCurrency(amount));
-                  console.log(`Added currency: ${amount}`);
                   statisticsRef.current.totalCurrency += amount;
                 }
               }
 
               statisticsRef.current.expeditionsCompleted += 1;
 
-              // Calculate per-hour rates
               const durationHours = statisticsRef.current.totalDuration / 3600;
               statisticsRef.current.xpPerHour = Math.floor(statisticsRef.current.totalXp / durationHours).toLocaleString();
               statisticsRef.current.currencyPerHour = Math.floor(statisticsRef.current.totalCurrency / durationHours).toLocaleString();
@@ -116,11 +102,10 @@ const Expeditions = () => {
               dispatch(updateStatistics({ ...statisticsRef.current }));
               dispatch(calculateExpeditionDuration());
 
-              // Restart the interval
               startInterval();
             }, 1000); // Delay of 1 second before resetting
           }
-        }, 1000); // Using 1 second interval for simplicity
+        }, 1000);
       }
     };
 
@@ -130,53 +115,45 @@ const Expeditions = () => {
       if (intervalIdRef.current) {
         clearInterval(intervalIdRef.current);
         intervalIdRef.current = null;
-        // Reset progress bar
         if (progressBarRef.current) {
           progressBarRef.current.style.width = '0%';
         }
         if (progressTextRef.current) {
           progressTextRef.current.textContent = '';
         }
-        console.log('Interval cleared in cleanup');
       }
     };
   }, [activeZone, zones, dispatch]);
 
   const handleStart = (zoneName) => {
     if (intervalIdRef.current) {
-      clearInterval(intervalIdRef.current); // Clear any existing interval
+      clearInterval(intervalIdRef.current);
       intervalIdRef.current = null;
-      // Reset progress bar
       if (progressBarRef.current) {
         progressBarRef.current.style.width = '0%';
       }
       if (progressTextRef.current) {
         progressTextRef.current.textContent = '';
       }
-      console.log('Cleared existing interval before starting a new one');
     }
+    dispatch(stopGatheringResource());
+    dispatch(clearActiveZone());
     dispatch(setActiveZone({ zoneName }));
-    console.log(`Expedition started in zone: ${zoneName}`);
   };
 
   const handleStop = () => {
     if (intervalIdRef.current) {
       clearInterval(intervalIdRef.current);
       intervalIdRef.current = null;
-      // Reset progress bar
       if (progressBarRef.current) {
         progressBarRef.current.style.width = '0%';
       }
       if (progressTextRef.current) {
         progressTextRef.current.textContent = '';
       }
-      console.log('Interval cleared in handleStop');
     }
     dispatch(clearActiveZone());
     dispatch(calculateExpeditionDuration());
-    console.log('Expedition stopped.');
-
-    // Reset per-hour calculations
     statisticsRef.current.currencyPerHour = 0;
     statisticsRef.current.xpPerHour = 0;
     dispatch(updateStatistics({ ...statisticsRef.current }));
