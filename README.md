@@ -2,14 +2,9 @@
 [http://dev.fishboneaquatics.com/](http://dev.fishboneaquatics.com/)
 
 ## TODO:
-- update gathering to have its own slice so we can start the below.
-- background tasks. (you can switch tabs and it will continue the action / update status)
 - offline progression. (We can start with 5 minutes for testing, up to 24 hours but with the consideration that there will be ways to increase it via in game currency later)
-- we lost our beautiful bubbles during expeditions.
-- menu should collapse (perhaps we put the chat back here at some point)
--- admin panel perhaps (should hide behind a collapsable menu)
-    - button to reset account until there is a sign in.
-    - button to add one of each start item (filter, heater etc)
+- button to reset account until there is a sign in.
+
 ## Screenshots
 [<img src="https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/blob/main/screenshots/WorkingGridExample.gif">](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/blob/main/screenshots/WorkingGridExample.gif)
 
@@ -63,5 +58,20 @@ https://docs.google.com/document/d/1_K5F1I7iJGMqax2JdnS1ja4mLUppdm_f7yZoA6i8TqA/
 git commit --allow-empty -m "chore: trigger release-please"
 testing
 
-## start commands for ec2
+## commands for ec2
+
+# pm2
 `pm2 start npm --name "react-app" -- run dev`
+
+# git 
+# do the below when actions errors / locks up with conflicts.
+```cd /Aquarium-Capitalists
+git clone https://github.com/Fishbone-Aquatics/Aquarium-Capitalists.git
+cd Aquarium-Capitalists
+
+# Pull the latest changes (usually this one)
+git pull origin development
+# or
+git pull --rebase origin development
+```
+
