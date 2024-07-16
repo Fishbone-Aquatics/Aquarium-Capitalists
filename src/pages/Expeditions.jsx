@@ -22,6 +22,11 @@ const Expeditions = () => {
         startTimeRef.current = Date.now();
 
         console.log('Starting interval for progress update');
+
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+        }
+
         intervalRef.current = setInterval(() => {
           const elapsedSeconds = Math.floor((Date.now() - startTimeRef.current) / 1000);
           const progress = (elapsedSeconds / totalDuration) * 100;
@@ -70,6 +75,7 @@ const Expeditions = () => {
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
+        intervalRef.current = null;
         console.log('Interval cleared on component unmount');
       }
     };
@@ -88,6 +94,7 @@ const Expeditions = () => {
     dispatch(clearActiveZone());
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
+      intervalRef.current = null;
       console.log('Interval cleared on stop');
     }
   };
