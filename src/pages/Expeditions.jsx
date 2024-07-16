@@ -31,16 +31,6 @@ const Expeditions = () => {
             progressTextRef.current.textContent = `${elapsedSeconds} / ${totalDuration} seconds`;
             console.log('progress bar elapsedSeconds:', elapsedSeconds);
           }
-
-          if (elapsedSeconds >= totalDuration) {
-            console.log('Expedition cycle completed, resetting progress bar');
-            resetProgressBar();
-            dispatch(handleExpedition());
-            setTimeout(() => {
-              dispatch(setActiveZone({ zoneName: activeZone })); // Restart the expedition
-              dispatch(handleExpedition());
-            }, 1000);
-          }
         };
 
         if (intervalRef.current) {

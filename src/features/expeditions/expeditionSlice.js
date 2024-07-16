@@ -35,7 +35,6 @@ const expeditionSlice = createSlice({
     clearActiveZone: (state) => {
       console.log('Clearing active zone');
       state.activeZone = null;
-      state.expeditionStartTime = null;
       if (state.intervalId) {
         clearInterval(state.intervalId);
         console.log('Interval cleared:', state.intervalId);
@@ -69,7 +68,7 @@ const expeditionSlice = createSlice({
     },
     calculateExpeditionDuration: (state) => {
       const now = Date.now();
-      const startTime = state.expeditionStartTime || now;
+      const startTime = state.expeditionStartTime;
       const duration = Math.floor((now - startTime) / 1000);
 
       let formattedDuration;
@@ -171,8 +170,9 @@ export const handleExpedition = () => (dispatch, getState) => {
       dispatch(updateStatistics(statistics));
 
       setTimeout(() => {
-        dispatch(handleExpedition()); // Restart expedition after 1 second delay
-      }, 1000); // Delay of 1 second before resetting
+        dispatch(setActiveZone({ zoneName: activeZone }));
+        dispatch(handleExpedition());
+      }, 1000); // Delay of 1 second before restarting
     }
   }, 1000);
 
