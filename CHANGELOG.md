@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.2](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.7.1...v1.7.2) (2024-07-16)
+
+
+### Bug Fixes
+
+* **expeditions:** interval didn't properly stop ([83e1d14](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/83e1d149dcca4532177f5e953f708ce42867de92))
+
 ## [1.7.1](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.7.0...v1.7.1) (2024-07-16)
 
 
