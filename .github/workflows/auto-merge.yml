@@ -1,4 +1,4 @@
-name: Auto-Merge Changelog PRs
+name: Auto-Merge Changelog PR
 
 on:
   pull_request:
