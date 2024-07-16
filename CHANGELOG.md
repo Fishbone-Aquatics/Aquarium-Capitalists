@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.6.0...v1.6.1) (2024-07-16)
+
+
+### Bug Fixes
+
+* **automerge:** test 123 ([aec1a07](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/aec1a077d1bad5b5f37bca25782d0dd01558298a))
+
 ## [1.6.0](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.5.1...v1.6.0) (2024-07-16)
 
 
