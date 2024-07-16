@@ -9,29 +9,23 @@ const Expeditions = () => {
   const dispatch = useDispatch();
   const activeZone = useSelector((state) => state.expedition.activeZone);
   const zones = useSelector((state) => state.expedition.zones);
+  const expeditionStartTime = useSelector((state) => state.expedition.expeditionStartTime);
   const progressBarRef = useRef(null);
   const progressTextRef = useRef(null);
-  const startTimeRef = useRef(0);
   const intervalRef = useRef(null);
 
   useEffect(() => {
     const updateProgressBar = () => {
-      if (activeZone) {
+      if (activeZone && expeditionStartTime) {
         const zone = zones.find(zone => zone.name === activeZone);
         const totalDuration = zone.duration;
-        startTimeRef.current = Date.now();
 
-        console.log('Starting interval for progress update');
-
-        if (intervalRef.current) {
-          clearInterval(intervalRef.current);
-        }
-
-        intervalRef.current = setInterval(() => {
-          const elapsedSeconds = Math.floor((Date.now() - startTimeRef.current) / 1000);
+        const update = () => {
+          const elapsedMillis = Date.now() - expeditionStartTime;
+          const cyclesCompleted = Math.floor(elapsedMillis / (totalDuration * 1000));
+          const cycleElapsedMillis = elapsedMillis % (totalDuration * 1000);
+          const elapsedSeconds = Math.floor(cycleElapsedMillis / 1000);
           const progress = (elapsedSeconds / totalDuration) * 100;
-
-          console.log(`Elapsed seconds: ${elapsedSeconds}, Progress: ${progress}%`);
 
           if (progressBarRef.current) {
             progressBarRef.current.style.width = `${progress}%`;
@@ -41,21 +35,23 @@ const Expeditions = () => {
           }
 
           if (elapsedSeconds >= totalDuration) {
-            clearInterval(intervalRef.current);
-            console.log('Expedition completed, clearing interval');
-
-            setTimeout(() => {
-              dispatch(handleExpedition());
-              resetProgressBar();
-              updateProgressBar(); // Restart after resetting
-            }, 1000); // 1-second delay before resetting the progress bar
+            console.log('Expedition cycle completed, resetting progress bar');
+            resetProgressBar();
+            dispatch(handleExpedition());
           }
-        }, 1000);
+        };
+
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+        }
+
+        update(); // Initial call to update progress immediately
+
+        intervalRef.current = setInterval(update, 1000);
       }
     };
 
     const resetProgressBar = () => {
-      console.log('Resetting progress bar');
       if (progressBarRef.current) {
         progressBarRef.current.style.width = '0%';
       }
@@ -67,7 +63,7 @@ const Expeditions = () => {
       }
     };
 
-    if (activeZone) {
+    if (activeZone && expeditionStartTime) {
       console.log('Active zone:', activeZone);
       updateProgressBar();
     }
@@ -79,11 +75,11 @@ const Expeditions = () => {
         console.log('Interval cleared on component unmount');
       }
     };
-  }, [activeZone, zones, dispatch]);
+  }, [activeZone, zones, expeditionStartTime, dispatch]);
 
   const handleStart = (zoneName) => {
     console.log('Starting expedition in zone:', zoneName);
-    dispatch(stopGatheringResource()); // we need a util / helper for this lol
+    dispatch(stopGatheringResource());
     dispatch(resetStatistics());
     dispatch(setActiveZone({ zoneName }));
     dispatch(handleExpedition());
