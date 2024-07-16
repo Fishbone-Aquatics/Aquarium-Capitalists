@@ -40,6 +40,17 @@ const expeditionSlice = createSlice({
       }
       state.intervalId = null;
     },
+    resetStatistics: (state) => {
+      state.statistics = {
+        expeditionsCompleted: 0,
+        totalCurrency: 0,
+        currencyPerHour: 0,
+        totalXp: 0,
+        xpPerHour: 0,
+        lootedItems: [],
+        expeditionDuration: '0 seconds',
+      };
+    },
     updateStatistics: (state, action) => {
       const { expeditionsCompleted, totalCurrency, currencyPerHour, totalXp, xpPerHour, lootedItems, expeditionDuration } = action.payload;
       console.log('Updating statistics:', action.payload);
@@ -81,7 +92,7 @@ const expeditionSlice = createSlice({
   },
 });
 
-export const { setActiveZone, clearActiveZone, updateStatistics, calculateExpeditionDuration, setIntervalId } = expeditionSlice.actions;
+export const { setActiveZone, clearActiveZone, resetStatistics, updateStatistics, calculateExpeditionDuration, setIntervalId } = expeditionSlice.actions;
 
 export const handleExpedition = () => (dispatch, getState) => {
   const state = getState();

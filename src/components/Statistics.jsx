@@ -6,6 +6,21 @@ const Statistics = () => {
 
   console.log('Statistics:', statistics);
 
+  // Helper function to count the number of each looted item
+  const countLootedItems = (items) => {
+    const itemCounts = {};
+    items.forEach(item => {
+      if (itemCounts[item.name]) {
+        itemCounts[item.name]++;
+      } else {
+        itemCounts[item.name] = 1;
+      }
+    });
+    return itemCounts;
+  };
+
+  const lootedItemCounts = countLootedItems(statistics?.lootedItems || []);
+
   return (
     <div className="statistics">
       <h3>Expedition Statistics</h3>
@@ -15,9 +30,9 @@ const Statistics = () => {
       <p>Expedition duration: {statistics?.expeditionDuration || '0 seconds'}.</p>
       <h4>Looted Items:</h4>
       <ul>
-        {statistics?.lootedItems && statistics.lootedItems.length > 0 ? (
-          statistics.lootedItems.map((item, index) => (
-            <li key={index}>{item.name}: {item.quantity?.toLocaleString() || 0}</li>
+        {Object.keys(lootedItemCounts).length > 0 ? (
+          Object.entries(lootedItemCounts).map(([itemName, count], index) => (
+            <li key={index}>{itemName}: {count.toLocaleString()}</li>
           ))
         ) : (
           <li>No items looted yet.</li>

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActiveZone, clearActiveZone, handleExpedition } from '../features/expeditions/expeditionSlice';
+import { setActiveZone, clearActiveZone, handleExpedition, resetStatistics } from '../features/expeditions/expeditionSlice';
 import '../styles/expeditions.css';
 
 const Expeditions = () => {
@@ -68,6 +68,7 @@ const Expeditions = () => {
 
   const handleStart = (zoneName) => {
     console.log('Starting expedition in zone:', zoneName);
+    dispatch(resetStatistics());
     dispatch(setActiveZone({ zoneName }));
     dispatch(handleExpedition());
   };
