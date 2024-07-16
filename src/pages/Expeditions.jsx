@@ -20,9 +20,12 @@ const Expeditions = () => {
         const totalDuration = zone.duration;
         startTimeRef.current = Date.now();
 
+        console.log('Starting interval for progress update');
         intervalRef.current = setInterval(() => {
           const elapsedSeconds = Math.floor((Date.now() - startTimeRef.current) / 1000);
           const progress = (elapsedSeconds / totalDuration) * 100;
+
+          console.log(`Elapsed seconds: ${elapsedSeconds}, Progress: ${progress}%`);
 
           if (progressBarRef.current) {
             progressBarRef.current.style.width = `${progress}%`;
@@ -33,6 +36,7 @@ const Expeditions = () => {
 
           if (elapsedSeconds >= totalDuration) {
             clearInterval(intervalRef.current);
+            console.log('Expedition completed, clearing interval');
 
             setTimeout(() => {
               dispatch(handleExpedition());
@@ -45,6 +49,7 @@ const Expeditions = () => {
     };
 
     const resetProgressBar = () => {
+      console.log('Resetting progress bar');
       if (progressBarRef.current) {
         progressBarRef.current.style.width = '0%';
       }
@@ -57,12 +62,14 @@ const Expeditions = () => {
     };
 
     if (activeZone) {
+      console.log('Active zone:', activeZone);
       updateProgressBar();
     }
 
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
+        console.log('Interval cleared on component unmount');
       }
     };
   }, [activeZone, zones, dispatch]);
@@ -79,6 +86,7 @@ const Expeditions = () => {
     dispatch(clearActiveZone());
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
+      console.log('Interval cleared on stop');
     }
   };
 
@@ -92,6 +100,8 @@ const Expeditions = () => {
             activeZone={activeZone}
             handleStart={handleStart}
             handleStop={handleStop}
+            progressBarRef={progressBarRef}
+            progressTextRef={progressTextRef}
           />
         ))}
       </div>

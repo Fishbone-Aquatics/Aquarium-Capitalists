@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { BubblesContainer } from './BubblesContainer'; 
 
@@ -48,8 +48,14 @@ const Heading = styled.h2`
   border-radius: 5px;
 `;
 
-const Zone = ({ zone, activeZone, handleStart, handleStop }) => {
+const Zone = ({ zone, activeZone, handleStart, handleStop, progressBarRef, progressTextRef }) => {
   const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    if (activeZone === zone.name) {
+      console.log('Progress bar and text elements:', progressBarRef.current, progressTextRef.current);
+    }
+  }, [activeZone, zone.name, progressBarRef, progressTextRef]);
 
   return (
     <ZoneContainer
@@ -69,8 +75,8 @@ const Zone = ({ zone, activeZone, handleStart, handleStop }) => {
       </HeaderContainer>
       {activeZone === zone.name && (
         <div className="progress-container">
-          <div className="progress-bar"></div>
-          <p className="progress-text"></p>
+          <div ref={progressBarRef} className="progress-bar"></div>
+          <p ref={progressTextRef} className="progress-text"></p>
         </div>
       )}
       <div className="description-container">
