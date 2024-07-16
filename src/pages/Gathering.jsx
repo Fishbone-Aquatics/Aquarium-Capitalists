@@ -1,16 +1,15 @@
 // src/pages/Gathering.js
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import '../styles/gathering.css';
 import items from '../data/items/items';
 import { updateSkillXp, addItemToInventory } from '../features/player/playerSlice';
-import { startGatheringResource, stopGatheringResource, handleGathering } from '../features/gathering/gatheringSlice';
+import { startGatheringResource, stopGatheringResource, handleGathering, setNotificationMessage, clearNotificationMessage } from '../features/gathering/gatheringSlice';
 import { clearActiveZone } from '../features/expeditions/expeditionSlice';
 import { getRequiredXPForLevel } from '../features/player/xpCalculator';
 
 const Gathering = () => {
   const [activeTab, setActiveTab] = useState('minerals');
-  const [notificationMessage, setNotificationMessage] = useState(null);
   const dispatch = useDispatch();
 
   const minerals = Object.values(items.resource).filter(item => item.type.toLowerCase() === 'mineral');
@@ -33,6 +32,7 @@ const Gathering = () => {
   const gatheringSpeed = useSelector(state => state.player.gatheringSpeed);
   const gatheringEfficiency = useSelector(state => state.player.gatheringEfficiency);
   const activeResource = useSelector(state => state.gathering.activeResource);
+  const notificationMessage = useSelector(state => state.gathering.notificationMessage);
 
   const currentLevel = gatheringSkill.level;
   const currentXP = gatheringSkill.xp;
@@ -45,6 +45,7 @@ const Gathering = () => {
     } else {
       dispatch(clearActiveZone());
       dispatch(startGatheringResource({ resource: selectedItem }));
+      dispatch(setNotificationMessage(`Starting gathering ${selectedItem.name}`));
       setTimeout(() => {
         dispatch(handleGathering());
       }, 0);
@@ -65,11 +66,11 @@ const Gathering = () => {
   useEffect(() => {
     if (notificationMessage) {
       const timer = setTimeout(() => {
-        setNotificationMessage(null);
+        dispatch(clearNotificationMessage());
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [notificationMessage]);
+  }, [notificationMessage, dispatch]);
 
   return (
     <div className="gathering-container">
