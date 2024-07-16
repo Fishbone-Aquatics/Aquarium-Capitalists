@@ -18,7 +18,7 @@ const initialState = {
     expeditionDuration: '0 seconds',
   },
   expeditionStartTime: null,
-  intervalId: null, // Add intervalId to state
+  intervalId: null,
 };
 
 const expeditionSlice = createSlice({
@@ -26,26 +26,23 @@ const expeditionSlice = createSlice({
   initialState,
   reducers: {
     setActiveZone: (state, action) => {
+      console.log('Setting active zone:', action.payload.zoneName);
       state.activeZone = action.payload.zoneName;
-      state.statistics = {
-        expeditionsCompleted: 0,
-        totalCurrency: 0,
-        currencyPerHour: 0,
-        totalXp: 0,
-        xpPerHour: 0,
-        lootedItems: [],
-        expeditionDuration: '0 seconds',
-      };
       state.expeditionStartTime = Date.now();
     },
     clearActiveZone: (state) => {
+      console.log('Clearing active zone');
       state.activeZone = null;
       state.expeditionStartTime = null;
-      clearInterval(state.intervalId); // Clear interval
+      if (state.intervalId) {
+        clearInterval(state.intervalId);
+        console.log('Interval cleared:', state.intervalId);
+      }
       state.intervalId = null;
     },
     updateStatistics: (state, action) => {
-      const { expeditionsCompleted, totalCurrency, currencyPerHour, totalXp, xpPerHour, lootedItems } = action.payload;
+      const { expeditionsCompleted, totalCurrency, currencyPerHour, totalXp, xpPerHour, lootedItems, expeditionDuration } = action.payload;
+      console.log('Updating statistics:', action.payload);
       state.statistics = {
         expeditionsCompleted,
         totalCurrency,
@@ -53,7 +50,7 @@ const expeditionSlice = createSlice({
         totalXp,
         xpPerHour,
         lootedItems,
-        expeditionDuration: state.statistics.expeditionDuration,
+        expeditionDuration,
       };
     },
     calculateExpeditionDuration: (state) => {
@@ -78,6 +75,7 @@ const expeditionSlice = createSlice({
       saveState({ player: state.player, expedition: state, aquarium: state.aquarium });
     },
     setIntervalId: (state, action) => {
+      console.log('Setting interval ID:', action.payload);
       state.intervalId = action.payload;
     }
   },
@@ -98,17 +96,17 @@ export const handleExpedition = () => (dispatch, getState) => {
   const interval = setInterval(() => {
     elapsedSeconds += 1;
     const progress = (elapsedSeconds / totalDuration) * 100;
-
-    // Dispatch updateProgress action to update the progress bar if needed
-    // dispatch(updateProgress(progress));
+    console.log(`Elapsed seconds: ${elapsedSeconds}, Total duration: ${totalDuration}, Progress: ${progress}%`);
 
     if (elapsedSeconds >= totalDuration) {
       clearInterval(interval);
       dispatch(setIntervalId(null));
+      console.log('Expedition completed for zone:', activeZone);
 
       // Handle expedition completion
       const xp = Math.floor(Math.random() * (selectedZone.xpRange[1] - selectedZone.xpRange[0] + 1)) + selectedZone.xpRange[0];
       dispatch(addXp(xp));
+      console.log('XP earned:', xp);
 
       const totalChance = selectedZone.lootDrops.reduce((total, drop) => total + drop.chance, 0);
       const randomChance = Math.random() * totalChance;
@@ -119,18 +117,44 @@ export const handleExpedition = () => (dispatch, getState) => {
         return randomChance <= cumulativeChance;
       });
 
+      let currencyEarned = 0;
       if (selectedDrop) {
         if (selectedDrop.type === 'item') {
           dispatch(addItemToInventory({ item: selectedDrop.item }));
+          console.log('Item looted:', selectedDrop.item.name);
         } else if (selectedDrop.type === 'currency') {
-          const amount = randomNumberInRange(selectedDrop.amountRange[0], selectedDrop.amountRange[1]);
-          dispatch(addCurrency(amount));
+          currencyEarned = randomNumberInRange(selectedDrop.amountRange[0], selectedDrop.amountRange[1]);
+          dispatch(addCurrency(currencyEarned));
+          console.log('Currency looted:', currencyEarned);
         }
       }
 
-      // Update statistics and restart expedition
-      dispatch(updateStatistics({ ...state.expedition.statistics }));
-      dispatch(handleExpedition()); // Restart expedition
+      // Calculate expedition duration
+      dispatch(calculateExpeditionDuration());
+
+      // Calculate XP and currency per hour
+      const updatedState = getState().expedition;
+      const durationSeconds = Math.floor((Date.now() - updatedState.expeditionStartTime) / 1000);
+      const durationHours = durationSeconds / 3600;
+      const xpPerHour = durationHours > 0 ? Math.floor(updatedState.statistics.totalXp / durationHours) : 0;
+      const currencyPerHour = durationHours > 0 ? Math.floor(updatedState.statistics.totalCurrency / durationHours) : 0;
+
+      // Update statistics
+      const statistics = {
+        expeditionsCompleted: updatedState.statistics.expeditionsCompleted + 1,
+        totalCurrency: updatedState.statistics.totalCurrency + currencyEarned,
+        currencyPerHour,
+        totalXp: updatedState.statistics.totalXp + xp,
+        xpPerHour,
+        lootedItems: selectedDrop?.type === 'item' ? [...updatedState.statistics.lootedItems, selectedDrop.item] : updatedState.statistics.lootedItems,
+        expeditionDuration: updatedState.statistics.expeditionDuration,
+      };
+      console.log('Updating statistics with:', statistics);
+      dispatch(updateStatistics(statistics));
+
+      setTimeout(() => {
+        dispatch(handleExpedition()); // Restart expedition after 1 second delay
+      }, 1000); // Delay of 1 second before resetting
     }
   }, 1000);
 
