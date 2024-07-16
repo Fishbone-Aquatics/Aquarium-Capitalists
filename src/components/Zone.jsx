@@ -53,7 +53,9 @@ const Zone = ({ zone, activeZone, handleStart, handleStop, progressBarRef, progr
 
   useEffect(() => {
     if (activeZone === zone.name) {
-      console.log('Progress bar and text elements:', progressBarRef.current, progressTextRef.current);
+      console.log('Active Zone:', activeZone);
+      console.log('Progress bar ref:', progressBarRef.current);
+      console.log('Progress text ref:', progressTextRef.current);
     }
   }, [activeZone, zone.name, progressBarRef, progressTextRef]);
 

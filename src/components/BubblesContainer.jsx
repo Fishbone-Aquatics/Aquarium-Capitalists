@@ -17,22 +17,12 @@ const rise = keyframes`
 `;
 
 // Styled components
-const Zone = styled.div`
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 16px;
-  width: 300px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  position: relative;
-  overflow: hidden;
-  margin: 20px 0;
-`;
-
-const Bubble = styled.div`
+const Bubble = styled.div.withConfig({
+  shouldForwardProp: (prop) =>
+    !['left', 'duration', 'delay', 'size'].includes(prop)
+})`
   position: absolute;
   bottom: -50px;
-  width: 20px;
-  height: 20px;
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 50%;
   opacity: 0.7;
@@ -83,4 +73,4 @@ const BubblesContainer = ({ isActive }) => {
   );
 };
 
-export { Zone, BubblesContainer };
+export { BubblesContainer };
