@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.7.0...v1.7.1) (2024-07-16)
+
+
+### Bug Fixes
+
+* **merger:** pesky ([ddd9aab](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/ddd9aab42632ec3177a18a065947dd4e6884cd62))
+
 ## [1.7.0](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.6.2...v1.7.0) (2024-07-16)
 
 
