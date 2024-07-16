@@ -19,6 +19,7 @@ const initialState = {
   },
   expeditionStartTime: null,
   intervalId: null,
+  elapsedSeconds: 0,
 };
 
 const expeditionSlice = createSlice({
@@ -29,6 +30,7 @@ const expeditionSlice = createSlice({
       console.log('Setting active zone:', action.payload.zoneName);
       state.activeZone = action.payload.zoneName;
       state.expeditionStartTime = Date.now();
+      state.elapsedSeconds = 0;
     },
     clearActiveZone: (state) => {
       console.log('Clearing active zone');
@@ -39,6 +41,7 @@ const expeditionSlice = createSlice({
         console.log('Interval cleared:', state.intervalId);
       }
       state.intervalId = null;
+      state.elapsedSeconds = 0;
     },
     resetStatistics: (state) => {
       state.statistics = {
@@ -88,11 +91,14 @@ const expeditionSlice = createSlice({
     setIntervalId: (state, action) => {
       console.log('Setting interval ID:', action.payload);
       state.intervalId = action.payload;
-    }
+    },
+    incrementElapsedSeconds: (state) => {
+      state.elapsedSeconds += 1;
+    },
   },
 });
 
-export const { setActiveZone, clearActiveZone, resetStatistics, updateStatistics, calculateExpeditionDuration, setIntervalId } = expeditionSlice.actions;
+export const { setActiveZone, clearActiveZone, resetStatistics, updateStatistics, calculateExpeditionDuration, setIntervalId, incrementElapsedSeconds } = expeditionSlice.actions;
 
 export const handleExpedition = () => (dispatch, getState) => {
   const state = getState();
@@ -103,9 +109,10 @@ export const handleExpedition = () => (dispatch, getState) => {
   const selectedZone = state.expedition.zones.find(zone => zone.name === activeZone);
   const totalDuration = selectedZone.duration;
 
-  let elapsedSeconds = 0;
   const interval = setInterval(() => {
-    elapsedSeconds += 1;
+    dispatch(incrementElapsedSeconds());
+    const updatedState = getState();
+    const { elapsedSeconds } = updatedState.expedition;
     const progress = (elapsedSeconds / totalDuration) * 100;
     console.log(`Elapsed seconds: ${elapsedSeconds}, Total duration: ${totalDuration}, Progress: ${progress}%`);
 
@@ -144,21 +151,21 @@ export const handleExpedition = () => (dispatch, getState) => {
       dispatch(calculateExpeditionDuration());
 
       // Calculate XP and currency per hour
-      const updatedState = getState().expedition;
-      const durationSeconds = Math.floor((Date.now() - updatedState.expeditionStartTime) / 1000);
+      const updatedStateAfterCompletion = getState().expedition;
+      const durationSeconds = Math.floor((Date.now() - updatedStateAfterCompletion.expeditionStartTime) / 1000);
       const durationHours = durationSeconds / 3600;
-      const xpPerHour = durationHours > 0 ? Math.floor(updatedState.statistics.totalXp / durationHours) : 0;
-      const currencyPerHour = durationHours > 0 ? Math.floor(updatedState.statistics.totalCurrency / durationHours) : 0;
+      const xpPerHour = durationHours > 0 ? Math.floor(updatedStateAfterCompletion.statistics.totalXp / durationHours) : 0;
+      const currencyPerHour = durationHours > 0 ? Math.floor(updatedStateAfterCompletion.statistics.totalCurrency / durationHours) : 0;
 
       // Update statistics
       const statistics = {
-        expeditionsCompleted: updatedState.statistics.expeditionsCompleted + 1,
-        totalCurrency: updatedState.statistics.totalCurrency + currencyEarned,
+        expeditionsCompleted: updatedStateAfterCompletion.statistics.expeditionsCompleted + 1,
+        totalCurrency: updatedStateAfterCompletion.statistics.totalCurrency + currencyEarned,
         currencyPerHour,
-        totalXp: updatedState.statistics.totalXp + xp,
+        totalXp: updatedStateAfterCompletion.statistics.totalXp + xp,
         xpPerHour,
-        lootedItems: selectedDrop?.type === 'item' ? [...updatedState.statistics.lootedItems, selectedDrop.item] : updatedState.statistics.lootedItems,
-        expeditionDuration: updatedState.statistics.expeditionDuration,
+        lootedItems: selectedDrop?.type === 'item' ? [...updatedStateAfterCompletion.statistics.lootedItems, selectedDrop.item] : updatedStateAfterCompletion.statistics.lootedItems,
+        expeditionDuration: updatedStateAfterCompletion.statistics.expeditionDuration,
       };
       console.log('Updating statistics with:', statistics);
       dispatch(updateStatistics(statistics));
@@ -171,5 +178,7 @@ export const handleExpedition = () => (dispatch, getState) => {
 
   dispatch(setIntervalId(interval));
 };
+
+export const selectElapsedSeconds = (state) => state.expedition.elapsedSeconds;
 
 export default expeditionSlice.reducer;

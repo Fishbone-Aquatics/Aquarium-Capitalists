@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { BubblesContainer } from './BubblesContainer'; 
+import { BubblesContainer } from './BubblesContainer';
 
 // Styled components for Zone
 const ZoneContainer = styled.div`
