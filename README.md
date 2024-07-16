@@ -54,22 +54,27 @@ https://github.com/SobieskiCodes/Codefolio/blob/websocket/.github/workflows/PROP
 https://docs.google.com/document/d/1_K5F1I7iJGMqax2JdnS1ja4mLUppdm_f7yZoA6i8TqA/edit
 
 
-## nice to know commands
+# nice to know commands
 git commit --allow-empty -m "chore: trigger release-please"
 testing
+<p>
 
 ## commands for ec2
 
-# pm2
+### pm2
 `pm2 start npm --name "react-app" -- run dev`
 
-# git 
-# do the below when actions errors / locks up with conflicts.
-```cd /Aquarium-Capitalists
+### git
+
+do the below when actions errors / locks up with conflicts.
+<p>
+
+```
+cd /Aquarium-Capitalists
 git clone https://github.com/Fishbone-Aquatics/Aquarium-Capitalists.git
 cd Aquarium-Capitalists
 
-# Pull the latest changes (usually this one)
+Pull the latest changes (usually this one)
 git pull origin development
 # or
 git pull --rebase origin development
