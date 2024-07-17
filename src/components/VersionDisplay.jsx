@@ -12,7 +12,7 @@ const VersionDisplay = () => {
     fetchVersion();
   }, []);
 
-  return <div className="version-display">version: {version}</div>;
+  return <div className="version-display">version example: {version}</div>;
 };
 
 export default VersionDisplay;
