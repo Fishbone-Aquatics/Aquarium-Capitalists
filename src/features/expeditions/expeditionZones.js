@@ -12,7 +12,7 @@ const zones = [
       { type: 'item', item: items.equipment.spongeFilter, dropRate: '1:100' },
       { type: 'item', item: items.equipment.light, dropRate: '1:500' },
       { type: 'item', item: items.equipment.heater, dropRate: '1:200' },
-      { type: 'currency', amountRange: [5, 10], dropRate: 'always' }, // always
+      { type: 'currency', amountRange: [5, 10], dropRate: 'always' },
     ],
     image: 'icons/expeditions/coralReef.png',
   },

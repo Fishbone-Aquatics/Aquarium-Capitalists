@@ -151,7 +151,6 @@
   animation-delay: 0s;
 }
 
-/* src/styles/statistics.css */
 .statistics {
   background: #2c3e50;
   padding: 20px;
@@ -172,3 +171,4 @@
 .statistics ul li {
   margin-bottom: 10px;
 }
+
