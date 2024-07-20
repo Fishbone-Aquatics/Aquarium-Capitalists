@@ -131,26 +131,51 @@ export const handleExpedition = () => (dispatch, getState) => {
       dispatch(addXp(xp));
       console.log('XP earned:', xp);
 
-      const totalChance = selectedZone.lootDrops.reduce((total, drop) => total + drop.chance, 0);
-      const randomChance = Math.random() * totalChance;
+      let currencyEarned = 0;
+      let lootedItem = null;
 
-      let cumulativeChance = 0;
-      const selectedDrop = selectedZone.lootDrops.find(drop => {
-        cumulativeChance += drop.chance;
-        return randomChance <= cumulativeChance;
+      // Handle always/100% drops
+      const alwaysDrops = selectedZone.lootDrops.filter(drop => drop.dropRate === 'always' || drop.dropRate === '100%');
+      alwaysDrops.forEach(drop => {
+        if (drop.type === 'item') {
+          dispatch(addItemToInventory({ item: drop.item }));
+          console.log('Always item looted:', drop.item.name);
+        } else if (drop.type === 'currency') {
+          currencyEarned += randomNumberInRange(drop.amountRange[0], drop.amountRange[1]);
+          dispatch(addCurrency(currencyEarned));
+          console.log('Always currency looted:', currencyEarned);
+        }
       });
 
-      let currencyEarned = 0;
-      if (selectedDrop) {
-        if (selectedDrop.type === 'item') {
-          dispatch(addItemToInventory({ item: selectedDrop.item }));
-          console.log('Item looted:', selectedDrop.item.name);
-        } else if (selectedDrop.type === 'currency') {
-          currencyEarned = randomNumberInRange(selectedDrop.amountRange[0], selectedDrop.amountRange[1]);
-          dispatch(addCurrency(currencyEarned));
-          console.log('Currency looted:', currencyEarned);
+      // Filter out always/100% drops for random selection
+      const randomDrops = selectedZone.lootDrops.filter(drop => drop.dropRate !== 'always' && drop.dropRate !== '100%');
+
+      // Log the drop rates
+      randomDrops.forEach(drop => {
+        const [numerator, denominator] = drop.dropRate.split(':').map(Number);
+        const dropChance = (numerator / denominator) * 100;
+        console.log(`Drop chance for ${drop.item?.name || 'currency'}: ${dropChance.toFixed(4)}%`);
+      });
+
+      // Determine if an item should be dropped based on its drop rate
+      randomDrops.forEach(drop => {
+        const [numerator, denominator] = drop.dropRate.split(':').map(Number);
+        const dropChance = numerator / denominator;
+        const randomValue = Math.random();
+        console.log(`Checking drop for ${drop.item?.name || 'currency'}: random value = ${randomValue.toFixed(4)}, drop chance = ${dropChance.toFixed(4)}`);
+        if (randomValue <= dropChance) {
+          if (drop.type === 'item') {
+            dispatch(addItemToInventory({ item: drop.item }));
+            lootedItem = drop.item;
+            console.log('Item looted:', drop.item.name);
+          } else if (drop.type === 'currency') {
+            const earned = randomNumberInRange(drop.amountRange[0], drop.amountRange[1]);
+            currencyEarned += earned;
+            dispatch(addCurrency(earned));
+            console.log('Currency looted:', earned);
+          }
         }
-      }
+      });
 
       // Calculate expedition duration
       dispatch(calculatetotalExpeditionDuration());
@@ -169,7 +194,7 @@ export const handleExpedition = () => (dispatch, getState) => {
         currencyPerHour,
         totalXp: updatedStateAfterCompletion.statistics.totalXp + xp,
         xpPerHour,
-        lootedItems: selectedDrop?.type === 'item' ? [...updatedStateAfterCompletion.statistics.lootedItems, selectedDrop.item] : updatedStateAfterCompletion.statistics.lootedItems,
+        lootedItems: lootedItem ? [...updatedStateAfterCompletion.statistics.lootedItems, lootedItem] : updatedStateAfterCompletion.statistics.lootedItems,
         totalExpeditionDuration: updatedStateAfterCompletion.statistics.totalExpeditionDuration,
       };
       console.log('Updating statistics with:', statistics);

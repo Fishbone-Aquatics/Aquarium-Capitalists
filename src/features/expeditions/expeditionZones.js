@@ -8,10 +8,11 @@ const zones = [
     duration: 10, // seconds
     xpRange: [15, 25],
     lootDrops: [
-      { type: 'item', item: items.equipment.filter, chance: 0.00013 },
-      { type: 'item', item: items.equipment.spongeFilter, chance: 0.00093 },
-      { type: 'item', item: items.equipment.light, chance: 0.00093 },
-      { type: 'currency', amountRange: [5, 10], chance: 0.2 },
+      { type: 'item', item: items.equipment.filter, dropRate: '1:10' },
+      { type: 'item', item: items.equipment.spongeFilter, dropRate: '1:100' },
+      { type: 'item', item: items.equipment.light, dropRate: '1:500' },
+      { type: 'item', item: items.equipment.heater, dropRate: '1:200' },
+      { type: 'currency', amountRange: [5, 10], dropRate: 'always' }, // always
     ],
     image: 'icons/expeditions/coralReef.png',
   },
@@ -21,9 +22,8 @@ const zones = [
     duration: 30, // seconds
     xpRange: [3, 5],
     lootDrops: [
-      { type: 'item', item: items.equipment.canisterFilter, chance: 0.005 },
-      { type: 'item', item: items.equipment.largeFilter, chance: 0.002 },
-      { type: 'currency', amountRange: [10, 20], chance: 0.2 },
+      { type: 'item', item: items.equipment.filter, dropRate: '1:10000' },
+      { type: 'currency', amountRange: [5, 10], dropRate: '1:5' },
     ],
     image: 'icons/expeditions/shipwreck.png',
   },
@@ -33,9 +33,8 @@ const zones = [
     duration: 45, // seconds
     xpRange: [4, 7],
     lootDrops: [
-      { type: 'item', item: items.equipment.largeHeater, chance: 0.005 },
-      { type: 'item', item: items.equipment.mediumHeater, chance: 0.05 },
-      { type: 'currency', amountRange: [15, 25], chance: 0.2 },
+      { type: 'item', item: items.equipment.filter, dropRate: '1:10000' },
+      { type: 'currency', amountRange: [5, 10], dropRate: '1:5' },
     ],
     image: 'icons/expeditions/trench.png',
   },
@@ -45,9 +44,8 @@ const zones = [
     duration: 60, // seconds
     xpRange: [5, 10],
     lootDrops: [
-      { type: 'item', item: items.bread, chance: 0.1 },
-      { type: 'item', item: items.apple, chance: 0.05 },
-      { type: 'currency', amountRange: [20, 30], chance: 0.2 },
+      { type: 'item', item: items.equipment.filter, dropRate: '1:10000' },
+      { type: 'currency', amountRange: [5, 10], dropRate: '1:5' },
     ],
     image: 'icons/expeditions/underwaterCave.png',
   },
