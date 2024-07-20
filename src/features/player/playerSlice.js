@@ -52,6 +52,7 @@ export const {
   swapInventoryAndEquipment,
   startExpedition,
   stopExpedition,
+  updateItemQuantity
 } = playerSlice.actions;
 
 export default playerSlice.reducer;

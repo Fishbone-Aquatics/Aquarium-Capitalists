@@ -33,26 +33,40 @@ const playerReducers = {
   },
   addItemToInventory: (state, action) => {
     const { item } = action.payload;
+
+    if (!item || !item.id) {
+      console.error('Invalid item:', item);
+      return;
+    }
+
     const existingItem = state.inventory.find(i => i.id === item.id && item.stackLimit !== 1);
     console.log('Adding item to inventory:', item);
 
     if (existingItem && existingItem.quantity < (item.stackLimit || Infinity)) {
-        // If the item can be stacked and the existing quantity is less than the stack limit
-        existingItem.quantity += item.quantity || 1;
-        console.log('Added item', item.name, 'to inventory');
+      // If the item can be stacked and the existing quantity is less than the stack limit
+      existingItem.quantity += item.quantity || 1;
+      console.log('Added item', item.name, 'to inventory');
     } else {
-        // If the item cannot be stacked or does not exist in the inventory
-        const emptyIndex = state.inventory.findIndex(it => it.id === items.equipment.emptySlot.id);
-        if (emptyIndex !== -1) {
-            state.inventory[emptyIndex] = { ...item, quantity: item.quantity || 1 };
-            console.log('Placed item', item.name, 'in an empty slot');
-        } else {
-            console.log('Inventory full. Cannot add item:', item.name);
-        }
+      // If the item cannot be stacked or does not exist in the inventory
+      const emptyIndex = state.inventory.findIndex(it => it.id === items.equipment.emptySlot.id);
+      if (emptyIndex !== -1) {
+        state.inventory[emptyIndex] = { ...item, quantity: item.quantity || 1 };
+        console.log('Placed item', item.name, 'in an empty slot');
+      } else {
+        console.log('Inventory full. Cannot add item:', item.name);
+      }
     }
 
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
-},
+  },
+  updateItemQuantity: (state, action) => {
+    const { itemId, quantity } = action.payload;
+    const item = state.inventory.find(item => item && item.id === itemId);
+    if (item) {
+      item.quantity = quantity;
+    }
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
+  },
 sellItem: (state, action) => {
   const { itemId, quantity } = action.payload;
   const item = state.inventory.find(item => item && item.id === itemId);

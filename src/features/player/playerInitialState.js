@@ -2,6 +2,22 @@
 import deepmerge from 'deepmerge';
 import items from '../../data/items/items';
 
+const initializeInventory = (initialItems, maxSlots) => {
+  const inventory = new Array(maxSlots).fill({ ...items.equipment.emptySlot });
+
+  initialItems.forEach((item, index) => {
+    if (index < maxSlots) {
+      inventory[index] = item;
+    }
+  });
+
+  return inventory;
+};
+
+const initialItems = [
+  { ...items.resource.treasurechest, quantity: 6 },
+];
+
 const loadInitialState = () => {
   const initialState = {
     name: 'player',
@@ -10,7 +26,7 @@ const loadInitialState = () => {
       currency: 0,
       level: 1,
     },
-    inventory: new Array(10).fill({ ...items.equipment.emptySlot }),
+    inventory: initializeInventory(initialItems, 10),
     equipment: {
       heater: { ...items.equipment.emptySlot, type: 'Heater' },
       filter: { ...items.equipment.emptySlot, type: 'Filter' },

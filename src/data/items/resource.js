@@ -85,6 +85,10 @@ const resource = {
     category: "Misc",
     sellValue: 1,
     image: "/icons/resource/treasure_chest.png",
+    contents: {
+      currency: [50, 100, 200],
+      items: ['drift-wood'], // Example item IDs
+    },
   },
   redtreasurechest: {
     id: 'red-treasure-chest',
