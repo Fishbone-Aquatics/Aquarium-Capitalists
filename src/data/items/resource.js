@@ -77,6 +77,42 @@ const resource = {
       xpRange: [5, 10],
     },
   },
+  treasurechest: {
+    id: 'treasure-chest',
+    name: "Treasure Chest",
+    type: "Misc",
+    category: "Resource",
+    category: "Misc",
+    sellValue: 1,
+    image: "/icons/resource/treasure_chest.png",
+  },
+  driftwood: {
+    id: 'red-treasure-chest',
+    name: "Red Treasure Chest",
+    type: "Misc",
+    category: "Resource",
+    category: "Misc",
+    sellValue: 1,
+    image: "/icons/resource/red_treasure_chest.png",
+  },
+  driftwood: {
+    id: 'drift-wood',
+    name: "Drift Wood",
+    type: "Misc",
+    category: "Resource",
+    category: "Misc",
+    sellValue: 1,
+    image: "/icons/resource/driftwood.png",
+  },
+  driftwood: {
+    id: 'drift-wood',
+    name: "Drift Wood",
+    type: "Misc",
+    category: "Resource",
+    category: "Misc",
+    sellValue: 1,
+    image: "/icons/resource/driftwood.png",
+  },
 };
 
 export default resource;

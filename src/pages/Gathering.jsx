@@ -10,8 +10,9 @@ const Gathering = () => {
   const [activeTab, setActiveTab] = useState('minerals');
   const dispatch = useDispatch();
 
+  // Filter the items based on both type and category
   const minerals = Object.values(items.resource).filter(item => item.type.toLowerCase() === 'mineral');
-  const resources = Object.values(items.resource).filter(item => item.type.toLowerCase() === 'resource');
+  const resources = Object.values(items.resource).filter(item => item.type.toLowerCase() === 'resource' && item.category.toLowerCase() === 'resource');
 
   const initialSelectedItem = minerals.length > 0 ? minerals[0] : {
     id: 'silica',
