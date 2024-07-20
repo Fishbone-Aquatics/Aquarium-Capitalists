@@ -17,7 +17,7 @@ const playerReducers = {
       state.stats.level = newLevel;
     }
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
-  },
+},
   addCurrency: (state, action) => {
     state.stats.currency += action.payload;
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
@@ -178,20 +178,28 @@ const playerReducers = {
     const { skill, xp } = action.payload;
 
     if (skill in state.skills) {
-      const skillObject = state.skills[skill];
-      if (skillObject) {
-        skillObject.xp += xp;
-        const newLevel = calculateLevelFromXP(skillObject.xp);
-        console.log(`Adding XP to ${skill}:`, xp, "for a total of", skillObject.xp, "New level:", newLevel, "skill's current level:", skillObject.level);
-        if (newLevel > skillObject.level) {
-          console.log(`Level up! New ${skill} level: ${newLevel}`);
-          skillObject.level = newLevel;
+        const skillObject = state.skills[skill];
+        if (skillObject) {
+            skillObject.xp += xp;
+            const newLevel = calculateLevelFromXP(skillObject.xp);
+            console.log(`Adding XP to ${skill}:`, xp, "for a total of", skillObject.xp, "New level:", newLevel, "skill's current level:", skillObject.level);
+            if (newLevel > skillObject.level) {
+                console.log(`Level up! New ${skill} level: ${newLevel}`);
+                skillObject.level = newLevel;
+            } else {
+                console.log(`No level up. Current ${skill} level: ${skillObject.level}`);
+            }
+        } else {
+            console.log(`Skill object not found for skill: ${skill}`);
         }
-      }
+    } else {
+        console.log(`Skill not found in state.skills: ${skill}`);
     }
 
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
-  },
+},
+
+
   updateSkillBoostPercent: (state, action) => {
     state.skillBoostPercent = action.payload;
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });

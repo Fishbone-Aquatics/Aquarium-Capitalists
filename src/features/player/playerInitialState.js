@@ -6,9 +6,9 @@ const loadInitialState = () => {
   const initialState = {
     name: 'player',
     stats: {
-      xp: 83332,
+      xp: 3332,
       currency: 0,
-      level: 4,
+      level: 1,
     },
     inventory: new Array(10).fill({ ...items.equipment.emptySlot }),
     equipment: {
@@ -19,7 +19,7 @@ const loadInitialState = () => {
     skills: {
       gathering: {
         level: 1,
-        xp: 0,
+        xp: 3332,
       },
     },
     status: 'idle',
