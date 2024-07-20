@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.1](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.8.0...v1.8.1) (2024-07-20)
+
+
+### Bug Fixes
+
+* **inventory:** display players name properly. ([40a3848](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/40a3848d240c369a9a0a8f138bcd378c5d076c99))
+
 ## [1.8.0](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.7.3...v1.8.0) (2024-07-16)
 
 
