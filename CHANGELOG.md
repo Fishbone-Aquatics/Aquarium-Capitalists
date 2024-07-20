@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.1](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.9.0...v1.9.1) (2024-07-20)
+
+
+### Bug Fixes
+
+* **Expeditions:** Progress shows current level ([2e27f57](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/2e27f575ec3384be121e57e9f55a5d70ef14a7c1))
+
 ## [1.9.0](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.8.1...v1.9.0) (2024-07-20)
 
 
