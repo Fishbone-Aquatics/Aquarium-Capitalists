@@ -76,7 +76,7 @@ const Tooltip = styled.div`
   z-index: 1;
   bottom: 10px; /* Move down a bit */
   right: 60px; /* Move left a bit */
-  opacity: 60;
+  opacity: 0.6;
   transition: opacity 0.3s, font-size 0.3s;
   font-size: 0.6em; /* Make the text smaller */
 
@@ -97,7 +97,7 @@ const Tooltip = styled.div`
   }
 `;
 
-const Zone = ({ zone, activeZone, handleStart, handleStop, progressBarRef, progressTextRef }) => {
+const Zone = ({ zone, activeZone, handleStart, handleStop, progressBarRef, progressTextRef, playerLevel }) => {
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
@@ -108,11 +108,13 @@ const Zone = ({ zone, activeZone, handleStart, handleStop, progressBarRef, progr
     }
   }, [activeZone, zone.name, progressBarRef, progressTextRef]);
 
+  const isLocked = playerLevel < zone.minLevel;
+
   return (
     <ZoneContainer
       onMouseEnter={() => setIsActive(true)}
       onMouseLeave={() => setIsActive(false)}
-      style={{ backgroundImage: `url(${zone.image})` }}
+      style={{ backgroundImage: `url(${zone.image})`, filter: isLocked ? 'grayscale(100%)' : 'none' }}
     >
       <HeaderContainer>
         <Heading>{zone.name}</Heading>
@@ -120,7 +122,9 @@ const Zone = ({ zone, activeZone, handleStart, handleStop, progressBarRef, progr
           {activeZone === zone.name ? (
             <button className="stop-button" onClick={handleStop}>Stop</button>
           ) : (
-            <button className="start-button" onClick={() => handleStart(zone.name)}>Start</button>
+            <button className="start-button" onClick={() => handleStart(zone.name)} disabled={isLocked}>
+              {isLocked ? `Locked (Level ${zone.minLevel})` : 'Start'}
+            </button>
           )}
         </div>
       </HeaderContainer>

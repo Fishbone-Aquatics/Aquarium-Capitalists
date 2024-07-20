@@ -6,6 +6,7 @@ const zones = [
     name: 'Coral Reefs',
     description: 'Rich in colorful fish and rare coral species.',
     duration: 10, // seconds
+    minLevel: 1,
     xpRange: [15, 25],
     lootDrops: [
       { type: 'item', item: items.equipment.filter, dropRate: '1:10' },
@@ -20,6 +21,7 @@ const zones = [
     name: 'Shipwrecks',
     description: 'Chance to find hidden treasures and ancient artifacts.',
     duration: 30, // seconds
+    minLevel: 5,
     xpRange: [3, 5],
     lootDrops: [
       { type: 'item', item: items.equipment.filter, dropRate: '1:10000' },
@@ -31,6 +33,7 @@ const zones = [
     name: 'Deep Sea Trenches',
     description: 'Home to exotic and rare deep-sea creatures.',
     duration: 45, // seconds
+    minLevel: 10,
     xpRange: [4, 7],
     lootDrops: [
       { type: 'item', item: items.equipment.filter, dropRate: '1:10000' },
@@ -42,6 +45,7 @@ const zones = [
     name: 'Underwater Caves',
     description: 'Potential for discovering unique plant species and minerals.',
     duration: 60, // seconds
+    minLevel: 15,
     xpRange: [5, 10],
     lootDrops: [
       { type: 'item', item: items.equipment.filter, dropRate: '1:10000' },

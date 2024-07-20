@@ -11,6 +11,7 @@ const Expeditions = () => {
   const zones = useSelector((state) => state.expedition.zones);
   const expeditionStartTime = useSelector((state) => state.expedition.statistics.expeditionStartTime);
   const currentExpeditionElapsedSeconds = useSelector(selectcurrentExpeditionElapsedSeconds);
+  const playerLevel = useSelector((state) => state.player.stats.level);
   const progressBarRef = useRef(null);
   const progressTextRef = useRef(null);
   const intervalRef = useRef(null);
@@ -29,7 +30,6 @@ const Expeditions = () => {
           }
           if (progressTextRef.current) {
             progressTextRef.current.textContent = `${currentExpeditionElapsedSeconds} / ${totalDuration} seconds`;
-            console.log('progress bar currentExpeditionElapsedSeconds:', currentExpeditionElapsedSeconds);
           }
         };
 
@@ -47,7 +47,6 @@ const Expeditions = () => {
     };
 
     if (activeZone && expeditionStartTime) {
-      console.log('Active zone:', activeZone);
       updateProgressBar();
     }
 
@@ -55,13 +54,11 @@ const Expeditions = () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
-        console.log('Interval cleared on component unmount');
       }
     };
   }, [activeZone, zones, expeditionStartTime, dispatch, currentExpeditionElapsedSeconds]);
 
   const handleStart = (zoneName) => {
-    console.log('Starting expedition in zone:', zoneName);
     dispatch(stopGatheringResource());
     dispatch(resetStatistics());
     dispatch(setActiveZone({ zoneName }));
@@ -69,12 +66,10 @@ const Expeditions = () => {
   };
 
   const handleStop = () => {
-    console.log('Stopping expedition');
     dispatch(clearActiveZone());
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
-      console.log('Interval cleared on stop');
     }
   };
 
@@ -90,6 +85,7 @@ const Expeditions = () => {
             handleStop={handleStop}
             progressBarRef={progressBarRef}
             progressTextRef={progressTextRef}
+            playerLevel={playerLevel} // Pass player level to Zone component
           />
         ))}
       </div>
