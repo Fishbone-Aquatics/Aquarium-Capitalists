@@ -20,6 +20,7 @@ export const saveState = (state) => {
 
     const serializedState = JSON.stringify({
       player: {
+        name: playerState.name,
         stats: playerState.stats,
         inventory: playerState.inventory,
         equipment: playerState.equipment,

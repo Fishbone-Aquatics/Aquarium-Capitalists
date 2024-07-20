@@ -8,9 +8,9 @@ const zones = [
     duration: 10, // seconds
     xpRange: [15, 25],
     lootDrops: [
-      { type: 'item', item: items.equipment.filter, chance: 0.000033 },
-      { type: 'item', item: items.equipment.spongeFilter, chance: 0.000033 },
-      { type: 'item', item: items.equipment.light, chance: 0.000033 },
+      { type: 'item', item: items.equipment.filter, chance: 0.00013 },
+      { type: 'item', item: items.equipment.spongeFilter, chance: 0.00093 },
+      { type: 'item', item: items.equipment.light, chance: 0.00093 },
       { type: 'currency', amountRange: [5, 10], chance: 0.2 },
     ],
     image: 'icons/expeditions/coralReef.png',

@@ -5,7 +5,7 @@ import '../styles/inventory.css';
 import InventorySlot from '../components/InventorySlot';
 
 const Inventory = () => {
-  const player = useSelector(state => state.player);
+  const player = useSelector((state) => state.player);
   const dispatch = useDispatch();
 
   return (
