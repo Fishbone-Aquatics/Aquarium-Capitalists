@@ -15,7 +15,7 @@ const initializeInventory = (initialItems, maxSlots) => {
 };
 
 const initialItems = [
-  { ...items.resource.treasurechest, quantity: 6 },
+  //{ ...items.resource.treasurechest, quantity: 6 },
 ];
 
 const loadInitialState = () => {
