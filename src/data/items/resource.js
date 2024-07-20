@@ -86,7 +86,7 @@ const resource = {
     sellValue: 1,
     image: "/icons/resource/treasure_chest.png",
   },
-  driftwood: {
+  redtreasurechest: {
     id: 'red-treasure-chest',
     name: "Red Treasure Chest",
     type: "Misc",
@@ -95,14 +95,14 @@ const resource = {
     sellValue: 1,
     image: "/icons/resource/red_treasure_chest.png",
   },
-  driftwood: {
-    id: 'drift-wood',
-    name: "Drift Wood",
+  greentreasurechest: {
+    id: 'green-treasure-chest',
+    name: "Green Treasure Chest",
     type: "Misc",
     category: "Resource",
     category: "Misc",
     sellValue: 1,
-    image: "/icons/resource/driftwood.png",
+    image: "/icons/resource/green_treasure_chest.png",
   },
   driftwood: {
     id: 'drift-wood',
