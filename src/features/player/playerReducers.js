@@ -53,6 +53,23 @@ const playerReducers = {
 
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
 },
+sellItem: (state, action) => {
+  const { itemId, quantity } = action.payload;
+  const item = state.inventory.find(item => item && item.id === itemId);
+  
+  if (item && item.quantity >= quantity) {
+    const sellValue = item.sellValue || 0;
+    const totalSellValue = sellValue * quantity;
+
+    item.quantity -= quantity;
+    if (item.quantity === 0) {
+      state.inventory = state.inventory.map(i => i.id === itemId ? { ...items.equipment.emptySlot } : i);
+    }
+
+    state.stats.currency += totalSellValue;
+  }
+  saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
+},
 
 
 

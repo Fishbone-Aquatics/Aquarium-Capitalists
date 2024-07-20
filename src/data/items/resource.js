@@ -4,6 +4,7 @@ const resource = {
     name: "Calcium Carbonate",
     type: "Mineral",
     category: "Resource",
+    sellValue: 1,
     image: "/icons/resource/calciumcarbonate.png",
     duration: 5000, // Duration in milliseconds
     gatheringDrops: {
@@ -16,6 +17,7 @@ const resource = {
     name: "Magnesium",
     type: "Mineral",
     category: "Resource",
+    sellValue: 1,
     image: "/icons/resource/magnesium.png",
     duration: 5000,
     gatheringDrops: {
@@ -28,6 +30,7 @@ const resource = {
     name: "Iodine",
     type: "Mineral",
     category: "Resource",
+    sellValue: 1,
     image: "/icons/resource/iodine.png",
     duration: 5000,
     gatheringDrops: {
@@ -40,6 +43,7 @@ const resource = {
     name: "Iron",
     type: "Resource",
     category: "Resource",
+    sellValue: 1,
     image: "/icons/resource/iron.png",
     duration: 5000,
     gatheringDrops: {
@@ -52,6 +56,7 @@ const resource = {
     name: "Potassium",
     type: "Resource",
     category: "Resource",
+    sellValue: 1,
     image: "/icons/resource/potassium.png",
     duration: 5000,
     gatheringDrops: {
@@ -64,6 +69,7 @@ const resource = {
     name: "Silica",
     type: "Resource",
     category: "Resource",
+    sellValue: 1,
     image: "/icons/resource/silica.png",
     duration: 5000,
     gatheringDrops: {

@@ -42,6 +42,7 @@ export const {
   unequipItem,
   swapItems,
   swapEquipmentAndInventory,
+  sellItem,
   updateSkillXp,
   updateSkillBoostPercent,
   updateGatheringSpeed,

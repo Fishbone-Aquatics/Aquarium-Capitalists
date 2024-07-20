@@ -1,0 +1,21 @@
+/* src/styles/confirmationmodal.css */
+.confirmation-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: black; /* Set background color to black */
+  color: white; /* Ensure text is readable on black background */
+  border: 1px solid #ccc;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.confirmation-message {
+  margin-bottom: 20px;
+}
+
+.confirmation-buttons {
+  display: flex;
+  justify-content: space-between;
+}
