@@ -4,6 +4,10 @@
   gap: 35px;
 }
 
+.inventory-layout {
+  position: relative;
+}
+
 .equipment-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* Adjust the number based on how many columns you want */
