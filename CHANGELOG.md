@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.10.0](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.9.1...v1.10.0) (2024-07-20)
+
+
+### Features
+
+* **Game:** Right click context menu. ([cf872ad](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/cf872ade4f95b0a0cba7675f1b72ae8b45f2c26b))
+* **Inventory:** Open menu context. ([02ffe42](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/02ffe42c49e1ca3ced1e358df031b93839f022fe))
+* **Inventory:** Sell menu ([2a50018](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/2a50018c0adcd8bf70054fa6b9eaa107744e053a))
+
 ## [1.9.1](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.9.0...v1.9.1) (2024-07-20)
 
 
