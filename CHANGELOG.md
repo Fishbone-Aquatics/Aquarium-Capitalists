@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.9.0](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.8.1...v1.9.0) (2024-07-20)
+
+
+### Features
+
+* **expeditions:** Drop rate tooltip. ([111c1b2](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/111c1b276c437b3456f1f78b81e768e6700eb2da))
+* **Expeditions:** Level locked areas. ([0ed587b](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/0ed587b8c95f287b043ef6832b8696b0027cc8db))
+
+
+### Bug Fixes
+
+* **leveling:** Off by one. ([fc40a64](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/fc40a641c164d89ff04a1b086036054b686949dc))
+
 ## [1.8.1](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.8.0...v1.8.1) (2024-07-20)
 
 
