@@ -27,26 +27,26 @@ const InventorySlot = ({ item, index, dispatch, onContextMenu, isContextMenuVisi
   const slotRef = useRef(null);
 
   useEffect(() => {
-    console.log('Item updated in slot:', index, item);
+    console.log(`Item updated in slot ${index}:`, item);
   }, [item, index]);
 
   const [{ isOver }, dropRef] = useDrop(() => ({
     accept: 'item',
     drop: (draggedItem) => {
-      console.log('Dropping item:', draggedItem);
+      console.log(`Dropping item:`, draggedItem);
       if (draggedItem.isEquipmentSlot) {
-        console.log('Item is from equipment slot');
-        console.log('Current item in target slot:', item);
+        console.log(`Item is from equipment slot`);
+        console.log(`Current item in target slot ${index}:`, item);
         if (isEmptySlot) {
-          console.log('Dispatching unequipItem:', { slot: draggedItem.index, targetIndex: index });
+          console.log(`Dispatching unequipItem:`, { slot: draggedItem.index, targetIndex: index });
           dispatch(unequipItem({ slot: draggedItem.index, targetIndex: index }));
         } else {
-          console.log('Dispatching swap inv items:');
+          console.log(`Dispatching swapInventoryAndEquipment:`);
           dispatch(swapInventoryAndEquipment({ fromEquipmentSlot: draggedItem.index, toInventoryIndex: index }));
         }
         dispatch(setEquipmentFlag({ index: draggedItem.index, isEquipmentSlot: false }));
       } else {
-        console.log('Dispatching swap items:');
+        console.log(`Dispatching swapItems:`);
         dispatch(swapItems({ from: draggedItem.index, to: index }));
       }
     },
@@ -54,6 +54,12 @@ const InventorySlot = ({ item, index, dispatch, onContextMenu, isContextMenuVisi
       isOver: !!monitor.isOver(),
     }),
   }));
+
+  useEffect(() => {
+    if (dropRef.current) {
+      console.log(`Drop ref assigned to slot ${index}`);
+    }
+  }, [dropRef, index]);
 
   const handleContextMenu = (e) => {
     if (!isEmptySlot) {
@@ -63,7 +69,7 @@ const InventorySlot = ({ item, index, dispatch, onContextMenu, isContextMenuVisi
 
   return (
     <div
-      ref={slotRef}
+      ref={dropRef}
       className={`item-box ${isOver ? 'highlight' : ''} ${isContextMenuVisible ? 'no-hover' : ''}`}
       onContextMenu={handleContextMenu}
     >
