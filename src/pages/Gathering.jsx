@@ -1,18 +1,18 @@
-// src/pages/Gathering.js
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import '../styles/gathering.css';
 import items from '../data/items/items';
 import { startGatheringResource, stopGatheringResource, handleGathering, setNotificationMessage, clearNotificationMessage } from '../features/gathering/gatheringSlice';
 import { clearActiveZone } from '../features/expeditions/expeditionSlice';
-import { getRequiredXPForLevel } from '../features/player/xpCalculator';
+import { calculateLevelFromXP, getRequiredXPForLevel } from '../features/player/xpCalculator';
 
 const Gathering = () => {
   const [activeTab, setActiveTab] = useState('minerals');
   const dispatch = useDispatch();
 
+  // Filter the items based on both type and category
   const minerals = Object.values(items.resource).filter(item => item.type.toLowerCase() === 'mineral');
-  const resources = Object.values(items.resource).filter(item => item.type.toLowerCase() === 'resource');
+  const resources = Object.values(items.resource).filter(item => item.type.toLowerCase() === 'resource' && item.category.toLowerCase() === 'resource');
 
   const initialSelectedItem = minerals.length > 0 ? minerals[0] : {
     id: 'silica',
@@ -33,16 +33,21 @@ const Gathering = () => {
   const activeResource = useSelector(state => state.gathering.activeResource);
   const notificationMessage = useSelector(state => state.gathering.notificationMessage);
 
-  const currentLevel = gatheringSkill.level;
   const currentXP = gatheringSkill.xp;
-  const requiredXPForCurrentLevel = getRequiredXPForLevel(currentLevel);
-  const xpPercentage = (currentXP / requiredXPForCurrentLevel) * 100;
+  const currentLevel = calculateLevelFromXP(currentXP);
+  const requiredXPForCurrentLevel = currentLevel > 1 ? getRequiredXPForLevel(currentLevel - 1) : 0;
+  const requiredXPForNextLevel = getRequiredXPForLevel(currentLevel);
+
+  // Calculate current level progress
+  const currentLevelProgress = currentXP - requiredXPForCurrentLevel;
+  const xpForNextLevel = requiredXPForNextLevel - requiredXPForCurrentLevel;
+  const xpPercentage = (currentLevelProgress / xpForNextLevel) * 100;
 
   const handleToggleGathering = async () => {
     if (activeResource) {
       dispatch(stopGatheringResource());
     } else {
-      dispatch(clearActiveZone()); // we need a util / helper for this lol
+      dispatch(clearActiveZone());
       dispatch(startGatheringResource({ resource: selectedItem }));
       dispatch(setNotificationMessage(`Starting gathering ${selectedItem.name}`));
       setTimeout(() => {
@@ -125,11 +130,11 @@ const Gathering = () => {
       <div className="gathering-column">
         <div className="gathering-sidebar">
           <h3>Gathering</h3>
-          <p>Level: {gatheringSkill.level}</p>
-          <p>XP Progress: {xpPercentage.toFixed(2)}% ({currentXP} / {requiredXPForCurrentLevel} XP)</p>
+          <p>Level: {currentLevel}</p>
+          <p>XP Progress: {xpPercentage.toFixed(2)}% ({currentLevelProgress} / {xpForNextLevel} XP)</p>
           <p>Gathering Speed: +{(gatheringSpeed * 100).toFixed(2)}%</p>
           <p>Gathering Efficiency: +{(gatheringEfficiency * 100).toFixed(2)}%</p>
-          <p>Total Gathering XP: {gatheringSkill.xp.toLocaleString()} XP</p>
+          <p>Total Gathering XP: {currentXP.toLocaleString()} XP</p>
         </div>
         <div className="gathering-tabs">
           <button

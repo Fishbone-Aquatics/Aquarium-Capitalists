@@ -17,7 +17,7 @@ const playerReducers = {
       state.stats.level = newLevel;
     }
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
-  },
+},
   addCurrency: (state, action) => {
     state.stats.currency += action.payload;
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
@@ -33,25 +33,56 @@ const playerReducers = {
   },
   addItemToInventory: (state, action) => {
     const { item } = action.payload;
+
+    if (!item || !item.id) {
+      console.error('Invalid item:', item);
+      return;
+    }
+
     const existingItem = state.inventory.find(i => i.id === item.id && item.stackLimit !== 1);
     console.log('Adding item to inventory:', item);
 
     if (existingItem && existingItem.quantity < (item.stackLimit || Infinity)) {
-        // If the item can be stacked and the existing quantity is less than the stack limit
-        existingItem.quantity += item.quantity || 1;
-        console.log('Added item', item.name, 'to inventory');
+      // If the item can be stacked and the existing quantity is less than the stack limit
+      existingItem.quantity += item.quantity || 1;
+      console.log('Added item', item.name, 'to inventory');
     } else {
-        // If the item cannot be stacked or does not exist in the inventory
-        const emptyIndex = state.inventory.findIndex(it => it.id === items.equipment.emptySlot.id);
-        if (emptyIndex !== -1) {
-            state.inventory[emptyIndex] = { ...item, quantity: item.quantity || 1 };
-            console.log('Placed item', item.name, 'in an empty slot');
-        } else {
-            console.log('Inventory full. Cannot add item:', item.name);
-        }
+      // If the item cannot be stacked or does not exist in the inventory
+      const emptyIndex = state.inventory.findIndex(it => it.id === items.equipment.emptySlot.id);
+      if (emptyIndex !== -1) {
+        state.inventory[emptyIndex] = { ...item, quantity: item.quantity || 1 };
+        console.log('Placed item', item.name, 'in an empty slot');
+      } else {
+        console.log('Inventory full. Cannot add item:', item.name);
+      }
     }
 
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
+  },
+  updateItemQuantity: (state, action) => {
+    const { itemId, quantity } = action.payload;
+    const item = state.inventory.find(item => item && item.id === itemId);
+    if (item) {
+      item.quantity = quantity;
+    }
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
+  },
+sellItem: (state, action) => {
+  const { itemId, quantity } = action.payload;
+  const item = state.inventory.find(item => item && item.id === itemId);
+  
+  if (item && item.quantity >= quantity) {
+    const sellValue = item.sellValue || 0;
+    const totalSellValue = sellValue * quantity;
+
+    item.quantity -= quantity;
+    if (item.quantity === 0) {
+      state.inventory = state.inventory.map(i => i.id === itemId ? { ...items.equipment.emptySlot } : i);
+    }
+
+    state.stats.currency += totalSellValue;
+  }
+  saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
 },
 
 
@@ -178,20 +209,28 @@ const playerReducers = {
     const { skill, xp } = action.payload;
 
     if (skill in state.skills) {
-      const skillObject = state.skills[skill];
-      if (skillObject) {
-        skillObject.xp += xp;
-        const newLevel = calculateLevelFromXP(skillObject.xp);
-        console.log(`Adding XP to ${skill}:`, xp, "for a total of", skillObject.xp, "New level:", newLevel, "skill's current level:", skillObject.level);
-        if (newLevel > skillObject.level) {
-          console.log(`Level up! New ${skill} level: ${newLevel}`);
-          skillObject.level = newLevel;
+        const skillObject = state.skills[skill];
+        if (skillObject) {
+            skillObject.xp += xp;
+            const newLevel = calculateLevelFromXP(skillObject.xp);
+            console.log(`Adding XP to ${skill}:`, xp, "for a total of", skillObject.xp, "New level:", newLevel, "skill's current level:", skillObject.level);
+            if (newLevel > skillObject.level) {
+                console.log(`Level up! New ${skill} level: ${newLevel}`);
+                skillObject.level = newLevel;
+            } else {
+                console.log(`No level up. Current ${skill} level: ${skillObject.level}`);
+            }
+        } else {
+            console.log(`Skill object not found for skill: ${skill}`);
         }
-      }
+    } else {
+        console.log(`Skill not found in state.skills: ${skill}`);
     }
 
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
-  },
+},
+
+
   updateSkillBoostPercent: (state, action) => {
     state.skillBoostPercent = action.payload;
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });

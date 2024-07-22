@@ -15,10 +15,11 @@ const initialState = {
     totalXp: 0,
     xpPerHour: 0,
     lootedItems: [],
-    expeditionDuration: '0 seconds',
+    totalExpeditionDuration: '0 seconds',
+    currentExpeditionElapsedSeconds: 0,
+    expeditionStartTime: null,
+    intervalId: null,
   },
-  expeditionStartTime: null,
-  intervalId: null,
 };
 
 const expeditionSlice = createSlice({
@@ -28,17 +29,20 @@ const expeditionSlice = createSlice({
     setActiveZone: (state, action) => {
       console.log('Setting active zone:', action.payload.zoneName);
       state.activeZone = action.payload.zoneName;
-      state.expeditionStartTime = Date.now();
+      if (state.statistics.expeditionStartTime === null) {
+        state.statistics.expeditionStartTime = Date.now();
+      }
+      state.statistics.currentExpeditionElapsedSeconds = 0;
     },
     clearActiveZone: (state) => {
       console.log('Clearing active zone');
       state.activeZone = null;
-      state.expeditionStartTime = null;
-      if (state.intervalId) {
-        clearInterval(state.intervalId);
-        console.log('Interval cleared:', state.intervalId);
+      if (state.statistics.intervalId) {
+        clearInterval(state.statistics.intervalId);
+        console.log('Interval cleared:', state.statistics.intervalId);
       }
-      state.intervalId = null;
+      state.statistics.intervalId = null;
+      state.statistics.currentExpeditionElapsedSeconds = 0;
     },
     resetStatistics: (state) => {
       state.statistics = {
@@ -48,25 +52,29 @@ const expeditionSlice = createSlice({
         totalXp: 0,
         xpPerHour: 0,
         lootedItems: [],
-        expeditionDuration: '0 seconds',
+        totalExpeditionDuration: '0 seconds',
+        currentExpeditionElapsedSeconds: 0,
+        expeditionStartTime: null,
+        intervalId: null,
       };
     },
     updateStatistics: (state, action) => {
-      const { expeditionsCompleted, totalCurrency, currencyPerHour, totalXp, xpPerHour, lootedItems, expeditionDuration } = action.payload;
+      const { expeditionsCompleted, totalCurrency, currencyPerHour, totalXp, xpPerHour, lootedItems, totalExpeditionDuration } = action.payload;
       console.log('Updating statistics:', action.payload);
       state.statistics = {
+        ...state.statistics,
         expeditionsCompleted,
         totalCurrency,
         currencyPerHour,
         totalXp,
         xpPerHour,
         lootedItems,
-        expeditionDuration,
+        totalExpeditionDuration,
       };
     },
-    calculateExpeditionDuration: (state) => {
+    calculatetotalExpeditionDuration: (state) => {
       const now = Date.now();
-      const startTime = state.expeditionStartTime || now;
+      const startTime = state.statistics.expeditionStartTime;
       const duration = Math.floor((now - startTime) / 1000);
 
       let formattedDuration;
@@ -82,34 +90,38 @@ const expeditionSlice = createSlice({
         formattedDuration = `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
       }
 
-      state.statistics.expeditionDuration = formattedDuration;
+      state.statistics.totalExpeditionDuration = formattedDuration;
       saveState({ player: state.player, expedition: state, aquarium: state.aquarium });
     },
     setIntervalId: (state, action) => {
       console.log('Setting interval ID:', action.payload);
-      state.intervalId = action.payload;
-    }
+      state.statistics.intervalId = action.payload;
+    },
+    incrementcurrentExpeditionElapsedSeconds: (state) => {
+      state.statistics.currentExpeditionElapsedSeconds += 1;
+    },
   },
 });
 
-export const { setActiveZone, clearActiveZone, resetStatistics, updateStatistics, calculateExpeditionDuration, setIntervalId } = expeditionSlice.actions;
+export const { setActiveZone, clearActiveZone, resetStatistics, updateStatistics, calculatetotalExpeditionDuration, setIntervalId, incrementcurrentExpeditionElapsedSeconds } = expeditionSlice.actions;
 
 export const handleExpedition = () => (dispatch, getState) => {
   const state = getState();
-  const { activeZone, intervalId } = state.expedition;
+  const { activeZone, statistics: { intervalId } } = state.expedition;
 
   if (!activeZone || intervalId) return;
 
   const selectedZone = state.expedition.zones.find(zone => zone.name === activeZone);
   const totalDuration = selectedZone.duration;
 
-  let elapsedSeconds = 0;
   const interval = setInterval(() => {
-    elapsedSeconds += 1;
-    const progress = (elapsedSeconds / totalDuration) * 100;
-    console.log(`Elapsed seconds: ${elapsedSeconds}, Total duration: ${totalDuration}, Progress: ${progress}%`);
+    dispatch(incrementcurrentExpeditionElapsedSeconds());
+    const updatedState = getState();
+    const { statistics: { currentExpeditionElapsedSeconds } } = updatedState.expedition;
+    const progress = (currentExpeditionElapsedSeconds / totalDuration) * 100;
+    console.log(`Elapsed seconds: ${currentExpeditionElapsedSeconds}, Total duration: ${totalDuration}, Progress: ${progress}%`);
 
-    if (elapsedSeconds >= totalDuration) {
+    if (currentExpeditionElapsedSeconds >= totalDuration) {
       clearInterval(interval);
       dispatch(setIntervalId(null));
       console.log('Expedition completed for zone:', activeZone);
@@ -119,57 +131,85 @@ export const handleExpedition = () => (dispatch, getState) => {
       dispatch(addXp(xp));
       console.log('XP earned:', xp);
 
-      const totalChance = selectedZone.lootDrops.reduce((total, drop) => total + drop.chance, 0);
-      const randomChance = Math.random() * totalChance;
+      let currencyEarned = 0;
+      let lootedItem = null;
 
-      let cumulativeChance = 0;
-      const selectedDrop = selectedZone.lootDrops.find(drop => {
-        cumulativeChance += drop.chance;
-        return randomChance <= cumulativeChance;
+      // Handle always/100% drops
+      const alwaysDrops = selectedZone.lootDrops.filter(drop => drop.dropRate === 'always' || drop.dropRate === '100%');
+      alwaysDrops.forEach(drop => {
+        if (drop.type === 'item') {
+          dispatch(addItemToInventory({ item: drop.item }));
+          console.log('Always item looted:', drop.item.name);
+        } else if (drop.type === 'currency') {
+          currencyEarned += randomNumberInRange(drop.amountRange[0], drop.amountRange[1]);
+          dispatch(addCurrency(currencyEarned));
+          console.log('Always currency looted:', currencyEarned);
+        }
       });
 
-      let currencyEarned = 0;
-      if (selectedDrop) {
-        if (selectedDrop.type === 'item') {
-          dispatch(addItemToInventory({ item: selectedDrop.item }));
-          console.log('Item looted:', selectedDrop.item.name);
-        } else if (selectedDrop.type === 'currency') {
-          currencyEarned = randomNumberInRange(selectedDrop.amountRange[0], selectedDrop.amountRange[1]);
-          dispatch(addCurrency(currencyEarned));
-          console.log('Currency looted:', currencyEarned);
+      // Filter out always/100% drops for random selection
+      const randomDrops = selectedZone.lootDrops.filter(drop => drop.dropRate !== 'always' && drop.dropRate !== '100%');
+
+      // Log the drop rates
+      randomDrops.forEach(drop => {
+        const [numerator, denominator] = drop.dropRate.split(':').map(Number);
+        const dropChance = (numerator / denominator) * 100;
+        console.log(`Drop chance for ${drop.item?.name || 'currency'}: ${dropChance.toFixed(4)}%`);
+      });
+
+      // Determine if an item should be dropped based on its drop rate
+      randomDrops.forEach(drop => {
+        const [numerator, denominator] = drop.dropRate.split(':').map(Number);
+        const dropChance = numerator / denominator;
+        const randomValue = Math.random();
+        console.log(`Checking drop for ${drop.item?.name || 'currency'}: random value = ${randomValue.toFixed(4)}, drop chance = ${dropChance.toFixed(4)}`);
+        if (randomValue <= dropChance) {
+          if (drop.type === 'item') {
+            dispatch(addItemToInventory({ item: drop.item }));
+            lootedItem = drop.item;
+            console.log('Item looted:', drop.item.name);
+          } else if (drop.type === 'currency') {
+            const earned = randomNumberInRange(drop.amountRange[0], drop.amountRange[1]);
+            currencyEarned += earned;
+            dispatch(addCurrency(earned));
+            console.log('Currency looted:', earned);
+          }
         }
-      }
+      });
 
       // Calculate expedition duration
-      dispatch(calculateExpeditionDuration());
+      dispatch(calculatetotalExpeditionDuration());
 
       // Calculate XP and currency per hour
-      const updatedState = getState().expedition;
-      const durationSeconds = Math.floor((Date.now() - updatedState.expeditionStartTime) / 1000);
+      const updatedStateAfterCompletion = getState().expedition;
+      const durationSeconds = Math.floor((Date.now() - updatedStateAfterCompletion.statistics.expeditionStartTime) / 1000);
       const durationHours = durationSeconds / 3600;
-      const xpPerHour = durationHours > 0 ? Math.floor(updatedState.statistics.totalXp / durationHours) : 0;
-      const currencyPerHour = durationHours > 0 ? Math.floor(updatedState.statistics.totalCurrency / durationHours) : 0;
+      const xpPerHour = durationHours > 0 ? Math.floor(updatedStateAfterCompletion.statistics.totalXp / durationHours) : 0;
+      const currencyPerHour = durationHours > 0 ? Math.floor(updatedStateAfterCompletion.statistics.totalCurrency / durationHours) : 0;
 
       // Update statistics
       const statistics = {
-        expeditionsCompleted: updatedState.statistics.expeditionsCompleted + 1,
-        totalCurrency: updatedState.statistics.totalCurrency + currencyEarned,
+        expeditionsCompleted: updatedStateAfterCompletion.statistics.expeditionsCompleted + 1,
+        totalCurrency: updatedStateAfterCompletion.statistics.totalCurrency + currencyEarned,
         currencyPerHour,
-        totalXp: updatedState.statistics.totalXp + xp,
+        totalXp: updatedStateAfterCompletion.statistics.totalXp + xp,
         xpPerHour,
-        lootedItems: selectedDrop?.type === 'item' ? [...updatedState.statistics.lootedItems, selectedDrop.item] : updatedState.statistics.lootedItems,
-        expeditionDuration: updatedState.statistics.expeditionDuration,
+        lootedItems: lootedItem ? [...updatedStateAfterCompletion.statistics.lootedItems, lootedItem] : updatedStateAfterCompletion.statistics.lootedItems,
+        totalExpeditionDuration: updatedStateAfterCompletion.statistics.totalExpeditionDuration,
       };
       console.log('Updating statistics with:', statistics);
       dispatch(updateStatistics(statistics));
 
       setTimeout(() => {
-        dispatch(handleExpedition()); // Restart expedition after 1 second delay
-      }, 1000); // Delay of 1 second before resetting
+        dispatch(setActiveZone({ zoneName: activeZone }));
+        dispatch(handleExpedition());
+      }, 1000); // Delay of 1 second before restarting
     }
   }, 1000);
 
   dispatch(setIntervalId(interval));
 };
+
+export const selectcurrentExpeditionElapsedSeconds = (state) => state.expedition.statistics.currentExpeditionElapsedSeconds;
 
 export default expeditionSlice.reducer;

@@ -14,12 +14,13 @@ export const saveState = (state) => {
       expeditionState.statistics = {};
     }
 
-    if (!expeditionState.statistics.expeditionDuration) {
-      expeditionState.statistics.expeditionDuration = '0 seconds';
+    if (!expeditionState.statistics.totalExpeditionDuration) {
+      expeditionState.statistics.totalExpeditionDuration = '0 seconds';
     }
 
     const serializedState = JSON.stringify({
       player: {
+        name: playerState.name,
         stats: playerState.stats,
         inventory: playerState.inventory,
         equipment: playerState.equipment,
@@ -40,7 +41,7 @@ export const saveState = (state) => {
         ...expeditionState,
         statistics: {
           ...expeditionState.statistics,
-          expeditionDuration: expeditionState.statistics.expeditionDuration,
+          totalExpeditionDuration: expeditionState.statistics.totalExpeditionDuration,
         },
       },
       gathering: {

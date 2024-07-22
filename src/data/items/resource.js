@@ -4,6 +4,7 @@ const resource = {
     name: "Calcium Carbonate",
     type: "Mineral",
     category: "Resource",
+    sellValue: 1,
     image: "/icons/resource/calciumcarbonate.png",
     duration: 5000, // Duration in milliseconds
     gatheringDrops: {
@@ -16,6 +17,7 @@ const resource = {
     name: "Magnesium",
     type: "Mineral",
     category: "Resource",
+    sellValue: 1,
     image: "/icons/resource/magnesium.png",
     duration: 5000,
     gatheringDrops: {
@@ -28,6 +30,7 @@ const resource = {
     name: "Iodine",
     type: "Mineral",
     category: "Resource",
+    sellValue: 1,
     image: "/icons/resource/iodine.png",
     duration: 5000,
     gatheringDrops: {
@@ -40,6 +43,7 @@ const resource = {
     name: "Iron",
     type: "Resource",
     category: "Resource",
+    sellValue: 1,
     image: "/icons/resource/iron.png",
     duration: 5000,
     gatheringDrops: {
@@ -52,6 +56,7 @@ const resource = {
     name: "Potassium",
     type: "Resource",
     category: "Resource",
+    sellValue: 1,
     image: "/icons/resource/potassium.png",
     duration: 5000,
     gatheringDrops: {
@@ -64,12 +69,53 @@ const resource = {
     name: "Silica",
     type: "Resource",
     category: "Resource",
+    sellValue: 1,
     image: "/icons/resource/silica.png",
     duration: 5000,
     gatheringDrops: {
       items: [{ id: 'silica', name: "Silica", quantity: 1 }],
       xpRange: [5, 10],
     },
+  },
+  treasurechest: {
+    id: 'treasure-chest',
+    name: "Treasure Chest",
+    type: "Misc",
+    category: "Resource",
+    category: "Misc",
+    sellValue: 1,
+    image: "/icons/resource/treasure_chest.png",
+    contents: {
+      currency: [50, 100, 200],
+      items: ['drift-wood'], // Example item IDs
+    },
+  },
+  redtreasurechest: {
+    id: 'red-treasure-chest',
+    name: "Red Treasure Chest",
+    type: "Misc",
+    category: "Resource",
+    category: "Misc",
+    sellValue: 1,
+    image: "/icons/resource/red_treasure_chest.png",
+  },
+  greentreasurechest: {
+    id: 'green-treasure-chest',
+    name: "Green Treasure Chest",
+    type: "Misc",
+    category: "Resource",
+    category: "Misc",
+    sellValue: 1,
+    image: "/icons/resource/green_treasure_chest.png",
+  },
+  driftwood: {
+    id: 'drift-wood',
+    name: "Drift Wood",
+    type: "Misc",
+    category: "Resource",
+    category: "Misc",
+    sellValue: 1,
+    image: "/icons/resource/driftwood.png",
   },
 };
 

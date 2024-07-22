@@ -2,6 +2,23 @@
 import deepmerge from 'deepmerge';
 import items from '../../data/items/items';
 
+const initializeInventory = (initialItems, maxSlots) => {
+  const inventory = new Array(maxSlots).fill({ ...items.equipment.emptySlot });
+
+  initialItems.forEach((item, index) => {
+    if (index < maxSlots) {
+      inventory[index] = item;
+    }
+  });
+
+  return inventory;
+};
+
+const initialItems = [
+  { ...items.equipment.filter, quantity: 1 },
+  { ...items.equipment.spongeFilter, quantity: 1 }
+];
+
 const loadInitialState = () => {
   const initialState = {
     name: 'player',
@@ -10,7 +27,7 @@ const loadInitialState = () => {
       currency: 0,
       level: 1,
     },
-    inventory: new Array(10).fill({ ...items.equipment.emptySlot }),
+    inventory: initializeInventory(initialItems, 10),
     equipment: {
       heater: { ...items.equipment.emptySlot, type: 'Heater' },
       filter: { ...items.equipment.emptySlot, type: 'Filter' },
@@ -19,7 +36,7 @@ const loadInitialState = () => {
     skills: {
       gathering: {
         level: 1,
-        xp: 3320,
+        xp: 0,
       },
     },
     status: 'idle',

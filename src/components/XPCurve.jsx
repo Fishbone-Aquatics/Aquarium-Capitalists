@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import { calculateXPForLevel } from '../utils/xpUtils';
 
 // Register the necessary components
 ChartJS.register(
@@ -22,22 +23,9 @@ ChartJS.register(
   Legend
 );
 
-const calculateXP = (n) => {
-    if (n <= 30) {
-        // Polynomial function for levels 1-30
-        const a = 3e6 / Math.pow(30, 2); // a = 3,000,000 / 900
-        return a * Math.pow(n, 2);
-    } else {
-        // Exponential function for levels 31-100
-        const C = 3e6; // XP at level 30
-        const D = (200e6 - C) / Math.pow(70, 2); // Growth rate for levels 31-100
-        return C + D * Math.pow(n - 30, 2);
-    }
-};
-
 const XPCurve = () => {
     const levels = Array.from({ length: 100 }, (_, i) => i + 1);
-    const xpValues = levels.map(calculateXP);
+    const xpValues = levels.map(calculateXPForLevel);
 
     const data = {
         labels: levels,
