@@ -5,21 +5,20 @@ Here you'll breed aquatic life, go on expeditions, complete quests, gather solo 
 ## Table of Contents
 - [Introduction](#introduction)
 - [The Basics](#the-basics)
-- [The Player](#the-player)
-  - [Stats](#stats)
-  - [Inventory Size](#inventory-size)
-  - [Items](#items)
-  - [Weapons](#weapons)
-  - [Armor](#armor)
-  - [Consumables](#consumables)
-- [Resources](#resources)
 - [Archetypes / Starting Bonuses](#archetypes--starting-bonuses)
+- [The Player](#the-player)
+  - [Aquarium Shop](#aquarium-shop)
+  - [Inventory](#inventory)
+  - [Stats & Equipment](#stats-and-equipment)
+  - [Skills](#skills)
 - [Currencies](#currencies)
+- [Resources](#resources)
 - [Items and Market](#items-and-market)
+  - [Items](#items)
+  - [Consumables](#consumables)
 - [Quests](#quests)
 - [Group Content (Guilds / Clans)](#group-content-guilds-tbd)
 - [Expedition Missions](#expedition-missions)
-- [Equipment](#equipment)
 - [Shop System](#shop-system)
 - [Breeding and Genetics](#breeding-and-genetics)
 - [Minigames](#minigames)
@@ -30,6 +29,7 @@ Here you'll breed aquatic life, go on expeditions, complete quests, gather solo 
 ## Introduction
 - Brief overview of the game.
 - Objective and key features.
+- Its a game designed around years of in real life time, its a long and slow game. It's not meant to be sat on for hours on end all day. (though hopefully we get enough content)
 
 ## The Basics
 - Gameplay mechanics.
@@ -157,6 +157,7 @@ Here you'll breed aquatic life, go on expeditions, complete quests, gather solo 
   - Implement initial expedition missions.
 
 - Phase 2: Advanced Features
+  - Integrate a DB
   - Expand on breeding and genetics.
   - Implement advanced equipment and upgrades.
   - Develop dynamic market system.

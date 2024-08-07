@@ -1,9 +1,16 @@
 /* src/styles/aquariumshop.css */
 .aquarium-shop {
+  background: #2c3e50; /* Match the statistics background color */
   padding: 20px;
-  background-color: #f5f5f5;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 10px;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px; /* Add margin for spacing */
+}
+
+.aquarium-shop h2 {
+  margin-top: 0;
+  color: white; /* Ensure the text color matches */
 }
 
 .shop-items {
@@ -26,6 +33,21 @@
   object-fit: contain;
   margin-bottom: 5px;
 }
+
+button {
+  padding: 10px 20px;
+  background: #2980b9; /* Match button styling */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #3498db;
+}
+
 
 /* src/styles/grid.css */
 .grid-container {
