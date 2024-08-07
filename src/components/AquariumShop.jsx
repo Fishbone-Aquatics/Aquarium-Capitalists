@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setDropIndicator, increaseShopSize, setItems } from '../features/aquariumshop/aquariumSlice';
 import { useDrag } from 'react-dnd';
 import '../styles/aquariumshop.css';
-import Grid from '../components/PlayersShopGrid';
 
 const ItemTypes = {
   ITEM: 'item',

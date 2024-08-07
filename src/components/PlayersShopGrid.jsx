@@ -71,12 +71,19 @@ const Grid = ({ gridSize }) => {
         const col = Math.floor((x - gridLeft) / cellSize);
         const row = Math.floor((y - gridTop) / cellSize);
 
-        const top = row * cellSize;
-        const left = col * cellSize;
-        const width = item.size.cols * cellSize;
-        const height = item.size.rows * cellSize;
+        // Check if the entire item is within the grid bounds
+        const withinBounds = col + item.size.cols <= gridSize && row + item.size.rows <= gridSize;
 
-        dispatch(setDropIndicator({ visible: true, top, left, width, height }));
+        if (withinBounds) {
+          const top = row * cellSize;
+          const left = col * cellSize;
+          const width = item.size.cols * cellSize;
+          const height = item.size.rows * cellSize;
+
+          dispatch(setDropIndicator({ visible: true, top, left, width, height }));
+        } else {
+          dispatch(setDropIndicator({ visible: false, top: 0, left: 0, width: 0, height: 0 }));
+        }
       }
     },
     end: (item, monitor) => {
