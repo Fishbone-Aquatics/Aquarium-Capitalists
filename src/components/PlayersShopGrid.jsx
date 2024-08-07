@@ -1,4 +1,3 @@
-// src/components/PlayersShopGrid.jsx
 import React, { useRef, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';

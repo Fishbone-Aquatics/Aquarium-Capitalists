@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDropIndicator, increaseShopSize } from '../features/aquariumshop/aquariumSlice';
+import { setDropIndicator, increaseShopSize, setItems } from '../features/aquariumshop/aquariumSlice';
 import { useDrag } from 'react-dnd';
 import '../styles/aquariumshop.css';
+import Grid from '../components/PlayersShopGrid';
 
 const ItemTypes = {
   ITEM: 'item',
@@ -11,6 +12,7 @@ const ItemTypes = {
 function AquariumShop() {
   const dispatch = useDispatch();
   const items = useSelector((state) => state.aquarium.items);
+  const maxShopSize = useSelector((state) => state.aquarium.maxShopSize);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

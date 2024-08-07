@@ -18,7 +18,22 @@ const aquariumSlice = createSlice({
     increaseShopSize(state) {
       if (state.maxShopSize < 10) {
         state.maxShopSize += 1;
-        state.gridItems = Array(state.maxShopSize * state.maxShopSize).fill(null);
+        const newGridSize = state.maxShopSize * state.maxShopSize;
+        const newGridItems = Array(newGridSize).fill(null);
+
+        // Copy existing items to the new grid
+        const gridSize = Math.sqrt(state.gridItems.length);
+        for (let row = 0; row < gridSize; row++) {
+          for (let col = 0; col < gridSize; col++) {
+            const index = row * gridSize + col;
+            const newIndex = row * state.maxShopSize + col;
+            if (state.gridItems[index]) {
+              newGridItems[newIndex] = state.gridItems[index];
+            }
+          }
+        }
+
+        state.gridItems = newGridItems;
       }
     },
     resetShopSize(state) {
