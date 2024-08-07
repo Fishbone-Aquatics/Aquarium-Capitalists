@@ -47,11 +47,28 @@ const aquariumSlice = createSlice({
       const { item, index } = action.payload;
       const { rows, cols } = item.size;
       const gridSize = Math.sqrt(state.gridItems.length);
+
+      // Check for overlap
+      let canPlace = true;
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           const targetIndex = index + r * gridSize + c;
-          if (targetIndex >= 0 && targetIndex < state.gridItems.length) {
-            state.gridItems[targetIndex] = item;
+          if (targetIndex >= state.gridItems.length || state.gridItems[targetIndex] !== null) {
+            canPlace = false;
+            break;
+          }
+        }
+        if (!canPlace) break;
+      }
+
+      // Place item if no overlap
+      if (canPlace) {
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const targetIndex = index + r * gridSize + c;
+            if (targetIndex >= 0 && targetIndex < state.gridItems.length) {
+              state.gridItems[targetIndex] = item;
+            }
           }
         }
       }

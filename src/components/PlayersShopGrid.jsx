@@ -43,8 +43,14 @@ const Grid = ({ gridSize }) => {
         console.log('Calculated index:', index);
 
         if (index >= 0 && index < gridItems.length) {
-          console.log('Dispatching addItemToGrid action');
-          dispatch(addItemToGrid({ item, index }));
+          // Check if the item can be placed without overlapping
+          const canPlace = checkNoOverlap(item, index, gridSize, gridItems);
+          if (canPlace) {
+            console.log('Dispatching addItemToGrid action');
+            dispatch(addItemToGrid({ item, index }));
+          } else {
+            console.warn('Cannot place item due to overlap');
+          }
         } else {
           console.warn('Drop index out of bounds:', index);
         }
@@ -83,6 +89,19 @@ const Grid = ({ gridSize }) => {
       canDrop: !!monitor.canDrop(),
     }),
   }), [dispatch, gridSize, gridItems]);
+
+  const checkNoOverlap = (item, index, gridSize, gridItems) => {
+    const { rows, cols } = item.size;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const targetIndex = index + r * gridSize + c;
+        if (targetIndex >= gridItems.length || gridItems[targetIndex] !== null) {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
 
   const cells = Array.from({ length: gridSize * gridSize });
 
