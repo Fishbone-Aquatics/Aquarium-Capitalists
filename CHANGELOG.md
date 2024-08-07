@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.11.0](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.10.1...v1.11.0) (2024-08-07)
+
+
+### Features
+
+* **Home:** Draggable items ([2c120b2](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/2c120b299d47897dda0578d0ede3efcd37bad391))
+
+
+### Bug Fixes
+
+* **Home:** Forced spacing between items ([86707fa](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/86707fa7633f51ba27f4f1bfcfff048f012206de))
+* **Home:** Prevent item overlapping in grid. ([4afa282](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/4afa282c2eab791d737a33fb7ed817f4b1a6d2cb))
+* **Home:** Proper highlighting for dropping items. ([69cc68d](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/69cc68d42c1c62db3d1c44fa1f4914d507deb56d))
+* **Home:** Properly increase shop size. ([90cfa4b](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/90cfa4b33c473952a16eb92e8a48d1d8ade7d549))
+* **Home:** Swap works as intended. ([83d7e95](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/83d7e958d13fc06b4420f0dc8b373f2fe0f311a8))
+
 ## [1.10.1](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.10.0...v1.10.1) (2024-07-21)
 
 
