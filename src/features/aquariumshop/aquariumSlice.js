@@ -77,35 +77,50 @@ const aquariumSlice = createSlice({
       const { item, index } = action.payload;
       const { rows, cols } = item.size;
       const gridSize = Math.sqrt(state.gridItems.length);
-
+    
+      // Helper function to clear an item's space in the grid
+      const clearItemSpace = (item) => {
+        const itemIndex = state.gridItems.findIndex(gridItem => gridItem && gridItem.id === item.id);
+        if (itemIndex !== -1) {
+          const itemRow = Math.floor(itemIndex / gridSize);
+          const itemCol = itemIndex % gridSize;
+          for (let r = 0; r < item.size.rows; r++) {
+            for (let c = 0; c < item.size.cols; c++) {
+              const targetIndex = (itemRow + r) * gridSize + (itemCol + c);
+              if (targetIndex >= 0 && targetIndex < state.gridItems.length) {
+                state.gridItems[targetIndex] = null;
+              }
+            }
+          }
+        }
+      };
+    
+      // Helper function to check if an item can be placed at a specific index
+      const canPlaceItemAt = (item, index) => {
+        const { rows, cols } = item.size;
+        const startRow = Math.floor(index / gridSize);
+        const startCol = index % gridSize;
+    
+        if (startCol + cols > gridSize || startRow + rows > gridSize) {
+          return false;
+        }
+    
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const targetIndex = index + r * gridSize + c;
+            if (targetIndex >= state.gridItems.length || state.gridItems[targetIndex] !== null) {
+              return false;
+            }
+          }
+        }
+        return true;
+      };
+    
       // Remove the item from its previous position
-      const previousIndex = state.gridItems.findIndex(gridItem => gridItem && gridItem.id === item.id);
-      if (previousIndex !== -1) {
-        const previousRow = Math.floor(previousIndex / gridSize);
-        const previousCol = previousIndex % gridSize;
-        for (let r = 0; r < item.size.rows; r++) {
-          for (let c = 0; c < item.size.cols; c++) {
-            const targetIndex = (previousRow + r) * gridSize + (previousCol + c);
-            state.gridItems[targetIndex] = null;
-          }
-        }
-      }
-
+      clearItemSpace(item);
+    
       // Check if the item can be placed without overlapping
-      let canPlace = true;
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          const targetIndex = index + r * gridSize + c;
-          if (targetIndex >= state.gridItems.length || state.gridItems[targetIndex] !== null) {
-            canPlace = false;
-            break;
-          }
-        }
-        if (!canPlace) break;
-      }
-
-      // Place the item if there's no overlap, otherwise swap
-      if (canPlace) {
+      if (canPlaceItemAt(item, index)) {
         for (let r = 0; r < rows; r++) {
           for (let c = 0; c < cols; c++) {
             const targetIndex = index + r * gridSize + c;
@@ -117,46 +132,42 @@ const aquariumSlice = createSlice({
       } else {
         // Handle swapping logic if the space is occupied
         const occupiedItem = state.gridItems[index];
-        const occupiedSize = occupiedItem.size;
-
-        // Clear the space of the occupied item
-        for (let r = 0; r < occupiedSize.rows; r++) {
-          for (let c = 0; c < occupiedSize.cols; c++) {
-            const targetIndex = index + r * gridSize + c;
-            state.gridItems[targetIndex] = null;
-          }
-        }
-
-        // Place the moving item
-        for (let r = 0; r < rows; r++) {
-          for (let c = 0; c < cols; c++) {
-            const targetIndex = index + r * gridSize + c;
-            if (targetIndex >= 0 && targetIndex < state.gridItems.length) {
-              state.gridItems[targetIndex] = item;
+        if (occupiedItem) {
+          const occupiedSize = occupiedItem.size;
+    
+          // Clear the space of the occupied item
+          clearItemSpace(occupiedItem);
+    
+          // Place the moving item
+          if (canPlaceItemAt(item, index)) {
+            for (let r = 0; r < rows; r++) {
+              for (let c = 0; c < cols; c++) {
+                const targetIndex = index + r * gridSize + c;
+                if (targetIndex >= 0 && targetIndex < state.gridItems.length) {
+                  state.gridItems[targetIndex] = item;
+                }
+              }
             }
-          }
-        }
-
-        // Find the first empty spot to place the swapped item
-        const emptyIndex = state.gridItems.findIndex((gridItem) => gridItem === null);
-        if (emptyIndex !== -1) {
-          const emptyRow = Math.floor(emptyIndex / gridSize);
-          const emptyCol = emptyIndex % gridSize;
-          let canPlace = true;
-          for (let r = 0; r < occupiedSize.rows; r++) {
-            for (let c = 0; c < occupiedSize.cols; c++) {
-              const targetIndex = emptyIndex + r * gridSize + c;
-              if (targetIndex >= state.gridItems.length || state.gridItems[targetIndex] !== null) {
-                canPlace = false;
+    
+            // Find the first empty spot to place the swapped item
+            for (let i = 0; i < state.gridItems.length; i++) {
+              if (canPlaceItemAt(occupiedItem, i)) {
+                for (let r = 0; r < occupiedSize.rows; r++) {
+                  for (let c = 0; c < occupiedSize.cols; c++) {
+                    const targetIndex = i + r * gridSize + c;
+                    if (targetIndex >= 0 && targetIndex < state.gridItems.length) {
+                      state.gridItems[targetIndex] = occupiedItem;
+                    }
+                  }
+                }
                 break;
               }
             }
-            if (!canPlace) break;
-          }
-          if (canPlace) {
+          } else {
+            // If the item cannot be placed back in the original position, restore the original item
             for (let r = 0; r < occupiedSize.rows; r++) {
               for (let c = 0; c < occupiedSize.cols; c++) {
-                const targetIndex = emptyIndex + r * gridSize + c;
+                const targetIndex = index + r * gridSize + c;
                 if (targetIndex >= 0 && targetIndex < state.gridItems.length) {
                   state.gridItems[targetIndex] = occupiedItem;
                 }
