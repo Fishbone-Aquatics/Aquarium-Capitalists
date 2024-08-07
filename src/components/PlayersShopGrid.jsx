@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
-import { useDrop } from 'react-dnd';
+import { useDrop, useDrag } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItemToGrid, setDropIndicator } from '../features/aquariumshop/aquariumSlice';
+import { addNewItemToGrid, moveItemWithinGrid, setDropIndicator } from '../features/aquariumshop/aquariumSlice';
 import '../styles/grid.css';
 
 const ItemTypes = {
@@ -43,13 +43,14 @@ const Grid = ({ gridSize }) => {
         console.log('Calculated index:', index);
 
         if (index >= 0 && index < gridItems.length) {
-          // Check if the item can be placed without overlapping
-          const canPlace = checkNoOverlap(item, index, gridSize, gridItems);
-          if (canPlace) {
-            console.log('Dispatching addItemToGrid action');
-            dispatch(addItemToGrid({ item, index }));
+          if (item.fromShop) {
+            // If the item is from the shop, add it to the grid as a new item
+            console.log('Dispatching addNewItemToGrid action');
+            dispatch(addNewItemToGrid({ item, index }));
           } else {
-            console.warn('Cannot place item due to overlap');
+            // If the item is from the grid, move it within the grid
+            console.log('Dispatching moveItemWithinGrid action');
+            dispatch(moveItemWithinGrid({ item, index }));
           }
         } else {
           console.warn('Drop index out of bounds:', index);
@@ -147,9 +148,27 @@ const Grid = ({ gridSize }) => {
       )}
       {cells.map((_, index) => (
         <div key={index} className="grid-cell">
-          {gridItems && gridItems[index] && <img src={gridItems[index].icon} alt={gridItems[index].name} />}
+          {gridItems && gridItems[index] && (
+            <DraggableItem item={gridItems[index]} index={index} />
+          )}
         </div>
       ))}
+    </div>
+  );
+};
+
+const DraggableItem = ({ item, index }) => {
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: ItemTypes.ITEM,
+    item: { ...item, index, fromShop: false }, // Marking the item as not from the shop
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }), [item, index]);
+
+  return (
+    <div ref={drag} className="draggable-item" style={{ opacity: isDragging ? 0.5 : 1 }}>
+      <img src={item.icon} alt={item.name} />
     </div>
   );
 };

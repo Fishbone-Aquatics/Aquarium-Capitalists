@@ -43,7 +43,7 @@ const aquariumSlice = createSlice({
     setItems(state, action) {
       state.items = action.payload;
     },
-    addItemToGrid(state, action) {
+    addNewItemToGrid(state, action) {
       const { item, index } = action.payload;
       const { rows, cols } = item.size;
       const gridSize = Math.sqrt(state.gridItems.length);
@@ -67,7 +67,100 @@ const aquariumSlice = createSlice({
           for (let c = 0; c < cols; c++) {
             const targetIndex = index + r * gridSize + c;
             if (targetIndex >= 0 && targetIndex < state.gridItems.length) {
+              state.gridItems[targetIndex] = { ...item, id: `${item.id}-${Date.now()}` }; // Ensure unique ID for each new item
+            }
+          }
+        }
+      }
+    },
+    moveItemWithinGrid(state, action) {
+      const { item, index } = action.payload;
+      const { rows, cols } = item.size;
+      const gridSize = Math.sqrt(state.gridItems.length);
+
+      // Remove the item from its previous position
+      const previousIndex = state.gridItems.findIndex(gridItem => gridItem && gridItem.id === item.id);
+      if (previousIndex !== -1) {
+        const previousRow = Math.floor(previousIndex / gridSize);
+        const previousCol = previousIndex % gridSize;
+        for (let r = 0; r < item.size.rows; r++) {
+          for (let c = 0; c < item.size.cols; c++) {
+            const targetIndex = (previousRow + r) * gridSize + (previousCol + c);
+            state.gridItems[targetIndex] = null;
+          }
+        }
+      }
+
+      // Check if the item can be placed without overlapping
+      let canPlace = true;
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const targetIndex = index + r * gridSize + c;
+          if (targetIndex >= state.gridItems.length || state.gridItems[targetIndex] !== null) {
+            canPlace = false;
+            break;
+          }
+        }
+        if (!canPlace) break;
+      }
+
+      // Place the item if there's no overlap, otherwise swap
+      if (canPlace) {
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const targetIndex = index + r * gridSize + c;
+            if (targetIndex >= 0 && targetIndex < state.gridItems.length) {
               state.gridItems[targetIndex] = item;
+            }
+          }
+        }
+      } else {
+        // Handle swapping logic if the space is occupied
+        const occupiedItem = state.gridItems[index];
+        const occupiedSize = occupiedItem.size;
+
+        // Clear the space of the occupied item
+        for (let r = 0; r < occupiedSize.rows; r++) {
+          for (let c = 0; c < occupiedSize.cols; c++) {
+            const targetIndex = index + r * gridSize + c;
+            state.gridItems[targetIndex] = null;
+          }
+        }
+
+        // Place the moving item
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const targetIndex = index + r * gridSize + c;
+            if (targetIndex >= 0 && targetIndex < state.gridItems.length) {
+              state.gridItems[targetIndex] = item;
+            }
+          }
+        }
+
+        // Find the first empty spot to place the swapped item
+        const emptyIndex = state.gridItems.findIndex((gridItem) => gridItem === null);
+        if (emptyIndex !== -1) {
+          const emptyRow = Math.floor(emptyIndex / gridSize);
+          const emptyCol = emptyIndex % gridSize;
+          let canPlace = true;
+          for (let r = 0; r < occupiedSize.rows; r++) {
+            for (let c = 0; c < occupiedSize.cols; c++) {
+              const targetIndex = emptyIndex + r * gridSize + c;
+              if (targetIndex >= state.gridItems.length || state.gridItems[targetIndex] !== null) {
+                canPlace = false;
+                break;
+              }
+            }
+            if (!canPlace) break;
+          }
+          if (canPlace) {
+            for (let r = 0; r < occupiedSize.rows; r++) {
+              for (let c = 0; c < occupiedSize.cols; c++) {
+                const targetIndex = emptyIndex + r * gridSize + c;
+                if (targetIndex >= 0 && targetIndex < state.gridItems.length) {
+                  state.gridItems[targetIndex] = occupiedItem;
+                }
+              }
             }
           }
         }
@@ -79,6 +172,6 @@ const aquariumSlice = createSlice({
   },
 });
 
-export const { increaseShopSize, resetShopSize, setItems, addItemToGrid, setDropIndicator } = aquariumSlice.actions;
+export const { increaseShopSize, resetShopSize, setItems, addNewItemToGrid, moveItemWithinGrid, setDropIndicator } = aquariumSlice.actions;
 
 export default aquariumSlice.reducer;

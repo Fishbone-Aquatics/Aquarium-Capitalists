@@ -51,7 +51,7 @@ function ShopItem({ item }) {
   const dispatch = useDispatch();
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.ITEM,
-    item,
+    item: { ...item, fromShop: true },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
