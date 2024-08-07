@@ -99,11 +99,24 @@ const Grid = ({ gridSize }) => {
 
   const checkNoOverlap = (item, index, gridSize, gridItems) => {
     const { rows, cols } = item.size;
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        const targetIndex = index + r * gridSize + c;
-        if (targetIndex >= gridItems.length || gridItems[targetIndex] !== null) {
-          return false;
+    const startRow = Math.floor(index / gridSize);
+    const startCol = index % gridSize;
+
+    // Check for out-of-bounds placement
+    if (startCol + cols > gridSize || startRow + rows > gridSize) {
+      return false;
+    }
+
+    // Check the surrounding cells for a one-cell buffer
+    for (let r = -1; r <= rows; r++) {
+      for (let c = -1; c <= cols; c++) {
+        const targetRow = startRow + r;
+        const targetCol = startCol + c;
+        const targetIndex = targetRow * gridSize + targetCol;
+        if (targetRow >= 0 && targetRow < gridSize && targetCol >= 0 && targetCol < gridSize) {
+          if (gridItems[targetIndex] !== null) {
+            return false;
+          }
         }
       }
     }
