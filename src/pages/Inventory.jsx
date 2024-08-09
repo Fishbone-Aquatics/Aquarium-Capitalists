@@ -4,6 +4,8 @@ import '../styles/inventory.css';
 import InventorySlot from '../components/InventorySlot';
 import ContextMenu from '../components/ContextMenu';
 import ConfirmationModal from '../components/ConfirmationModal';
+import Notification from '../components/Notification';
+import { setNotificationMessage } from '../features/notifications/notificationSlice';
 import resource from '../data/items/items';
 
 const Inventory = () => {
@@ -15,7 +17,6 @@ const Inventory = () => {
   const getRandomInt = (max) => Math.floor(Math.random() * max);
 
   const getItemFromResources = (resource, itemId) => {
-    // Flatten the nested resource objects
     const flattenedResources = Object.values(resource).reduce((acc, curr) => {
       if (typeof curr === 'object') {
         Object.values(curr).forEach(item => {
@@ -24,22 +25,17 @@ const Inventory = () => {
       }
       return acc;
     }, []);
-
-    // Find the item by its id
     return flattenedResources.find(item => item.id === itemId);
   };
 
   const generateContents = (resource, items, currency) => {
     const contents = [];
 
-    // Randomly select a currency amount
     if (currency.length > 0 && Math.random() > 0.5) {
       const selectedCurrency = currency[getRandomInt(currency.length)];
       contents.push({ type: 'currency', amount: selectedCurrency });
-    } else if (items.length > 0) { // Ensure only one type is selected
+    } else if (items.length > 0) {
       const itemId = items[getRandomInt(items.length)];
-      console.log("itemId-----------------", itemId);
-      console.log('resource obj', Object.values(resource));
       const item = getItemFromResources(resource, itemId);
       if (item) {
         contents.push({ type: 'item', item });
@@ -62,12 +58,10 @@ const Inventory = () => {
 
   const handleContextMenu = (e, item, index) => {
     e.preventDefault();
-
     const options = ['Sell'];
     if (item.contents) {
       options.push('Open (1)', 'Open (All)');
     }
-
     setContextMenu({ visible: true, x: e.clientX, y: e.clientY, item, index, options });
   };
 
@@ -75,7 +69,6 @@ const Inventory = () => {
     if (option === 'Sell') {
       const totalValue = contextMenu.item.sellValue * contextMenu.item.quantity;
       const sellMessage = `Sell ${contextMenu.item.quantity} ${contextMenu.item.name}(s) for ${totalValue} currency?`;
-  
       setConfirmation({
         visible: true,
         item: contextMenu.item,
@@ -85,38 +78,61 @@ const Inventory = () => {
     } else if (option.startsWith('Open')) {
       const openAll = option === 'Open (All)';
       const chestQuantity = openAll ? contextMenu.item.quantity : 1;
-  
+
+      const allContents = [];
+
       for (let i = 0; i < chestQuantity; i++) {
         const chestContents = openTreasureChest(contextMenu.item);
+        allContents.push(...chestContents);
+
         chestContents.forEach((content) => {
           if (content.type === 'currency') {
             dispatch({
               type: 'player/addCurrency',
               payload: content.amount,
             });
-            console.log(`Opened a chest and received ${content.amount} currency`);
           } else if (content.type === 'item' && content.item) {
             dispatch({
               type: 'player/addItemToInventory',
               payload: { item: content.item },
             });
-            console.log(`Opened a chest and received an item: ${content.item.name}`);
           } else {
             console.error('Invalid item content:', content);
           }
         });
       }
-  
-      // Update the quantity of the opened item
+
+      const itemCounts = allContents.reduce((acc, content) => {
+        if (content.type === 'item') {
+          acc[content.item.name] = (acc[content.item.name] || 0) + 1;
+        }
+        return acc;
+      }, {});
+
+      const receivedCurrency = allContents
+        .filter(content => content.type === 'currency')
+        .reduce((acc, content) => acc + content.amount, 0);
+
+      const itemMessages = Object.entries(itemCounts).map(([name, count]) => `${name} (x${count})`).join(', ');
+
+      let notificationMessage = '';
+      if (itemMessages) {
+        notificationMessage += `Received items: ${itemMessages}. `;
+      }
+      if (receivedCurrency > 0) {
+        notificationMessage += `Received currency: ${receivedCurrency}.`;
+      }
+
+      dispatch(setNotificationMessage(notificationMessage));
+
       dispatch({
         type: 'player/updateItemQuantity',
         payload: { itemId: contextMenu.item.id, quantity: contextMenu.item.quantity - chestQuantity },
       });
     }
-  
+
     setContextMenu({ ...contextMenu, visible: false });
   };
-  
 
   const handleClickOutside = () => {
     if (contextMenu.visible) {
@@ -142,7 +158,6 @@ const Inventory = () => {
     });
     setConfirmation({ visible: false, item: null, index: null });
   };
-  
 
   const handleSellCancel = () => {
     setConfirmation({ visible: false, item: null, index: null });
@@ -175,11 +190,12 @@ const Inventory = () => {
       )}
       {confirmation.visible && (
         <ConfirmationModal
-          message={`Are you sure you want to sell ${confirmation.item.quantity} ${confirmation.item.name}(s) for ${confirmation.item.sellValue * confirmation.item.quantity || 0} currency?`}
+          message={confirmation.message}
           onConfirm={handleSellConfirm}
           onCancel={handleSellCancel}
         />
       )}
+      <Notification />
     </div>
   );
 };

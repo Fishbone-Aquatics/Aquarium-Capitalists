@@ -4,6 +4,7 @@ import playerReducer from '../features/player/playerSlice';
 import expeditionReducer from '../features/expeditions/expeditionSlice';
 import aquariumReducer from '../features/aquariumshop/aquariumSlice';
 import gatheringReducer from '../features/gathering/gatheringSlice';
+import notificationReducer from '../features/notifications/notificationSlice';
 import { saveState, loadState } from '../features/player/saveState';
 
 const preloadedState = loadState();
@@ -13,6 +14,7 @@ const rootReducer = {
   expedition: expeditionReducer,
   aquarium: aquariumReducer,
   gathering: gatheringReducer,
+  notifications: notificationReducer,
 };
 
 const store = configureStore({

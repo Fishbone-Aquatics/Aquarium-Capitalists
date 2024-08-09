@@ -1,6 +1,7 @@
 // src/features/gathering/gatheringSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 import { updateSkillXp, addItemToInventory } from '../player/playerSlice';
+import { setNotificationMessage } from '../notifications/notificationSlice'; // Import the new notification actions
 
 const initialState = {
   activeResource: null,
@@ -22,16 +23,13 @@ const gatheringSlice = createSlice({
       state.activeResource = null;
       state.gatheringStartTime = null;
     },
-    setNotificationMessage: (state, action) => {
-      state.notificationMessage = action.payload;
-    },
     clearNotificationMessage: (state) => {
       state.notificationMessage = null;
     },
   },
 });
 
-export const { startGatheringResource, stopGatheringResource, setNotificationMessage, clearNotificationMessage } = gatheringSlice.actions;
+export const { startGatheringResource, stopGatheringResource, clearNotificationMessage } = gatheringSlice.actions;
 
 export const handleGathering = () => async (dispatch, getState) => {
   console.log('handle gather called');
@@ -48,7 +46,8 @@ export const handleGathering = () => async (dispatch, getState) => {
       console.log("Gathering completed, gained xp: ", xpGainedValue);
       await dispatch(updateSkillXp({ skill: 'gathering', xp: xpGainedValue }));
       await dispatch(addItemToInventory({ item: selectedItem }));
-      dispatch(setNotificationMessage(`Gathered ${selectedItem.name} and gained ${xpGainedValue} XP!`));
+      console.log(`Dispatching notification: Gathered ${selectedItem.name} and gained ${xpGainedValue} XP!`);
+      dispatch(setNotificationMessage(`Gathered ${selectedItem.name} and gained ${xpGainedValue} XP!`));      
       dispatch(handleGathering()); // Recurse to keep gathering
     }
   }, selectedItem.duration);

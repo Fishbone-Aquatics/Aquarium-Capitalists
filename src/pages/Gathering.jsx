@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import '../styles/gathering.css';
 import items from '../data/items/items';
-import { startGatheringResource, stopGatheringResource, handleGathering, setNotificationMessage, clearNotificationMessage } from '../features/gathering/gatheringSlice';
+import { startGatheringResource, stopGatheringResource, handleGathering } from '../features/gathering/gatheringSlice';
 import { clearActiveZone } from '../features/expeditions/expeditionSlice';
+import { setNotificationMessage } from '../features/notifications/notificationSlice'; // Import the new notification actions
 import { calculateLevelFromXP, getRequiredXPForLevel } from '../features/player/xpCalculator';
+import Notification from '../components/Notification'; // Import the Notification component
 
 const Gathering = () => {
   const [activeTab, setActiveTab] = useState('minerals');
@@ -31,7 +33,6 @@ const Gathering = () => {
   const gatheringSpeed = useSelector(state => state.player.gatheringSpeed);
   const gatheringEfficiency = useSelector(state => state.player.gatheringEfficiency);
   const activeResource = useSelector(state => state.gathering.activeResource);
-  const notificationMessage = useSelector(state => state.gathering.notificationMessage);
 
   const currentXP = gatheringSkill.xp;
   const currentLevel = calculateLevelFromXP(currentXP);
@@ -66,15 +67,6 @@ const Gathering = () => {
       gatheringDrops: item.gatheringDrops,
     });
   };
-
-  useEffect(() => {
-    if (notificationMessage) {
-      const timer = setTimeout(() => {
-        dispatch(clearNotificationMessage());
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [notificationMessage, dispatch]);
 
   return (
     <div className="gathering-container">
@@ -177,11 +169,7 @@ const Gathering = () => {
           )}
         </div>
       </div>
-      {notificationMessage && (
-        <div className="notification">
-          {notificationMessage}
-        </div>
-      )}
+      <Notification /> {/* Add Notification component */}
     </div>
   );
 };
