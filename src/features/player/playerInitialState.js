@@ -16,7 +16,10 @@ const initializeInventory = (initialItems, maxSlots) => {
 
 const initialItems = [
   { ...items.equipment.filter, quantity: 1 },
-  { ...items.equipment.spongeFilter, quantity: 1 }
+  { ...items.equipment.spongeFilter, quantity: 1 },
+  { ...items.equipment.spongeFilter, quantity: 1 },
+  { ...items.resource.treasurechest, quantity: 10 },
+  { ...items.resource.driftwood, quantity: 100 }
 ];
 
 const loadInitialState = () => {

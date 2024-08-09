@@ -10,7 +10,7 @@ const Inventory = () => {
   const player = useSelector((state) => state.player);
   const dispatch = useDispatch();
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, item: null, index: null });
-  const [confirmation, setConfirmation] = useState({ visible: false, item: null, quantity: 0 });
+  const [confirmation, setConfirmation] = useState({ visible: false, item: null, index: null });
 
   const getRandomInt = (max) => Math.floor(Math.random() * max);
 
@@ -73,11 +73,19 @@ const Inventory = () => {
 
   const handleOptionClick = (option) => {
     if (option === 'Sell') {
-      setConfirmation({ visible: true, item: contextMenu.item, quantity: contextMenu.item.quantity });
+      const totalValue = contextMenu.item.sellValue * contextMenu.item.quantity;
+      const sellMessage = `Sell ${contextMenu.item.quantity} ${contextMenu.item.name}(s) for ${totalValue} currency?`;
+  
+      setConfirmation({
+        visible: true,
+        item: contextMenu.item,
+        index: contextMenu.index,
+        message: sellMessage,
+      });
     } else if (option.startsWith('Open')) {
       const openAll = option === 'Open (All)';
       const chestQuantity = openAll ? contextMenu.item.quantity : 1;
-
+  
       for (let i = 0; i < chestQuantity; i++) {
         const chestContents = openTreasureChest(contextMenu.item);
         chestContents.forEach((content) => {
@@ -98,23 +106,17 @@ const Inventory = () => {
           }
         });
       }
-
-      // Adjust the quantity of treasure chests in the inventory
-      const newQuantity = contextMenu.item.quantity - chestQuantity;
-      if (newQuantity > 0) {
-        dispatch({
-          type: 'player/updateItemQuantity',
-          payload: { itemId: contextMenu.item.id, quantity: newQuantity },
-        });
-      } else {
-        dispatch({
-          type: 'player/removeItemFromInventory',
-          payload: { itemId: contextMenu.item.id, quantity: chestQuantity },
-        });
-      }
+  
+      // Update the quantity of the opened item
+      dispatch({
+        type: 'player/updateItemQuantity',
+        payload: { itemId: contextMenu.item.id, quantity: contextMenu.item.quantity - chestQuantity },
+      });
     }
+  
     setContextMenu({ ...contextMenu, visible: false });
   };
+  
 
   const handleClickOutside = () => {
     if (contextMenu.visible) {
@@ -134,14 +136,16 @@ const Inventory = () => {
       type: 'player/sellItem',
       payload: {
         itemId: confirmation.item.id,
-        quantity: confirmation.quantity,
+        quantity: confirmation.item.quantity,
+        index: confirmation.index,
       },
     });
-    setConfirmation({ visible: false, item: null, quantity: 0 });
+    setConfirmation({ visible: false, item: null, index: null });
   };
+  
 
   const handleSellCancel = () => {
-    setConfirmation({ visible: false, item: null, quantity: 0 });
+    setConfirmation({ visible: false, item: null, index: null });
   };
 
   return (
@@ -171,7 +175,7 @@ const Inventory = () => {
       )}
       {confirmation.visible && (
         <ConfirmationModal
-          message={`Are you sure you want to sell ${confirmation.quantity} ${confirmation.item.name}(s) for ${confirmation.item.sellValue * confirmation.quantity || 0} currency?`}
+          message={`Are you sure you want to sell ${confirmation.item.quantity} ${confirmation.item.name}(s) for ${confirmation.item.sellValue * confirmation.item.quantity || 0} currency?`}
           onConfirm={handleSellConfirm}
           onCancel={handleSellCancel}
         />

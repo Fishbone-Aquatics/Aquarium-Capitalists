@@ -32,64 +32,69 @@ const playerReducers = {
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
   addItemToInventory: (state, action) => {
-    const { item } = action.payload;
-
-    if (!item || !item.id) {
-      console.error('Invalid item:', item);
-      return;
-    }
-
-    const existingItem = state.inventory.find(i => i.id === item.id && item.stackLimit !== 1);
-    console.log('Adding item to inventory:', item);
-
-    if (existingItem && existingItem.quantity < (item.stackLimit || Infinity)) {
-      // If the item can be stacked and the existing quantity is less than the stack limit
-      existingItem.quantity += item.quantity || 1;
-      console.log('Added item', item.name, 'to inventory');
-    } else {
-      // If the item cannot be stacked or does not exist in the inventory
-      const emptyIndex = state.inventory.findIndex(it => it.id === items.equipment.emptySlot.id);
-      if (emptyIndex !== -1) {
-        state.inventory[emptyIndex] = { ...item, quantity: item.quantity || 1 };
-        console.log('Placed item', item.name, 'in an empty slot');
-      } else {
-        console.log('Inventory full. Cannot add item:', item.name);
+    const itemsToAdd = Array.isArray(action.payload.items) ? action.payload.items : [action.payload.item];
+  
+    itemsToAdd.forEach((item) => {
+      if (!item || !item.id) {
+        console.error('Invalid item:', item);
+        return;
       }
-    }
-
+  
+      const existingItem = state.inventory.find(i => i.id === item.id && item.stackLimit !== 1);
+      console.log('Adding item to inventory:', item);
+  
+      if (existingItem && existingItem.quantity < (item.stackLimit || Infinity)) {
+        // If the item can be stacked and the existing quantity is less than the stack limit
+        existingItem.quantity += item.quantity || 1;
+        console.log('Added item', item.name, 'to inventory');
+      } else {
+        // If the item cannot be stacked or does not exist in the inventory
+        const emptyIndex = state.inventory.findIndex(it => it.id === items.equipment.emptySlot.id);
+        if (emptyIndex !== -1) {
+          state.inventory[emptyIndex] = { ...item, quantity: item.quantity || 1 };
+          console.log('Placed item', item.name, 'in an empty slot');
+        } else {
+          console.log('Inventory full. Cannot add item:', item.name);
+        }
+      }
+    });
+  
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
+  
   updateItemQuantity: (state, action) => {
     const { itemId, quantity } = action.payload;
-    const item = state.inventory.find(item => item && item.id === itemId);
-    if (item) {
-      item.quantity = quantity;
+    const itemIndex = state.inventory.findIndex((item) => item.id === itemId);
+  
+    if (itemIndex !== -1 && quantity > 0) {
+      state.inventory[itemIndex].quantity = quantity;
+    } else {
+      state.inventory[itemIndex] = { ...items.equipment.emptySlot }; // Remove the item if quantity is zero or less
+    }
+  
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
+  },
+  sellItem: (state, action) => {
+    const { itemId, quantity, index } = action.payload;
+    const item = state.inventory[index];
+    
+    if (item && item.id === itemId && item.quantity >= quantity) {
+      const sellValue = item.sellValue || 0;
+      const totalSellValue = sellValue * quantity;
+  
+      item.quantity -= quantity;
+      if (item.quantity === 0) {
+        state.inventory[index] = { ...items.equipment.emptySlot };
+      }
+  
+      state.stats.currency += totalSellValue;
     }
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
-sellItem: (state, action) => {
-  const { itemId, quantity } = action.payload;
-  const item = state.inventory.find(item => item && item.id === itemId);
   
-  if (item && item.quantity >= quantity) {
-    const sellValue = item.sellValue || 0;
-    const totalSellValue = sellValue * quantity;
-
-    item.quantity -= quantity;
-    if (item.quantity === 0) {
-      state.inventory = state.inventory.map(i => i.id === itemId ? { ...items.equipment.emptySlot } : i);
-    }
-
-    state.stats.currency += totalSellValue;
-  }
-  saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
-},
-
-
-
   removeItemFromInventory: (state, action) => {
-    const { itemId } = action.payload;
-    state.inventory = state.inventory.map(item => item && item.id === itemId ? { ...items.equipment.emptySlot } : item);
+    const { index } = action.payload;
+    state.inventory[index] = { ...items.equipment.emptySlot };  // Remove item from the specific index
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
   updateInventorySize: (state, action) => {
@@ -229,8 +234,6 @@ sellItem: (state, action) => {
 
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
 },
-
-
   updateSkillBoostPercent: (state, action) => {
     state.skillBoostPercent = action.payload;
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
