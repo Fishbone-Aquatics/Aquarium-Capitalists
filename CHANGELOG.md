@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.11.1](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.11.0...v1.11.1) (2024-08-09)
+
+
+### Bug Fixes
+
+* **Game:** Global notification system ([58a3459](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/58a3459ab56444999b801bfd9168a857069bb640))
+* **Inventory:** Selling by index. ([aa2f4a9](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/aa2f4a95efd0a4c57010211ecabe301e66bf98d3))
+
 ## [1.11.0](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.10.1...v1.11.0) (2024-08-07)
 
 
