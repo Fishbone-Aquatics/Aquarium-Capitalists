@@ -1,193 +1,175 @@
-## Aquarium Capitalists Game - Structured Project Layout
-Aquarium Capitalists is a game about owning an aquarium shop.
-Here you'll breed aquatic life, go on expeditions, complete quests, gather solo or with your (shoal or school tbd). 
+# Aquarium Capitalists
+A game about owning an aquarium shop.
+
+## What is currently being developed:
+- The home page and designing the basic functionality of your "shop" and primary "goal".
+  - aquirums should have "size limits" and expeditions could give "gold fish" rarely for now (or fishing if you want to implement that early, though i don't think it's necessary)
+
+- Creating a boiler plate page/slice/feature ie. one fishing could just change variable names to get started with. 
+  - The page should have an if prod check for displaying. ("This is an example widget/extension")
+
+- Developing an "offline" solution.
+  - We can start with 5 minutes
+  - When the "page refresh" is triggered, we can have a "while you were gone" screen. 
+  - To track the progress we need to start updating a "last_action" game state when doing actions/updating the game state.
+  - https://chatgpt.com/share/67721c97-4af0-8000-9111-a817736386ef
+
+
+
+### Known bugs:
+- [Inventory eats multiple equiped items](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/issues/55)
 
 ## Table of Contents
 - [Introduction](#introduction)
 - [The Basics](#the-basics)
-- [Archetypes / Starting Bonuses](#archetypes--starting-bonuses)
-- [The Player](#the-player)
   - [Aquarium Shop](#aquarium-shop)
+    - [Status](#status)
+      - [Progression](#progression)
+      - [Offline Progression](#offline-progression)
+      - [Shop Decay](#shop-decay)
+    - [Currencies](#currencies)
+    - [Level](#level)
+      - [Experience](#experience)
+      - [Skill Experience](#skill-experience)
+    - [Skills](#skills)
+      - [Expeditions](#expeditions)
+      - [Gathering](#gathering)
   - [Inventory](#inventory)
-  - [Stats & Equipment](#stats-and-equipment)
-  - [Skills](#skills)
-- [Currencies](#currencies)
-- [Resources](#resources)
-- [Items and Market](#items-and-market)
-  - [Items](#items)
-  - [Consumables](#consumables)
-- [Quests](#quests)
-- [Group Content (Guilds / Clans)](#group-content-guilds-tbd)
-- [Expedition Missions](#expedition-missions)
-- [Shop System](#shop-system)
-- [Breeding and Genetics](#breeding-and-genetics)
-- [Minigames](#minigames)
-- [Monetization](#monetization)
-- [Implementation Plan](#implementation-plan)
-- [Other Ideas](#other-ideas)
+      - [Stats & Equipment](#stats-and-equipment)
+      - [Resources](#resources)
+- [Currently Planned Features](#currently-planned-features)
+  - [Fishing](#fishing)
+  - [Crafting](#crafting)
+  - [Shop System](#shop-system)
+  - [Chat](#chat)
+  - [Cloud Saves](#cloud-saves)
+  - [Breeding](#breeding)
+  - [Group Content](#group-content)
+  - [Items and Market](#items-and-market)
+  - [Quests](#quests)
+- [Potential Planned Features](#potential-planned-features)
+  - [Minigames](#minigames)
+    - [Euchre](#euchre)
+    - [Underwater Battles](#underwater-battles)
+    - [Memory](#memory)
+  - [Archetypes / Starting Bonuses](#archetypes--starting-bonuses)
+  - [Monetization](#monetization)
+  - [Expanded Backpack](#expanded-backpack)
+  - [Extended Shop](#extended-shop)
+- [Wiki](#wiki)
+
+---
 
 ## Introduction
-- Brief overview of the game.
-- Objective and key features.
-- Its a game designed around years of in real life time, its a long and slow game. It's not meant to be sat on for hours on end all day. (though hopefully we get enough content)
+Aquarium Capitalists is a game about owning and managing an aquarium shop. Players will breed aquatic life, go on expeditions, complete quests, gather resources, and build a thriving aquarium empire.
 
 ## The Basics
-- Gameplay mechanics.
-- User interface and navigation.
 
-## The Player
-### Stats
-- Level
-- Reputation
-- Energy
+### Aquarium Shop
+- Manage your shop, sell aquatic life, and earn revenue.
 
-### Inventory Size
-- Initial inventory capacity.
-- Upgradable slots.
+#### Status
+- **Progression:** Level up your shop by growing over time, gaining a loyal customer base, out living other active shops, completing expeditions for additional crafting resources and competing in clan battles for valueable loot.
+- **Offline Progression:** Gain rewards while away from the game, up to 12 hours to start.
+- **Shop Decay:** Login to maintain shop profits, over 3 days you will start to lose your active customers and begin to degrade in shop status until you become inactive, completly losing customers within 3 days and slowly shop stars over time.
 
-### Items
-#### Weapons
-- Types and effects.
+#### Currencies
+- **Premium Currency:** Pearls.
+- **Normal Currency:** Shells. Earn through sales and expeditions.
 
-#### Armor
-- Types and benefits.
+#### Level
+- **Experience:** Earn XP by completing tasks.
+- **Skill Experience:** Specialize in areas like genetics, crafting, or sales.
 
-#### Consumables
-- Potions and temporary buffs.
+#### Skills
+- **Expeditions:** Explore locations like coral reefs and shipwrecks. Gain rewards and special items.
+- **Gathering:** Harvest resources such as wood and sand to craft items or sell for profit.
 
-## Resources
-- Types of resources (wood, sand, etc.).
-- How to gather resources.
-- Uses of resources (crafting, selling).
+### Inventory
+- **Stats & Equipment:** Manage gear to boost stats and shop efficiency.
+- **Resources:** Collect and store materials for crafting and upgrades.
 
-## Archetypes / Starting Bonuses
-- Tycoon: Increased revenue.
-- Innovator: Faster research.
-- Conservationist: Better fish health.
-- Magnate: Additional resources.
-- Visionary: Enhanced aesthetic appeal.
-- Geneticist: Exclusive access to rare fish.
-- Artisan: Increased efficiency.
-- Dealer: Lower purchase prices.
+## Currently Planned Features
 
-## Currencies
-- Premium Currency: Pearls.
-- Normal Currency: Shells.
-- Earning methods and usage.
+### Fishing
+- A dynamic fishing system to collect rare species and resources as well as decor.
 
-## Items and Market
-- Shop items (aquariums, equipment, decorations).
-- Market dynamics and trading.
-- Quests for special items.
+### Shop System
+- Fully customizable shops with layout options and level-locked features.
 
-## Quests
-- Types of quests.
-- Rewards.
-- Quest progression.
-- Anything "daily" should be contributions to "guild" with "premium" reward if we have any premium (tradable) currency.
+### Crafting
+- Create items and equipment to enhance your shop and expeditions.
 
-## Group Content guilds tbd
-- Guilds / Clans or "schools/shoals"
-- Formation and management.
-- Idle resource donation.
-- Territory fights and map control.
-- Guilds - or "schools/shoals"
-- Group expeditions
-  - Requires people online within the last 24 hours
-- Resource donating/trading/team gathering
-  - More people = quicker time
-- Quests
-  - Collect and donate
-- Clan building to upgrade/build
-  - Similar appearance to an aquarium shop (can be reskinned for depth)
-  - Only guild master/co-owners can upgrade; all members can view/read
-  - Guilds can buy shareable perks that upgrade XP earned for players and can be further upgraded
-- Collaborative breeding/genetics/research
-  - Achieve certain traits/colors/patterns
-  - Pooling of resources to split offspring
-  - Breeding might originate from guilds to foster community-based gameplay
-- Exhibits to earn reputation/resources
-  - Could have a weekly community voting system
-- Auctions/sales/trade orders to other "shoals"
-- Environmental cleanup as a task/quest
-- Completing trade orders
-  - Other guilds might be looking for supplies you have as a player or as a guild
+### Chat
+- Interact with other players and coordinate group activities.
 
-## Expedition Missions
-- Locations: Coral Reefs, Shipwrecks, Deep Sea Trenches, Underwater Caves.
-- Teams: Pets and Hired Divers.
-- Expedition Types: Short, Medium, Long.
-- Rewards: XP, loot, stats, special items.
-- Progression: Upgrades, new locations, event expeditions.
+### Cloud Saves
+- Seamless saving and syncing across devices.
 
-## Equipment
-- Types: Filters, Heaters, Lights.
-- Upgrades and effects.
-- Integration with expeditions.
+### Breeding
+- Genetic traits and rare variants to create unique aquatic life.
 
-## Shop System
-- Initial setup and progression.
-- Items for sale: Aquariums, equipment.
-- Layout customization.
-- Level-locked tabs.
+### Group Content
+- Guilds or "Schools/Shoals" for collaborative gameplay, resource pooling, and competitive quests.
 
-## Breeding and Genetics
-- Breeding programs.
-- Genetic traits and rare variants.
-- Integration with shop system.
+### Items and Market
+- A dynamic marketplace to trade and auction rare items.
 
-## Minigames
-- In-game currency games: Blackjack, Memory, Russian Roulette.
-- Rewards and effects.
+### Quests
+- Engage in daily tasks, story-driven missions, and guild-based objectives.
 
-## Monetization
-- Skins and artist contributions.
-- Premium currency tradability.
-- Paid buffs.
-- Custom colors, icons, layouts.
+## Potential Planned Features
+
+### Minigames
+- **Euchre:** A strategic card game.
+- **Underwater Battles:** Clan-based combat system.
+- **Memory:** A matching game for rewards.
+
+### Archetypes / Starting Bonuses
+- Choose from roles like Tycoon, Geneticist, Conservationist, and more, each with unique benefits.
+
+### Monetization
+- Optional skins, premium currency, and customizations.
+
+### Expanded Backpack
+- Increase inventory capacity for more efficient gameplay.
+
+### Extended Shop
+- Additional customization options and advanced features for shop management.
 
 ## Implementation Plan
-- Phase 1: Core Gameplay Mechanics
-  - Basic player stats and inventory system.
-  - Initial resource gathering.
-  - Implement archetypes and starting bonuses.
-  - Develop basic shop system.
-  - Create initial quests.
-  - Develop guild/clan functionality.
-  - Implement initial expedition missions.
 
-- Phase 2: Advanced Features
-  - Integrate a DB
-  - Expand on breeding and genetics.
-  - Implement advanced equipment and upgrades.
-  - Develop dynamic market system.
-  - Introduce minigames.
-  - Implement monetization features.
-  - Develop and integrate chat and account systems (potential Steam login).
+### Phase 1: Core Gameplay Mechanics - Alpha
+- Create a basic shop owning system.
+- ~~Establish player stats and inventory systems.~~
+- ~~Launch initial expeditions.~~
+- ~~Design resource gathering.~~
+- Implement some form of crafting
+- Work in a basic shop mechanic
+- Have a basic working logging system/websocket.
 
-- Phase 3: Testing and Refinement
-  - Conduct thorough testing.
-  - Collect player feedback.
-  - Refine and balance gameplay mechanics.
-  - Finalize and polish UI/UX.
+### Phase 2: Advanced Features - Beta
+- Refine player stats/inventory/crafting systems
+- Add Fishing.
+- Expand expeditions/fishing zones/crafting. 
+- Showcase breeding/genetics.
+- Launch chat system.
+- Decide on and build guild functionality.
+- Bring in quests
+- Introduce cloud saves
 
-  Core mechanics & gameplay.
+### Phase 3: Testing and Refinement - Release discussions
+- Monetization features discussions.
+- Conduct thorough gameplay testing.
+- Collect player feedback.
+- Refine UI/UX and balance mechanics.
 
+### Phase 4: Out of Beta - Release
+- Introduce minigames.
+- Implement dynamic market system.
 
-## potential rewrite for phases:  
-This will consist of the basic functionality and the initial things to do, expeditions, players shop, gathering.
-Leveling (and level locks), stats, equipment.
-It will include things like tests, versioning and a basic deployment pipeline.
+---
 
-Additional gameplay mechanics
-This will be the stuff that adds some depth to the game.
-Breeding / genetics / minigames / clans / ironman etc.
+## Wiki
+If this page doesn't answer your question, and its not technical or found within the [README](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/blob/development/README.md) perhaps you could visit the [Aquarium Capitalist Wiki](https://probsjustin.notion.site/Aquarium-Capitalist-Wiki-7791bdfec9534b94a74e4a820125c1fe?pvs=4).
 
-Advanced features
-This will be things planned for the future after release - laying out baselines and ideas / projects.
-
-Testing and refinement
-This will be where we test everything
-
-## Other Ideas
-Guilds could have spying/sabatoge of rankings / supplys
