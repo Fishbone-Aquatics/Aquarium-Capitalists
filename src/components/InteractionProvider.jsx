@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { updateLastAction } from "../features/player/playerReducers";
 
 export const InteractionContext = createContext();
 
@@ -7,43 +8,61 @@ export const InteractionProvider = ({ children }) => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [timeAway, setTimeAway] = useState(0);
 
-  // Access the player's last action from the Redux store
   const playerLastAction = useSelector((state) => state.player.lastAction);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const handleInteraction = () => {
-      console.log("Tab or page interaction detected.");
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        console.log("Page became active again.");
+
+        if (playerLastAction) {
+          const lastTimestamp = new Date(playerLastAction);
+          const now = new Date();
+          const diffInSeconds = Math.floor((now - lastTimestamp) / 1000);
+
+          console.log("Time away:", diffInSeconds);
+          setTimeAway(diffInSeconds);
+
+          // Show the popup if time away > 5 minutes OR the page was just reactivated
+          if (diffInSeconds > 300 || document.visibilityState === "visible") {
+            setPopupVisible(true);
+          }
+        }
+      }
     };
 
-    // Only proceed if `playerLastAction` exists
-    if (playerLastAction) {
-      console.log("Player last action:", playerLastAction);
-      
-      // Parse the ISO string directly
-      const lastTimestamp = new Date(playerLastAction);
-      const now = new Date();
-      
-      // Calculate the difference in seconds
-      const diffInSeconds = Math.floor((now - lastTimestamp) / 1000);
-      
-      console.log("Time away:", diffInSeconds);
-      setTimeAway(diffInSeconds);    
+    const handleBeforeUnload = () => {
+      console.log("Tab or page is being unloaded.");
+      dispatch(updateLastAction(new Date().toISOString())); // Save current timestamp to Redux
+    };
 
-      // Show the popup if the time away is greater than 5 seconds
-      if (diffInSeconds > 300) {
+    const handlePageLoad = () => {
+      console.log("Page reloaded.");
+      if (playerLastAction) {
+        const lastTimestamp = new Date(playerLastAction);
+        const now = new Date();
+        const diffInSeconds = Math.floor((now - lastTimestamp) / 1000);
+
+        console.log("Time away after refresh:", diffInSeconds);
+        setTimeAway(diffInSeconds);
+
+        // Show the popup if the page was refreshed recently
         setPopupVisible(true);
       }
-    }
+    };
 
-    // Listen for tab visibility changes or page unloads
-    window.addEventListener("beforeunload", handleInteraction);
-    document.addEventListener("visibilitychange", handleInteraction);
+    // Listen for page load, visibility change, and beforeunload
+    window.addEventListener("load", handlePageLoad);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
-      window.removeEventListener("beforeunload", handleInteraction);
-      document.removeEventListener("visibilitychange", handleInteraction);
+      window.removeEventListener("load", handlePageLoad);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [playerLastAction]); // Re-run the effect if `playerLastAction` changes
+  }, [playerLastAction, dispatch]);
 
   const handlePopupClose = () => {
     setPopupVisible(false);
