@@ -5,17 +5,15 @@ A game about owning an aquarium shop.
 - We need a universal way to select & change "tasks" or "activites", it needs to be addressed and redone prior to expanding or it will become a nightmare later. 
   - IE. Status changes, ensuring background activities stay proper and in the background.
 
-- The home page and designing the basic functionality of your "shop" and primary "goal".
-  - aquirums should have "size limits" and expeditions could give "gold fish" rarely for now (or fishing if you want to implement that early, though i don't think it's necessary)
-
 - Creating a boiler plate page/slice/feature ie. one fishing could just change variable names to get started with. 
   - The page should have an if prod check for displaying. ("This is an example widget/extension")
 
 - Developing an "offline" solution.
-  - We can start with 5 minutes
-  - When the "page refresh" is triggered, we can have a "while you were gone" screen. 
-  - To track the progress we need to start updating a "last_action" game state when doing actions/updating the game state.
-  - https://chatgpt.com/share/67721c97-4af0-8000-9111-a817736386ef
+  - A basic implementation exists at 5 minutes, it does not function or calculate anything in its current state. Last action tracking is working and happens at every save interval.
+  - When the "page refreshes" is triggered a check happens from the last "action" (which could be hitting start, since hitting menu items doesn't update "last action", should clicks update it?)
+
+- The home page and designing the basic functionality of your "shop" and primary "goal".
+- aquirums should have "size limits" and expeditions could give "gold fish" rarely for now (or fishing if you want to implement that early, though i don't think it's necessary)
 
 
 
