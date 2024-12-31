@@ -16,44 +16,49 @@ import Statistics from './components/Statistics';
 import About from './pages/About';
 import XP from './pages/Xp';
 import VersionDisplay from './components/VersionDisplay';
+import PopupComponent from './components/PopupComponent';
+import { InteractionProvider } from './components/InteractionProvider';
 
 import './App.css';
 import './styles/tooltip.css';
 
 function App() {
   return (
-    <Provider store={store}>
-      <DndProvider backend={HTML5Backend}>
-        <Router>
-          <div className="app-grid">
-            <div className="sidebar">
-              <Link to="/">Home</Link>
-              <Link to="/inventory">Inventory</Link>
-              <Link to="/expeditions">Expeditions</Link>
-              <Link to="/gathering">Gathering</Link>
-              <Link to="/about">About</Link>
-              <Link to="/xp">XP Curve Chart</Link>
+    <Provider store={store}> {/* Redux Provider should wrap everything */}
+      <InteractionProvider> {/* InteractionProvider is inside Redux Provider */}
+        <DndProvider backend={HTML5Backend}>
+          <Router>
+            <PopupComponent /> {/* Always render the popup component */}
+            <div className="app-grid">
+              <div className="sidebar">
+                <Link to="/">Home</Link>
+                <Link to="/inventory">Inventory</Link>
+                <Link to="/expeditions">Expeditions</Link>
+                <Link to="/gathering">Gathering</Link>
+                <Link to="/about">About</Link>
+                <Link to="/xp">XP Curve Chart</Link>
+              </div>
+              <div className="status-bar">
+                <CurrentStatus />
+              </div>
+              <main className="main-display">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/inventory" element={<Inventory />} />
+                  <Route path="/expeditions" element={<Expeditions />} />
+                  <Route path="/gathering" element={<Gathering />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/xp" element={<XP />} />
+                </Routes>
+              </main>
+              <aside className="right-side">
+                <RightSideContent />
+              </aside>
+              <VersionDisplay />
             </div>
-            <div className="status-bar">
-              <CurrentStatus />
-            </div>
-            <main className="main-display">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/inventory" element={<Inventory />} />
-                <Route path="/expeditions" element={<Expeditions />} />
-                <Route path="/gathering" element={<Gathering />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/xp" element={<XP />} />
-              </Routes>
-            </main>
-            <aside className="right-side">
-              <RightSideContent />
-            </aside>
-            <VersionDisplay />
-          </div>
-        </Router>
-      </DndProvider>
+          </Router>
+        </DndProvider>
+      </InteractionProvider>
     </Provider>
   );
 }

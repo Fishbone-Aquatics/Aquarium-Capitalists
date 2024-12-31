@@ -1,23 +1,35 @@
-// src/features/player/saveState.js
 export const saveState = (state) => {
   try {
-    const playerState = state.player || {};
-    const expeditionState = state.expedition || {};
-    const aquariumState = state.aquarium || {};
-    const gatheringState = state.gathering || {};
+    const now = new Date().toISOString(); // Capture the current timestamp
 
-    if (!playerState.stats) {
-      playerState.stats = {};
+    // Perform deep cloning of state objects to avoid immutability issues
+    const playerState = JSON.parse(JSON.stringify(state.player || {}));
+    const expeditionState = JSON.parse(JSON.stringify(state.expedition || {}));
+    const aquariumState = JSON.parse(JSON.stringify(state.aquarium || {}));
+    const gatheringState = JSON.parse(JSON.stringify(state.gathering || {}));
+
+    // Ensure stats and statistics exist
+    playerState.stats = playerState.stats || {};
+    expeditionState.statistics = expeditionState.statistics || {};
+    expeditionState.statistics.totalExpeditionDuration =
+      expeditionState.statistics.totalExpeditionDuration || '0 seconds';
+
+    // Cap `currentExpeditionElapsedSeconds` to the total duration
+    if (expeditionState.activeZone) {
+      const zone = expeditionState.zones.find(z => z.name === expeditionState.activeZone);
+      if (zone) {
+        const maxDuration = zone.duration;
+        expeditionState.statistics.currentExpeditionElapsedSeconds = Math.min(
+          expeditionState.statistics.currentExpeditionElapsedSeconds,
+          maxDuration
+        );
+      }
     }
 
-    if (!expeditionState.statistics) {
-      expeditionState.statistics = {};
-    }
+    // Update the lastAction timestamp
+    playerState.lastAction = now;
 
-    if (!expeditionState.statistics.totalExpeditionDuration) {
-      expeditionState.statistics.totalExpeditionDuration = '0 seconds';
-    }
-
+    // Serialize the state
     const serializedState = JSON.stringify({
       player: {
         name: playerState.name,
@@ -31,6 +43,7 @@ export const saveState = (state) => {
         gatheringEfficiency: playerState.gatheringEfficiency,
         expeditionSpeed: playerState.expeditionSpeed,
         maxInventorySlots: playerState.maxInventorySlots,
+        lastAction: playerState.lastAction, // Include updated timestamp
       },
       aquarium: {
         maxShopSize: aquariumState.maxShopSize,
@@ -41,7 +54,7 @@ export const saveState = (state) => {
         ...expeditionState,
         statistics: {
           ...expeditionState.statistics,
-          totalExpeditionDuration: expeditionState.statistics.totalExpeditionDuration,
+          totalExpeditionDuration: expeditionState.statistics.totalExpeditionDuration
         },
       },
       gathering: {
@@ -50,12 +63,15 @@ export const saveState = (state) => {
       },
     });
 
+    // Save to localStorage
     localStorage.setItem('gameState', serializedState);
   } catch (e) {
     console.error('Error saving state:', e);
     console.log('State at error:', JSON.parse(JSON.stringify(state)));
   }
 };
+
+
 
 export const loadState = () => {
   try {

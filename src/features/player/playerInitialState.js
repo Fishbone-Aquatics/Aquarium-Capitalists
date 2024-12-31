@@ -43,6 +43,7 @@ const loadInitialState = () => {
       },
     },
     status: 'idle',
+    lastAction: null,
     expeditionDuration: '0 seconds', 
     skillBoostPercent: 0,
     gatheringSpeed: 1,

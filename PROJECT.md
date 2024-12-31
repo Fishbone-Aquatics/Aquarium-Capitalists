@@ -2,6 +2,9 @@
 A game about owning an aquarium shop.
 
 ## What is currently being developed:
+- We need a universal way to select & change "tasks" or "activites", it needs to be addressed and redone prior to expanding or it will become a nightmare later. 
+  - IE. Status changes, ensuring background activities stay proper and in the background.
+
 - The home page and designing the basic functionality of your "shop" and primary "goal".
   - aquirums should have "size limits" and expeditions could give "gold fish" rarely for now (or fishing if you want to implement that early, though i don't think it's necessary)
 

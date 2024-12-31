@@ -7,7 +7,7 @@ import { randomNumberInRange } from '../../utils/randomNumberInRange';
 const initialState = {
   name: "expedition",
   zones: zones,
-  activeZone: null,
+  activeZone: null, // string
   statistics: {
     expeditionsCompleted: 0,
     totalCurrency: 0,
@@ -18,7 +18,8 @@ const initialState = {
     totalExpeditionDuration: '0 seconds',
     currentExpeditionElapsedSeconds: 0,
     expeditionStartTime: null,
-    intervalId: null,
+    activeZoneObject: null,
+    expeditionIntervalId: null,
   },
 };
 
@@ -27,22 +28,14 @@ const expeditionSlice = createSlice({
   initialState,
   reducers: {
     setActiveZone: (state, action) => {
-      console.log('Setting active zone:', action.payload.zoneName);
       state.activeZone = action.payload.zoneName;
-      if (state.statistics.expeditionStartTime === null) {
-        state.statistics.expeditionStartTime = Date.now();
-      }
+      state.activeZoneObject = state.zones.find(zone => zone.name === action.payload.zoneName);
       state.statistics.currentExpeditionElapsedSeconds = 0;
     },
     clearActiveZone: (state) => {
-      console.log('Clearing active zone');
       state.activeZone = null;
-      if (state.statistics.intervalId) {
-        clearInterval(state.statistics.intervalId);
-        console.log('Interval cleared:', state.statistics.intervalId);
-      }
-      state.statistics.intervalId = null;
       state.statistics.currentExpeditionElapsedSeconds = 0;
+      state.statistics.expeditionStartTime = null;
     },
     resetStatistics: (state) => {
       state.statistics = {
@@ -55,7 +48,7 @@ const expeditionSlice = createSlice({
         totalExpeditionDuration: '0 seconds',
         currentExpeditionElapsedSeconds: 0,
         expeditionStartTime: null,
-        intervalId: null,
+        expeditionIntervalId: null,
       };
     },
     updateStatistics: (state, action) => {
@@ -75,6 +68,7 @@ const expeditionSlice = createSlice({
     calculatetotalExpeditionDuration: (state) => {
       const now = Date.now();
       const startTime = state.statistics.expeditionStartTime;
+      console.log('startTime', startTime);
       const duration = Math.floor((now - startTime) / 1000);
 
       let formattedDuration;
@@ -93,37 +87,56 @@ const expeditionSlice = createSlice({
       state.statistics.totalExpeditionDuration = formattedDuration;
       saveState({ player: state.player, expedition: state, aquarium: state.aquarium });
     },
-    setIntervalId: (state, action) => {
-      console.log('Setting interval ID:', action.payload);
-      state.statistics.intervalId = action.payload;
+    setExpeditionIntervalId: (state, action) => {
+      console.log('setting expedition interval id', action.payload, action);
+      state.statistics.expeditionIntervalId = action.payload;
+    },
+    clearExpeditionIntervalId: (state) => {
+      if (state.statistics.expeditionIntervalId) {
+        clearInterval(state.statistics.expeditionIntervalId);
+        state.statistics.expeditionIntervalId = null;
+      }
     },
     incrementcurrentExpeditionElapsedSeconds: (state) => {
       state.statistics.currentExpeditionElapsedSeconds += 1;
+      console.log('Function Incrementing expedition elapsed seconds', state.statistics.currentExpeditionElapsedSeconds);
+    },
+    setExpeditionStartTime: (state, action) => {
+      state.statistics.expeditionStartTime = action.payload;
+      console.log('Expedition start time updated:', state.statistics.expeditionStartTime);
     },
   },
 });
 
-export const { setActiveZone, clearActiveZone, resetStatistics, updateStatistics, calculatetotalExpeditionDuration, setIntervalId, incrementcurrentExpeditionElapsedSeconds } = expeditionSlice.actions;
+export const {
+  setActiveZone,
+  clearActiveZone,
+  setExpeditionIntervalId,
+  clearExpeditionIntervalId,
+  calculatetotalExpeditionDuration,
+  setExpeditionDuration,
+  incrementcurrentExpeditionElapsedSeconds,
+  resetStatistics,
+  updateStatistics,
+  setExpeditionStartTime
+} = expeditionSlice.actions;
 
 export const handleExpedition = () => (dispatch, getState) => {
+  console.log('Handling expedition');
   const state = getState();
-  const { activeZone, statistics: { intervalId } } = state.expedition;
-
-  if (!activeZone || intervalId) return;
-
-  const selectedZone = state.expedition.zones.find(zone => zone.name === activeZone);
-  const totalDuration = selectedZone.duration;
-
+  const { activeZone } = state.expedition;
+  if (!activeZone) return;
+  dispatch(setExpeditionStartTime(Date.now()));
   const interval = setInterval(() => {
-    dispatch(incrementcurrentExpeditionElapsedSeconds());
-    const updatedState = getState();
-    const { statistics: { currentExpeditionElapsedSeconds } } = updatedState.expedition;
-    const progress = (currentExpeditionElapsedSeconds / totalDuration) * 100;
-    console.log(`Elapsed seconds: ${currentExpeditionElapsedSeconds}, Total duration: ${totalDuration}, Progress: ${progress}%`);
+    const state = getState();
+    const selectedZone = state.expedition.zones.find(zone => zone.name === activeZone);
+    const expeditionDuration = selectedZone.duration;
+  
 
-    if (currentExpeditionElapsedSeconds >= totalDuration) {
-      clearInterval(interval);
-      dispatch(setIntervalId(null));
+    const progress = (state.expedition.statistics.currentExpeditionElapsedSeconds / expeditionDuration) * 100;
+    console.log(`Debug seconds: ${state.expedition.statistics.currentExpeditionElapsedSeconds}, Total duration: ${expeditionDuration}, Progress: ${progress}%`);
+    
+    if (state.expedition.statistics.currentExpeditionElapsedSeconds >= expeditionDuration) {
       console.log('Expedition completed for zone:', activeZone);
 
       // Handle expedition completion
@@ -177,9 +190,6 @@ export const handleExpedition = () => (dispatch, getState) => {
         }
       });
 
-      // Calculate expedition duration
-      dispatch(calculatetotalExpeditionDuration());
-
       // Calculate XP and currency per hour
       const updatedStateAfterCompletion = getState().expedition;
       const durationSeconds = Math.floor((Date.now() - updatedStateAfterCompletion.statistics.expeditionStartTime) / 1000);
@@ -197,19 +207,21 @@ export const handleExpedition = () => (dispatch, getState) => {
         lootedItems: lootedItem ? [...updatedStateAfterCompletion.statistics.lootedItems, lootedItem] : updatedStateAfterCompletion.statistics.lootedItems,
         totalExpeditionDuration: updatedStateAfterCompletion.statistics.totalExpeditionDuration,
       };
-      console.log('Updating statistics with:', statistics);
+      console.log('Updating statistics with:', statistics); // do i need this and the below?
       dispatch(updateStatistics(statistics));
-
-      setTimeout(() => {
-        dispatch(setActiveZone({ zoneName: activeZone }));
-        dispatch(handleExpedition());
-      }, 1000); // Delay of 1 second before restarting
+      console.log('Expedition completed.');
+      dispatch(setActiveZone({ zoneName: activeZone }));
+      // End Expedition completion logic
+    } else {
+      console.log('Call to function expedition elapsed seconds if its not time to restart', state.expedition.statistics.currentExpeditionElapsedSeconds);
+      // Calculate expedition duration
+      dispatch(calculatetotalExpeditionDuration(state));
+      dispatch(incrementcurrentExpeditionElapsedSeconds());
     }
   }, 1000);
-
-  dispatch(setIntervalId(interval));
+  dispatch(setExpeditionIntervalId(interval));
 };
 
-export const selectcurrentExpeditionElapsedSeconds = (state) => state.expedition.statistics.currentExpeditionElapsedSeconds;
+//export const selectcurrentExpeditionElapsedSeconds = (state) => state.expedition.statistics.currentExpeditionElapsedSeconds;
 
 export default expeditionSlice.reducer;
