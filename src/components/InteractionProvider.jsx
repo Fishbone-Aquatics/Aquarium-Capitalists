@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { updateLastAction } from "../features/player/playerReducers";
+import { updateLastAction } from "../features/player/playerSlice";
 
 export const InteractionContext = createContext();
 

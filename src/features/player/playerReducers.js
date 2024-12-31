@@ -250,6 +250,10 @@ const playerReducers = {
     state.expeditionSpeed = action.payload;
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
   },
+  updateLastAction: (state, action) => {
+    state.lastAction = Date.now();
+    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
+  }
 };
 
 export default playerReducers;
