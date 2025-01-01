@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.11.1...v1.12.0) (2025-01-01)
+
+
+### Features
+
+* **Offline Progression:** Just a basic checker ([d17d723](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/commit/d17d723e5ee2c1f0732d76bca66a9790da7276eb))
+
 ## [1.11.1](https://github.com/Fishbone-Aquatics/Aquarium-Capitalists/compare/v1.11.0...v1.11.1) (2024-08-09)
 
 
