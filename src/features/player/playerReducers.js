@@ -234,25 +234,20 @@ const playerReducers = {
 
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
 },
-  updateSkillBoostPercent: (state, action) => {
-    state.skillBoostPercent = action.payload;
-    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
-  },
-  updateGatheringSpeed: (state, action) => {
-    state.gatheringSpeed = action.payload;
-    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
-  },
-  updateGatheringEfficiency: (state, action) => {
-    state.gatheringEfficiency = action.payload;
-    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
-  },
-  updateExpeditionSpeed: (state, action) => {
-    state.expeditionSpeed = action.payload;
-    saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
-  },
   updateLastAction: (state, action) => {
     state.lastAction = Date.now();
     saveState({ player: state, expedition: state.expedition, aquarium: state.aquarium });
+  },
+  startTask: (state, action) => {
+    state.currentTaskState.activeTask = action.payload;
+    state.currentTaskState.status = action.payload.status;
+    console.log('Starting task:', action.payload);
+    //saveState();
+  },
+  stopTask: (state, action) => {
+    state.currentTaskState.activeTask = null;
+    state.currentTaskState.status = 'idle';
+    //saveState();
   }
 };
 

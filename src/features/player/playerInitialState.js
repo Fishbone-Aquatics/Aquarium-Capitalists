@@ -1,6 +1,7 @@
 // playerInitialState.js
 import deepmerge from 'deepmerge';
 import items from '../../data/items/items';
+import zones from '../expeditions/expeditionZones';
 
 const initializeInventory = (initialItems, maxSlots) => {
   const inventory = new Array(maxSlots).fill({ ...items.equipment.emptySlot });
@@ -38,17 +39,18 @@ const loadInitialState = () => {
     },
     skills: {
       gathering: {
-        level: 1,
-        xp: 0,
+      },      
+      expeditions: {
       },
     },
-    status: 'idle',
+    currentTaskState: {
+      activeTask: null,
+      taskStartTime: null,
+      status: 'idle',
+      DataAndStatistics: {
+      },
+    },
     lastAction: null,
-    expeditionDuration: '0 seconds', 
-    skillBoostPercent: 0,
-    gatheringSpeed: 1,
-    gatheringEfficiency: 1,
-    expeditionSpeed: 1,
     maxInventorySlots: 10
   };
 

@@ -13,21 +13,21 @@ const playerSlice = createSlice({
     ...playerReducers,
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(setActiveZone, (state, action) => {
-        state.status = `Exploring ${action.payload.zoneName}`;
-        state.expeditionStartTime = Date.now();
-      })
-      .addCase(clearActiveZone, (state) => {
-        state.status = 'idle';
-        calculatetotalExpeditionDuration(state); // Update duration when expedition stops
-      })
-      .addCase(startGatheringResource, (state, action) => {
-        state.status = `Gathering ${action.payload.resource.name}`;
-      })
-      .addCase(stopGatheringResource, (state) => {
-        state.status = 'idle';
-      });
+    // builder
+    //   .addCase(setActiveZone, (state, action) => {
+    //     state.status = `Exploring ${action.payload.zoneName}`;
+    //     state.expeditionStartTime = Date.now();
+    //   })
+    //   .addCase(clearActiveZone, (state) => {
+    //     state.status = 'idle';
+    //     calculatetotalExpeditionDuration(state); // Update duration when expedition stops
+    //   })
+    //   .addCase(startGatheringResource, (state, action) => {
+    //     state.status = `Gathering ${action.payload.resource.name}`;
+    //   })
+    //   .addCase(stopGatheringResource, (state) => {
+    //     state.status = 'idle';
+    //   });
   },
 });
 
@@ -53,7 +53,9 @@ export const {
   startExpedition,
   stopExpedition,
   updateItemQuantity,
-  updateLastAction
+  updateLastAction,
+  startTask,
+  stopTask
 } = playerSlice.actions;
 
 export default playerSlice.reducer;

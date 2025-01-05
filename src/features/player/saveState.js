@@ -36,14 +36,14 @@ export const saveState = (state) => {
         stats: playerState.stats,
         inventory: playerState.inventory,
         equipment: playerState.equipment,
-        skills: playerState.skills,
-        status: playerState.status,
-        skillBoostPercent: playerState.skillBoostPercent,
-        gatheringSpeed: playerState.gatheringSpeed,
-        gatheringEfficiency: playerState.gatheringEfficiency,
-        expeditionSpeed: playerState.expeditionSpeed,
+        skills: {
+          expedition: expeditionState || {},
+          gathering: gatheringState || {},
+        },
         maxInventorySlots: playerState.maxInventorySlots,
-        lastAction: playerState.lastAction, // Include updated timestamp
+        lastAction: playerState.lastAction, 
+        currentTaskState: playerState.currentTaskState,
+
       },
       aquarium: {
         maxShopSize: aquariumState.maxShopSize,

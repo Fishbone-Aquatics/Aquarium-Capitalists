@@ -7,6 +7,8 @@ const initialState = {
   activeResource: null,
   gatheringStartTime: null,
   notificationMessage: null,
+  level: 1,
+  xp: 0,
 };
 
 const gatheringSlice = createSlice({

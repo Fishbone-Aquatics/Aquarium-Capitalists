@@ -8,6 +8,8 @@ const initialState = {
   name: "expedition",
   zones: zones,
   activeZone: null, // string
+  level: 1,
+  xp: 0,
   statistics: {
     expeditionsCompleted: 0,
     totalCurrency: 0,

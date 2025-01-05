@@ -48,7 +48,7 @@ export const InteractionProvider = ({ children }) => {
         setTimeAway(diffInSeconds);
 
         // Show the popup if the page was refreshed recently
-        setPopupVisible(true);
+        //setPopupVisible(true);
       }
     };
 

@@ -6,10 +6,6 @@ const formatKey = (key) => key.replace(/([A-Z])/g, ' $1').replace(/^./, str => s
 
 const Stats = () => {
   const stats = useSelector(state => state.player.stats);
-  const skillBoostPercent = useSelector(state => state.player.skillBoostPercent);
-  const gatheringSpeed = useSelector(state => state.player.gatheringSpeed);
-  const gatheringEfficiency = useSelector(state => state.player.gatheringEfficiency);
-  const expeditionSpeed = useSelector(state => state.player.expeditionSpeed);
   const maxInventorySlots = useSelector(state => state.player.maxInventorySlots);
 
   const [isPopupVisible, setPopupVisible] = useState(false);
@@ -35,9 +31,6 @@ const Stats = () => {
             <h4>Advanced Stats</h4>
             <ul>
               <li>Skill Boost Percent: {skillBoostPercent}</li>
-              <li>Gathering Speed: {gatheringSpeed}</li>
-              <li>Gathering Efficiency: {gatheringEfficiency}</li>
-              <li>Expedition Speed: {expeditionSpeed}</li>
               <li>Max Inventory Slots: {maxInventorySlots}</li>
             </ul>
             <button className="button" onClick={togglePopup}>Close</button>
